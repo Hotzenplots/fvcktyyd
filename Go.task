@@ -1,0 +1,228 @@
+//流程控制
+Const Control_Step0_Auto             = 0 //无人值守0,人工确认1
+Const Control_Step1_Prepare_Data     = 1 //读表
+Const Control_Step2_Push_Box         = 0 //箱子
+Const Control_Step3_Draw_SS          = 0 //引上
+Const Control_Step4_Draw_OC          = 0 //光缆
+Const Control_Step5_OC_Laying        = 0 //敷设
+Const Control_Step6_Terminal_Process = 0 //上架
+Const Control_Step7_OA_Process       = 0 //工单
+
+Dim FSB_CC = []
+Dim OCS_CC = []
+Dim FSB_Info = []
+Dim OC_Info = []
+Dim Other_Info = []
+Dim OC_Draw_Vector = [] //[1]x,[2]y
+
+//Prepare_Data 函数列表
+Dim PD_Temp_List_1 = []
+Dim PD_Temp_List_2 = []
+Dim PD_OCS_Lenth_X_Y = []
+
+//Prepare_Data 函数变量
+Dim Opened_Excel_Obj
+Dim PD_Temp_Data
+Dim Base_Latitude
+Dim Horizontal_Density
+Dim Horizontal_Metre
+Dim Vertical_Density
+Dim Vertical_Metre
+Dim PD_CL1
+Dim PD_CL2
+
+Const C_End = 100
+Const Delay_Base_Unit =100
+Const Source_File_Path = "C:\\Users\\Administrator\\Desktop\\test.xls"
+Const FSB_Topology_Sheet = "FSB_Topology"
+Const OC_Topology_Sheet = "OC_Topology"
+Const Info_Sheet = "Info"
+Const Longitude_Sheet = "longitude"
+Const Latitude_Sheet = "latitude"
+Const OCS_Fiber_Count_Sheet = "OCS_Fiber_Count"
+
+Const FSB_Name_Constant         = 1 //FSB_Info 分纤箱名字
+Const FSB_Longitude_Constant    = 2 //FSB_Info 分纤箱经度
+Const FSB_Latitude_Constant     = 3 //FSB_Info 分纤箱纬度
+
+Const Fiber_Count_Constant    = 1    //OC_Info 芯数常量
+Const Lenth_Constant          = 2    //OC_Info 长度常量
+Const Type_Constant           = 3    //OC_Info 类型常量
+Const Start_Point_Constant    = 4    //OC_Info 起点常量 
+
+Const Other_Info_Data_Column      =  2 //Other_Info 数据列
+Const Other_Info_Count            = 14 //Other_Info 数据个数
+Const RD_Name_Constant            =  1 //Other_Info 小区名称常量
+Const SS_Name_Constant            =  2 //Other_Info 承载系统名称常量
+Const Project_Num_Constant        =  3 //Other_Info 项目编号常量
+Const Task_Name_Constant          =  4 //Other_Info 任务名称常量
+Const DQS_Porject_Constant        =  5 //Other_Info 数据质量责任人_工程常量
+Const DQS_City_Constant           =  6 //Other_Info 数据质量责任人_地市常量
+Const DQS_District_Constant       =  7 //Other_Info 数据质量责任人_区县常量
+Const DQS_Maintenance_Constant    =  8 //Other_Info 数据质量责任人_维护常量
+Const District_Constant           =  9 //Other_Info 区县常量
+Const Horizontal_Density_Constant = 10 //Other_Info 水平密度常量
+Const Vertical_Density_Constant   = 11 //Other_Info 垂直密度常量
+Const City_Constant               = 12 //Other_Info 地市常量
+Const OC_Sys_Name_Constant        = 13 //Other_Info 光缆系统名称常量
+Const OC_Sys_Type_Constant        = 14 //Other_Info 光缆规格常量
+
+Function Prepare_Data()
+    Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
+    //构建FSB_CC[]
+    For PD_CL1 = 1 to C_End
+        For PD_CL2 = 1 to C_End
+            PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[PD_CL1,PD_CL2])
+            If PD_Temp_Data = ""
+                Break
+            End If
+        Next
+        PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[PD_CL1,1])
+        If PD_Temp_Data = ""
+            Break
+        End If
+        FSB_CC[PD_CL1] = PD_CL2 - 1
+        //TracePrint(FSB_CC[PD_CL1])
+    Next
+    //构建OSC_CC[]
+    For PD_CL1 = 1 To C_End
+        For PD_CL2 =1 To C_End
+            PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,(PD_CL2 + 1)])
+            If PD_Temp_Data = ""
+                Break
+            End If
+        Next
+        PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,2])
+        If PD_Temp_Data = ""
+            Break
+        End If
+        OCS_CC[PD_CL1] = PD_CL2 - 1
+    Next
+    //构建FSB_Info[][][3]
+    For PD_CL1 = 1 To Ubound(FSB_CC)
+        For PD_CL2 = 1 To FSB_CC[PD_CL1]
+            For PD_CL3 = 1 To 3
+                PD_Temp_List_1[PD_CL3] = null
+            Next
+            PD_Temp_List_2[PD_CL2] = Clone(PD_Temp_List_1)
+        Next
+        FSB_Info[PD_CL1] = Clone(PD_Temp_List_2)
+    Next
+    //构建OC_Info[][][4]
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 To OCS_CC[PD_CL1]
+            For PD_CL3 = 1 To 4
+                PD_Temp_List_1[PD_CL3] = null
+            Next
+            PD_Temp_List_2[PD_CL2] = Clone(PD_Temp_List_1)
+        Next
+        OC_Info[PD_CL1] = Clone(PD_Temp_List_2)
+    Next
+    //构建OC_Draw_Vector[][][2]
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 To OCS_CC[PD_CL1]
+            For PD_CL3 = 1 To 2
+                PD_Temp_List_1[PD_CL3] = null
+            Next
+            PD_Temp_List_2[PD_CL2] = Clone(PD_Temp_List_1)
+        Next
+        OC_Draw_Vector[PD_CL1] = Clone(PD_Temp_List_2)
+    Next
+    //OC_Info 加载芯数
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 To OCS_CC[PD_CL1]
+            PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])
+            If PD_Temp_Data = ""
+                Break
+            End If
+            OC_Info[PD_CL1][PD_CL2][Fiber_Count_Constant] = CInt(PD_Temp_Data)
+        Next
+        PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,2])
+        If PD_Temp_Data = ""
+            Break
+        End If
+    Next
+    //OC_Info 加载长度
+    Horizontal_Density = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[Horizontal_Density_Constant,Other_Info_Data_Column])
+    Vertical_Density = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[Vertical_Density_Constant,Other_Info_Data_Column])
+    Base_Latitude = CNumber(Excel.ReadCell(Opened_Excel_Obj,Latitude_Sheet,[1,1]))
+    Horizontal_Metre = 111.11 * 1000 * Math.Cos(Base_Latitude * 3.1415926535 / 180) * Vertical_Density
+    Vertical_Metre = 111.11 * 1000 * Horizontal_Density
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 To OCS_CC[PD_CL1]
+            PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,(PD_CL2 + 1)])
+            PD_OCS_Lenth_X_Y = Split(PD_Temp_Data, "&")
+            If PD_OCS_Lenth_X_Y[0] = 0 //竖线
+                OC_Info[PD_CL1][PD_CL2][Lenth_Constant] = Math.Round(Math.Abs(Vertical_Metre * PD_OCS_Lenth_X_Y(1)),0)
+            End If
+            If PD_OCS_Lenth_X_Y[1] = 0 //横线
+                OC_Info[PD_CL1][PD_CL2][Lenth_Constant] = Math.Round(Math.Abs(Horizontal_Metre * PD_OCS_Lenth_X_Y(0)),0)
+            End If
+            If (PD_OCS_Lenth_X_Y[0] <> 0 and PD_OCS_Lenth_X_Y[1] <> 0) //斜线
+                OC_Info[PD_CL1][PD_CL2][Lenth_Constant] = Math.Round(Math.Abs(Math.Sqr((PD_OCS_Lenth_X_Y[0] * Vertical_Metre) ^ 2 + (PD_OCS_Lenth_X_Y[1] * Horizontal_Metre) ^ 2)),0)
+            End If
+        Next
+    Next
+    //OC_Info 加载型号
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 To OCS_CC[PD_CL1]
+            OC_Info[PD_CL1][PD_CL2][Type_Constant] = "GYTA-" & CStr(OC_Info[PD_CL1][PD_CL2][Fiber_Count_Constant])
+            //TracePrint(OC_Info[PD_CL1][PD_CL2][Type_Constant])
+        Next
+    Next
+    //Other_Info 加载其他信息
+    For PD_CL1 = 1 To Other_Info_Count
+        Other_Info[PD_CL1] = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[PD_CL1,Other_Info_Data_Column])
+        //TracePrint(Other_Info[PD_CL1])
+    Next
+    //FSB_Info 加载名称/经度/维度
+    For PD_CL1 = 1 To Ubound(FSB_CC)
+        For PD_CL2 = 1 To FSB_CC[PD_CL1]
+            FSB_Info[PD_CL1][PD_CL2][FSB_Name_Constant] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[PD_CL1,PD_CL2])
+            FSB_Info[PD_CL1][PD_CL2][FSB_Longitude_Constant] = Excel.ReadCell(Opened_Excel_Obj,Longitude_Sheet,[PD_CL1,PD_CL2])
+            FSB_Info[PD_CL1][PD_CL2][FSB_Latitude_Constant] = Excel.ReadCell(Opened_Excel_Obj,Latitude_Sheet,[PD_CL1,PD_CL2])
+            //TracePrint(FSB_Info[PD_CL1][PD_CL2][FSB_Name_Constant])
+            //TracePrint(FSB_Info[PD_CL1][PD_CL2][FSB_Longitude_Constant])
+            //TracePrint(FSB_Info[PD_CL1][PD_CL2][FSB_Latitude_Constant])
+        Next
+    Next
+    //OC_Info 加载起点
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        PD_Temp_List_1 = split(Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1, 1]), "&") //起点FSB坐标
+        OC_Info[PD_CL1][1][Start_Point_Constant] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[CNumber(PD_Temp_List_1[1]),CNumber(PD_Temp_List_1[0])])//起点FSB名称
+        //TracePrint(OC_Info[PD_CL1][1][Start_Point_Constant])
+    Next
+    //OC_Draw_Vector 加载向量
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 to OCS_CC[PD_CL1] //光缆段向量存入二维数组
+            PD_Temp_List_2 = split(Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,(PD_CL2 + 1)]), "&") 
+            OC_Draw_Vector[PD_CL1][PD_CL2][1] = PD_Temp_List_2[0]
+            OC_Draw_Vector[PD_CL1][PD_CL2][2] = PD_Temp_List_2[1]
+            //TracePrint(OC_Draw_Vector[PD_CL1][PD_CL2][1])
+            //TracePrint(OC_Draw_Vector[PD_CL1][PD_CL2][2])
+        Next
+    Next
+    Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
+End Function
+Function Determine_Box_Type(Box_Name)
+    If InStr(Box_Name,"GJ",1,false) <> 0
+        If InStr(Box_Name,"光交",1,false) <> 0
+            //光交
+            #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        End If
+    Else
+        //分纤箱
+        #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    End If
+End Function
+

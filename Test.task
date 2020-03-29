@@ -1,0 +1,6 @@
+dim objDatatable = ""
+objDataTable = CSV.Open("C:\\Users\\Administrator\\Desktop\\分光器的配置查询结果.csv")
+objDatatable2 = Datatable.BuildDataTable(objDataTable,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
+objDatatable2 = Datatable.SliceDataTable(objDatatable2,[],[5])
+TracePrint(objDataTable2)
+

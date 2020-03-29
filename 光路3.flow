@@ -1,0 +1,1 @@
+{"uuid":"3850d42df1c028","flow":[{"rem":"uibot3850d42df1b77c","type":"begin","next":"Go","x":0,"y":10},{"rem":"Go","type":"task","desc":"程序","in":"","out":"","file":"Go.task","next":"","x":0,"y":100},{"rem":"Test","type":"task","desc":"测试","in":"","out":"","file":"Test.task","next":"","x":160,"y":100}],"dim":[]}
