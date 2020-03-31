@@ -14,6 +14,7 @@ Dim FSB_Info = []
 Dim OC_Info = []
 Dim Other_Info = []
 Dim OC_Draw_Vector = [] //[1]x,[2]y
+Dim FSB_and_OC_Topology = []
 
 //Prepare_Data 函数列表
 Dim PD_Temp_List_1 = []
@@ -30,6 +31,12 @@ Dim Vertical_Density
 Dim Vertical_Metre
 Dim PD_CL1
 Dim PD_CL2
+Dim PD_CL3
+Dim Max_Lenth
+
+//Max_Number 函数变量
+Dim MN_Num1
+Dim MN_Num2
 
 Const C_End = 100
 Const Delay_Base_Unit =100
@@ -128,6 +135,21 @@ Function Prepare_Data()
         Next
         OC_Draw_Vector[PD_CL1] = Clone(PD_Temp_List_2)
     Next
+    //构建FSB_and_OC_Topology[][][10] 第三维长度还有说法,目前容纳4个分光器
+    Max_Lenth = 0 //计算最长光缆的段落数
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        Max_Lenth = Max_Number(Max_Lenth,OCS_CC[PD_CL1])
+    Next
+    //TracePrint(Max_Lenth)
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 To (Max_Lenth + 1)
+            For PD_CL3 = 1 To 10
+                PD_Temp_List_1[PD_CL3] = null
+            Next
+            PD_Temp_List_2[PD_CL2] = Clone(PD_Temp_List_1)
+        Next
+        FSB_and_OC_Topology[PD_CL1] = Clone(PD_Temp_List_2)
+    Next
     //OC_Info 加载芯数
     For PD_CL1 = 1 To Ubound(OCS_CC)
         For PD_CL2 = 1 To OCS_CC[PD_CL1]
@@ -203,6 +225,7 @@ Function Prepare_Data()
         Next
     Next
     Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
+    //FSB_and_OC_Topology 填充数据
 End Function
 Function Determine_Box_Type(Box_Name)
     If InStr(Box_Name,"GJ",1,false) <> 0
@@ -225,4 +248,12 @@ Function Determine_Box_Type(Box_Name)
         Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     End If
 End Function
+Function Max_Number(MN_Num1,MN_Num2)
+    If MN_Num1 > MN_Num2
+        Return MN_Num1
+    Else
+        Return MN_Num2
+    End If
+End Function
 
+Prepare_Data()
