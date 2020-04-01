@@ -16,9 +16,10 @@ Dim Other_Info = []
 Dim OC_Draw_Vector = [] //[1]x,[2]y
 Dim FSB_and_OC_Topology = []
 
-//Prepare_Data 函数列表
+//Prepare_Data 数组列表
 Dim PD_Temp_List_1 = []
 Dim PD_Temp_List_2 = []
+Dim PD_Temp_List_3 = []
 Dim PD_OCS_Lenth_X_Y = []
 
 //Prepare_Data 函数变量
@@ -74,6 +75,34 @@ Const City_Constant               = 12 //Other_Info 地市常量
 Const OC_Sys_Name_Constant        = 13 //Other_Info 光缆系统名称常量
 Const OC_Sys_Type_Constant        = 14 //Other_Info 光缆规格常量
 
+Function Determine_Box_Type(Box_Name)
+    If InStr(Box_Name,"GJ",1,false) <> 0
+        If InStr(Box_Name,"光交",1,false) <> 0
+            //光交
+            #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        End If
+    Else
+        //分纤箱
+        #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    End If
+End Function
+Function Max_Number(MN_Num1,MN_Num2)
+    If MN_Num1 > MN_Num2
+        Return MN_Num1
+    Else
+        Return MN_Num2
+    End If
+End Function
 Function Prepare_Data()
     Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
     //构建FSB_CC[]
@@ -224,36 +253,43 @@ Function Prepare_Data()
             //TracePrint(OC_Draw_Vector[PD_CL1][PD_CL2][2])
         Next
     Next
-    Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
     //FSB_and_OC_Topology 填充数据
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        PD_Temp_List_2[0] = 0
+        PD_Temp_List_2[1] = 0
+        For PD_CL2 = 1 To (Max_Lenth + 1)
+            If PD_CL2 = 1
+                PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,1]) //第 PD_CL1 条的起点坐标
+                PD_Temp_List_1 = split(PD_Temp_Data,"&")
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][1] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[CNumber(PD_Temp_List_1[1]),CNumber(PD_Temp_List_1[0])]) //第 PD_CL1 条的起点FSB名字
+            Else
+                PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,PD_CL2])
+                PD_Temp_List_1 = split(PD_Temp_Data,"&")
+                If len(PD_Temp_Data) = 0
+                    Break
+                End If
+                If CNumber(PD_Temp_List_1[0]) >= 0
+                    PD_Temp_List_2[0] = PD_Temp_List_2[0] + PD_Temp_List_1[0]
+                Else
+                    PD_Temp_List_2[0] = PD_Temp_List_2[0] - PD_Temp_List_1[0]
+                End If
+                If CNumber(PD_Temp_List_1[1]) >= 0
+                    PD_Temp_List_2[1] = PD_Temp_List_2[1] - Math.Abs(PD_Temp_List_1[1])
+                Else
+                    PD_Temp_List_2[1] = PD_Temp_List_2[1] + Math.Abs(PD_Temp_List_1[1])
+                End If
+                PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,1]) //第 PD_CL1 条的起点坐标
+                PD_Temp_List_3 = split(PD_Temp_Data,"&")
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][1] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[(CNumber(PD_Temp_List_3[1]) + CNumber(PD_Temp_List_2[1])),(CNumber(PD_Temp_List_3[0]) + CNumber(PD_Temp_List_2[0]))])
+            End If
+            FSB_and_OC_Topology[PD_CL1][PD_CL2][2] = CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) //FSB下行芯数,顺便处理结尾箱子,下行0芯
+            If CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) = null
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][2] = 0
+            End If
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][1])
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][2])
+        Next
+    Next
+    Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
 End Function
-Function Determine_Box_Type(Box_Name)
-    If InStr(Box_Name,"GJ",1,false) <> 0
-        If InStr(Box_Name,"光交",1,false) <> 0
-            //光交
-            #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            #icon("@res:iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            #icon("@res:jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        End If
-    Else
-        //分纤箱
-        #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        #icon("@res:iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        #icon("@res:0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-    End If
-End Function
-Function Max_Number(MN_Num1,MN_Num2)
-    If MN_Num1 > MN_Num2
-        Return MN_Num1
-    Else
-        Return MN_Num2
-    End If
-End Function
-
 Prepare_Data()
