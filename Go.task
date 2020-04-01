@@ -169,7 +169,7 @@ Function Prepare_Data()
         Next
         OC_Draw_Vector[PD_CL1] = Clone(PD_Temp_List_2)
     Next
-    //构建FSB_and_OC_Topology[][][10] 第三维长度还有说法,目前容纳4个分光器
+    //构建FSB_and_OC_Topology[][][10] 第三维长度还有说法,目前只加载分光器数,不考虑上行pos
     Max_Lenth = 0 //计算最长光缆的段落数
     For PD_CL1 = 1 To Ubound(OCS_CC)
         Max_Lenth = Max_Number(Max_Lenth,OCS_CC[PD_CL1])
@@ -301,12 +301,26 @@ Function Prepare_Data()
     DT_obj = Datatable.SliceDataTable(DT_obj,[],[5,7,21])
     DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
     List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
-    TracePrint(DT_obj)
-    TracePrint(List_7013)
-    //7013表处理完成,DT_obj,DT_Shape,List_7013可用
-    
+    //TracePrint(DT_obj)
+    //TracePrint(List_7013)
+    //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
     //FSB_and_OC_Topology 加载分光器数
-
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 To (Max_Lenth + 1)
+            PD_Temp_Data = FSB_and_OC_Topology[PD_CL1][PD_CL2][1]
+            FSB_and_OC_Topology[PD_CL1][PD_CL2][3] = 0
+            For PD_CL3 = 1 to DT_Shape[0]
+                If PD_Temp_Data = List_7013[PD_CL3-1][1]
+                    FSB_and_OC_Topology[PD_CL1][PD_CL2][3] = FSB_and_OC_Topology[PD_CL1][PD_CL2][3] + 1
+                End If
+            Next
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][3])
+            If FSB_and_OC_Topology[PD_CL1][PD_CL2][2] = 0 //短光缆跳出循环,避免数组越界
+                Break
+            End If
+        Next
+    Next
+    //FSB_and_OC_Topology 加载完成,[A][B][C],第A条光缆,第B个箱子,C,1名字,2行芯数,3分光器数
     Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
 End Function
 Prepare_Data()
