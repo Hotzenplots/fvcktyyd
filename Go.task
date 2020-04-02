@@ -80,6 +80,10 @@ Const City_Constant               = 12 //Other_Info 地市常量
 Const OC_Sys_Name_Constant        = 13 //Other_Info 光缆系统名称常量
 Const OC_Sys_Type_Constant        = 14 //Other_Info 光缆规格常量
 
+Const FSB_Name_Constant_2_Constant       = 1 //FSB_and_OC_Topology FSB名称
+Const FSB_Downlink_Width_Constant        = 2 //FSB_and_OC_Topology FSB下行芯数
+Const FSB_FS_Count_Constant              = 3 //FSB_and_OC_Topology FSB分光器数
+
 Function Determine_Box_Type(Box_Name)
     If InStr(Box_Name,"GJ",1,false) <> 0
         If InStr(Box_Name,"光交",1,false) <> 0
@@ -266,7 +270,7 @@ Function Prepare_Data()
             If PD_CL2 = 1
                 PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,1]) //第 PD_CL1 条的起点坐标
                 PD_Temp_List_1 = split(PD_Temp_Data,"&")
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][1] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[CNumber(PD_Temp_List_1[1]),CNumber(PD_Temp_List_1[0])]) //第 PD_CL1 条的起点FSB名字
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Name_Constant_2_Constant] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[CNumber(PD_Temp_List_1[1]),CNumber(PD_Temp_List_1[0])]) //第 PD_CL1 条的起点FSB名字
             Else
                 PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,PD_CL2])
                 PD_Temp_List_1 = split(PD_Temp_Data,"&")
@@ -285,14 +289,14 @@ Function Prepare_Data()
                 End If
                 PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,1]) //第 PD_CL1 条的起点坐标
                 PD_Temp_List_3 = split(PD_Temp_Data,"&")
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][1] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[(CNumber(PD_Temp_List_3[1]) + CNumber(PD_Temp_List_2[1])),(CNumber(PD_Temp_List_3[0]) + CNumber(PD_Temp_List_2[0]))])
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Name_Constant_2_Constant] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[(CNumber(PD_Temp_List_3[1]) + CNumber(PD_Temp_List_2[1])),(CNumber(PD_Temp_List_3[0]) + CNumber(PD_Temp_List_2[0]))])
             End If
-            FSB_and_OC_Topology[PD_CL1][PD_CL2][2] = CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) //FSB下行芯数,顺便处理结尾箱子,下行0芯
+            FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant] = CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) //FSB下行芯数,顺便处理结尾箱子,下行0芯
             If CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) = null
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][2] = 0
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant] = 0
             End If
-            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][1])
-            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][2])
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Name_Constant_2_Constant])
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant])
         Next
     Next
     //处理7013表
@@ -308,19 +312,21 @@ Function Prepare_Data()
     For PD_CL1 = 1 To Ubound(OCS_CC)
         For PD_CL2 = 1 To (Max_Lenth + 1)
             PD_Temp_Data = FSB_and_OC_Topology[PD_CL1][PD_CL2][1]
-            FSB_and_OC_Topology[PD_CL1][PD_CL2][3] = 0
+            FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] = 0
             For PD_CL3 = 1 to DT_Shape[0]
                 If PD_Temp_Data = List_7013[PD_CL3-1][1]
-                    FSB_and_OC_Topology[PD_CL1][PD_CL2][3] = FSB_and_OC_Topology[PD_CL1][PD_CL2][3] + 1
+                    FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] + 1
                 End If
             Next
-            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][3])
-            If FSB_and_OC_Topology[PD_CL1][PD_CL2][2] = 0 //短光缆跳出循环,避免数组越界
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant])
+            If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant] = 0 //短光缆跳出循环,避免数组越界
                 Break
             End If
         Next
     Next
-    //FSB_and_OC_Topology 加载完成,[A][B][C],第A条光缆,第B个箱子,C,1名字,2行芯数,3分光器数
+    //FSB_and_OC_Topology 加载完成,[A][B][C],第A条光缆,第B个箱子,C,1名字,2下行芯数,3分光器数
+    //FSB_and_OC_Topology 加载分光器名字&上行POS端口
+
     Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
 End Function
 Prepare_Data()
