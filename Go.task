@@ -1,12 +1,12 @@
 //流程控制
-Const Control_Step0_Auto             = 0 //无人值守0,人工确认1
-Const Control_Step1_Prepare_Data     = 1 //读表
-Const Control_Step2_Push_Box         = 0 //箱子
-Const Control_Step3_Draw_SS          = 0 //引上
-Const Control_Step4_Draw_OC          = 0 //光缆
-Const Control_Step5_OC_Laying        = 0 //敷设
-Const Control_Step6_Terminal_Process = 0 //上架
-Const Control_Step7_OA_Process       = 0 //工单
+Const Control_Step0_SemiAuto          = 1 //无人值守0,人工确认1
+Const Control_Step1_Prepare_Data      = 1 //读表
+Const Control_Step2_Push_Box          = 0 //箱子
+Const Control_Step3_Draw_SS           = 0 //引上
+Const Control_Step4_Draw_OC           = 0 //光缆
+Const Control_Step5_OC_Laying         = 0 //敷设
+Const Control_Step6_FSB_Fiber_Process = 0 //上架
+Const Control_Step7_OA_Process        = 0 //工单
 
 Dim FSB_CC = []
 Dim OCS_CC = []
@@ -326,7 +326,15 @@ Function Prepare_Data()
     Next
     //FSB_and_OC_Topology 加载完成,[A][B][C],第A条光缆,第B个箱子,C,1名字,2下行芯数,3分光器数
     //FSB_and_OC_Topology 加载分光器名字&上行POS端口
-
     Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
+    Dialog.MsgBox("PD执行完成","测试标题","0",3,0)
 End Function
-Prepare_Data()
+Function MainProgress()
+    If Control_Step1_Prepare_Data = 1
+        Prepare_Data()
+        If Control_Step0_SemiAuto = 1
+            Dialog.MsgBox("测试内容","测试标题","0",3,0)
+        End If
+    End If
+End Function
+MainProgress()

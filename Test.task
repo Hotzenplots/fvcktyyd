@@ -1,10 +1,29 @@
-dim objDatatable = ""
-dim objDatatable2 = ""
-dim objDatatable3 = ""
-objDataTable = CSV.Open("C:\\Users\\Administrator\\Desktop\\分光器的配置查询结果.csv")
-objDatatable2 = Datatable.BuildDataTable(objDataTable,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
-objDatatable2 = Datatable.SliceDataTable(objDatatable2,[],[5,7,21])
-objDatatable3 = Datatable.GetDataTableByArray(objDatatable2,false)
-arrayShape = Datatable.GetDataTableShape(objDatatable2)
-TracePrint(objDatatable2)
-TracePrint(arrayshape)
+dim FSB_and_OC_Topology = [null,[null,[null, "太原迎泽气象宾馆宿舍48芯汇聚分纤箱",6,0],[null,"太原迎泽气象宾馆宿舍13#楼2单元楼外一层半1号一级GF0001",12,3],[null,"太原迎泽气象宾馆宿舍13#1单元楼内一层半二级GF0001",12,2],[null,"太原迎泽气象宾馆宿舍13#2单元楼内一层半二级GF0001",6,2],[null,"太原迎泽气象宾馆宿舍13#3单元楼内一层半二级GF0001",0,2]],[null,[null,"太原迎泽气象宾馆宿舍13#楼2单元楼外一层半1号一级GF0001",12,3],[null,"太原迎泽气象宾馆宿舍11#3单元楼内一层半二级GF0001",6,1],[null,"太原迎泽气象宾馆宿舍11#2单元楼内一层半二级GF0001",6,1],[null,"太原迎泽气象宾馆宿舍11#1单元楼内一层半二级GF0001",0,2],[]]]
+dim k = 1
+dim list_a = []
+
+
+for i = 1 to 2
+    for j = 1 to 5
+        // TracePrint(i)
+        // TracePrint(j)
+        if len(FSB_and_OC_Topology[i][j]) = 0 //空箱跳过
+            break
+        end if
+        if FSB_and_OC_Topology[i][j][3] <> null
+            if FSB_and_OC_Topology[i][j][3] <> 0
+                list_a[k] = clone(FSB_and_OC_Topology[i][j]) //直接利用FSB_and_OC_Topology的数据
+                if j > 1
+                    list_a[k] = push(list_a[k],FSB_and_OC_Topology[i][(j - 1)][2]) //上行
+                    if FSB_and_OC_Topology[i][(j - 1)][3] = 0 //处理空箱,判断上一个箱子的分光器数量
+                        list_a[k][4] = 0
+                    end if
+                elseif j = 1
+                    list_a[k] = push(list_a[k],0) //第一个箱子上行为0
+                end if
+                k = k + 1
+            end if
+        end if
+    next
+next
+TracePrint(list_a)
