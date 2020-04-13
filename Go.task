@@ -15,6 +15,7 @@ Dim OC_Info = []
 Dim Other_Info = []
 Dim OC_Draw_Vector = [] //[1]x,[2]y
 Dim FSB_and_OC_Topology = []
+Dim FSB_FP = []
 
 //Prepare_Data 数组列表
 Dim PD_Temp_List_1 = []
@@ -326,6 +327,29 @@ Function Prepare_Data()
     Next
     //FSB_and_OC_Topology 加载完成,[A][B][C],第A条光缆,第B个箱子,C,1名字,2下行芯数,3分光器数
     //FSB_and_OC_Topology 加载分光器名字&上行POS端口
+    //FSB_FP 填充数据
+    PD_Temp_Data = 1
+    For PD_CL1 = 1 to Ubound(OCS_CC)
+        For PD_CL2 = 1 to (Max_Lenth + 1)
+            If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0 //空箱跳过
+                break
+            End If
+            If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] <> null
+                If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] <> 0
+                    FSB_FP[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
+                    If PD_CL2 > 1
+                        FSB_FP[PD_Temp_Data] = push(FSB_FP[PD_Temp_Data],FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][2]) //上行
+                        If FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][FSB_FS_Count_Constant] = 0 //处理空箱,判断上一个箱子的分光器数量
+                            FSB_FP[PD_Temp_Data][4] = 0
+                        End If
+                    Elseif PD_CL2 = 1
+                        FSB_FP[PD_Temp_Data] = push(FSB_FP[PD_Temp_Data],0) //第一个箱子上行为0
+                    End If
+                    PD_Temp_Data = PD_Temp_Data + 1
+                End If
+            End If
+        Next
+    Next
     Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
     Dialog.MsgBox("PD执行完成","测试标题","0",3,0)
 End Function
@@ -338,3 +362,4 @@ Function MainProgress()
     End If
 End Function
 MainProgress()
+TracePrint(FSB_FP)
