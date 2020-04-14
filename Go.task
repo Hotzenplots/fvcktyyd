@@ -1,3 +1,4 @@
+import TURING
 //流程控制
 Const Control_Step0_SemiAuto          = 1 //无人值守0,人工确认1
 Const Control_Step1_Prepare_Data      = 1 //读表
@@ -5,8 +6,11 @@ Const Control_Step2_Push_Box          = 0 //箱子
 Const Control_Step3_Draw_SS           = 0 //引上
 Const Control_Step4_Draw_OC           = 0 //光缆
 Const Control_Step5_OC_Laying         = 0 //敷设
-Const Control_Step6_FSB_Fiber_Process = 0 //上架
+Const Control_Step6_FSB_Fiber_Process = 1 //上架
 Const Control_Step7_OA_Process        = 0 //工单
+
+Dim Step6_Circulation_Sum
+Dim Step6_Circulation_Start
 
 Dim FSB_CC = []
 Dim OCS_CC = []
@@ -85,14 +89,16 @@ Const FSB_Name_Constant_2_Constant       = 1 //FSB_and_OC_Topology FSB名称
 Const FSB_Downlink_Width_Constant        = 2 //FSB_and_OC_Topology FSB下行芯数
 Const FSB_FS_Count_Constant              = 3 //FSB_and_OC_Topology FSB分光器数
 
+Const FFP_FSB_Name                  = 1 //FSB_FP FSB名称
+
 Function Determine_Box_Type(Box_Name)
     If InStr(Box_Name,"GJ",1,false) <> 0
         If InStr(Box_Name,"光交",1,false) <> 0
             //光交
             #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            #icon("@res:iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         End If
@@ -100,12 +106,13 @@ Function Determine_Box_Type(Box_Name)
         //分纤箱
         #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
         Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        #icon("@res:iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"iine3ca1-lh4r-v9b3-er6b-sdnknnctnr7g.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png")
         Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     End If
 End Function
+
 Function Max_Number(MN_Num1,MN_Num2)
     If MN_Num1 > MN_Num2
         Return MN_Num1
@@ -113,6 +120,7 @@ Function Max_Number(MN_Num1,MN_Num2)
         Return MN_Num2
     End If
 End Function
+
 Function Prepare_Data()
     Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
     //构建FSB_CC[]
@@ -350,16 +358,58 @@ Function Prepare_Data()
             End If
         Next
     Next
+    // Step6_Circulation_Sum 循环合计
+    Step6_Circulation_Sum = Ubound(FSB_FP)
+    // Step6_Circulation_Sum 写入
+    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,3],Step6_Circulation_Sum,true) //立即保存
+    // Step6_Circulation_Start 循环起点
+    Step6_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[26,2])
     Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
-    Dialog.MsgBox("PD执行完成","测试标题","0",3,0)
 End Function
+
 Function MainProgress()
     If Control_Step1_Prepare_Data = 1
         Prepare_Data()
         If Control_Step0_SemiAuto = 1
-            Dialog.MsgBox("测试内容","测试标题","0",3,0)
+            Dialog.MsgBox("完成","Step1","0",3,0)
         End If
     End If
+    If Control_Step6_FSB_Fiber_Process = 1
+        For MP_CL0 = 1 to 1 //套一层一次循环,判断 Step6_Circulation_Start 和 Step6_Circulation_Sum
+            If Step6_Circulation_Start > Step6_Circulation_Sum
+                Dialog.MsgBox("完成,情况B","Step6","0",3,0)
+                Break
+            End If
+            For MP_CL1 = Step6_Circulation_Start to Ubound(FSB_FP)
+                FSB_Fiber_Process(FSB_FP[MP_CL1])
+                Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
+                Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,2],(MP_CL1+1),true)
+                Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
+            Next
+            If Control_Step0_SemiAuto = 1
+                Dialog.MsgBox("完成,情况A","Step6","0",3,0)
+            End If
+        Next
+    End If
 End Function
+
+Function FSB_Fiber_Process(FFP)
+    // Determine_Box_Type(FFP[FFP_FSB_Name])
+    // #icon("@res:katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png")
+    // Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":60,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    // Keyboard.Input(FFP[FFP_FSB_Name],{"iDelayAfter":Delay_Base_Unit*5,"iDelayBefore":Delay_Base_Unit*5,"sSimulate":"simulate"})
+    // Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+    // Delay 10000
+    TracePrint(FFP[FFP_FSB_Name])
+End Function
+
 MainProgress()
-TracePrint(FSB_FP)
+TracePrint("版本号：",TURING.Version())
+
+
+/*
+Todolist
+鼠标指针识别,封装函数
+循环进度检测,储存,Resume,尽量标准化,封装函数
+FSB二次上架的逻辑实现
+*/
