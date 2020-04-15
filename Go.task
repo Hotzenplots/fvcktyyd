@@ -1,6 +1,6 @@
 import TURING
 //流程控制
-Const Control_Step0_SemiAuto          = 1 //无人值守0,人工确认1
+Const Control_Step0_SemiAuto          = 0 //无人值守0,人工确认1
 Const Control_Step1_Prepare_Data      = 1 //读表
 Const Control_Step2_Push_Box          = 0 //箱子
 Const Control_Step3_Draw_SS           = 0 //引上
@@ -9,8 +9,8 @@ Const Control_Step5_OC_Laying         = 0 //敷设
 Const Control_Step6_FSB_Fiber_Process = 1 //上架
 Const Control_Step7_OA_Process        = 0 //工单
 
-Dim Step6_Circulation_Sum
-Dim Step6_Circulation_Start
+//Mouse_shape 函数变量
+Dim Mouse_shape
 
 Dim FSB_CC = []
 Dim OCS_CC = []
@@ -20,13 +20,6 @@ Dim Other_Info = []
 Dim OC_Draw_Vector = [] //[1]x,[2]y
 Dim FSB_and_OC_Topology = []
 Dim FSB_FP = []
-
-//Prepare_Data 数组列表
-Dim PD_Temp_List_1 = []
-Dim PD_Temp_List_2 = []
-Dim PD_Temp_List_3 = []
-Dim PD_OCS_Lenth_X_Y = []
-Dim DT_Shape = []
 
 //Prepare_Data 函数变量
 Dim Opened_Excel_Obj
@@ -43,6 +36,14 @@ Dim Max_Lenth
 Dim CSV_obj
 Dim DT_obj
 Dim List_7013
+Dim Step6_Circulation_Sum
+Dim Step6_Circulation_Start
+
+Dim PD_Temp_List_1 = []
+Dim PD_Temp_List_2 = []
+Dim PD_Temp_List_3 = []
+Dim PD_OCS_Lenth_X_Y = []
+Dim DT_Shape = []
 
 //Max_Number 函数变量
 Dim MN_Num1
@@ -119,6 +120,14 @@ Function Max_Number(MN_Num1,MN_Num2)
     Else
         Return MN_Num2
     End If
+End Function
+
+Function Search_Waiting()
+    Mouse_shape = TURING.FindMouseShape(0)
+    Do While Mouse_shape = 0
+        Mouse_shape = TURING.FindMouseShape(0)
+        Delay Delay_Base_Unit
+    Loop
 End Function
 
 Function Prepare_Data()
@@ -393,23 +402,29 @@ Function MainProgress()
     End If
 End Function
 
-Function FSB_Fiber_Process(FFP)
-    // Determine_Box_Type(FFP[FFP_FSB_Name])
-    // #icon("@res:katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png")
-    // Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":60,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-    // Keyboard.Input(FFP[FFP_FSB_Name],{"iDelayAfter":Delay_Base_Unit*5,"iDelayBefore":Delay_Base_Unit*5,"sSimulate":"simulate"})
-    // Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-    // Delay 10000
-    TracePrint(FFP[FFP_FSB_Name])
+Function FSB_Fiber_Process(FFP_FSB_FP)
+    Determine_Box_Type(FFP_FSB_FP[FFP_FSB_Name])
+    #icon("@res:katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png")
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":60,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Delay Delay_Base_Unit*10
+    Keyboard.Input(FFP_FSB_FP[FFP_FSB_Name],{"iDelayAfter":Delay_Base_Unit*5,"iDelayBefore":Delay_Base_Unit*5,"sSimulate":"message"})
+    Delay Delay_Base_Unit*10
+    Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+    //判断鼠标指针
+    Search_Waiting()
 End Function
 
 MainProgress()
 TracePrint("版本号：",TURING.Version())
 
-
 /*
 Todolist
-鼠标指针识别,封装函数
-循环进度检测,储存,Resume,尽量标准化,封装函数
 FSB二次上架的逻辑实现
+GUI
+重构按键精灵部分的代码
+拖屏方案
+拆除方案,整体/部分
+写屏
 */
+
+
