@@ -6,11 +6,8 @@ Const Control_Step2_Push_Box          = 0 //箱子
 Const Control_Step3_Draw_SS           = 0 //引上
 Const Control_Step4_Draw_OC           = 0 //光缆
 Const Control_Step5_OC_Laying         = 0 //敷设
-Const Control_Step6_FSB_Fiber_Process = 1 //上架
+Const Control_Step6_FSB_Fiber_Process = 0 //上架
 Const Control_Step7_OA_Process        = 0 //工单
-
-//Mouse_shape 函数变量
-Dim Mouse_shape
 
 Dim FSB_CC = []
 Dim OCS_CC = []
@@ -49,6 +46,12 @@ Dim DT_Shape = []
 Dim MN_Num1
 Dim MN_Num2
 
+//Mouse_shape 函数变量
+Dim Mouse_shape
+
+//FSB_Fiber_Process 函数变量
+Dim FFP_Temp
+
 Const C_End = 100
 Const Delay_Base_Unit =100
 Const CSV_File = "C:\\Users\\Administrator\\Desktop\\分光器的配置查询结果.csv"
@@ -70,7 +73,7 @@ Const Type_Constant           = 3    //OC_Info 类型常量
 Const Start_Point_Constant    = 4    //OC_Info 起点常量 
 
 Const Other_Info_Data_Column      =  2 //Other_Info 数据列
-Const Other_Info_Count            = 14 //Other_Info 数据个数
+Const Other_Info_Count            = 15 //Other_Info 数据个数
 Const RD_Name_Constant            =  1 //Other_Info 小区名称常量
 Const SS_Name_Constant            =  2 //Other_Info 承载系统名称常量
 Const Project_Num_Constant        =  3 //Other_Info 项目编号常量
@@ -85,6 +88,7 @@ Const Vertical_Density_Constant   = 11 //Other_Info 垂直密度常量
 Const City_Constant               = 12 //Other_Info 地市常量
 Const OC_Sys_Name_Constant        = 13 //Other_Info 光缆系统名称常量
 Const OC_Sys_Type_Constant        = 14 //Other_Info 光缆规格常量
+Const BackUp_Fiber_Count          = 15 //Other_Info 备芯,1主X备
 
 Const FSB_Name_Constant_2_Constant       = 1 //FSB_and_OC_Topology FSB名称
 Const FSB_Downlink_Width_Constant        = 2 //FSB_and_OC_Topology FSB下行芯数
@@ -412,6 +416,27 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
     Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
     //判断鼠标指针
     Search_Waiting()
+    #icon("@res:86d3jo8e-mfbf-uuim-vntv-25ug36otjm6p.png")
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"86d3jo8e-mfbf-uuim-vntv-25ug36otjm6p.png",0.9,"left","dbclick",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":30,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Search_Waiting()
+    Delay Delay_Base_Unit*10
+    #icon("@res:1k7d4nc9-6g5i-6vhl-d372-ms0sgjkcdifo.png")
+    Image.Hover({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1k7d4nc9-6g5i-6vhl-d372-ms0sgjkcdifo.png",0.7,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:f0vf3qs7-9har-fncr-kl3s-4cc3onqg2nqf.png")
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"f0vf3qs7-9har-fncr-kl3s-4cc3onqg2nqf.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:2b4id6jb-vvv7-s8d1-v120-8p7toocurktk.png")
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2b4id6jb-vvv7-s8d1-v120-8p7toocurktk.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png")
+    FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+    Do While FFP_Temp <> true
+        #icon("@res:ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png")
+        FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+        Delay Delay_Base_Unit*5
+    Loop
+    Delay Delay_Base_Unit*100
+    //关闭窗口
+    #icon("@res:6up6oddd-uk30-uv1e-bgve-vmfsdm7tg4sc.png")
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6up6oddd-uk30-uv1e-bgve-vmfsdm7tg4sc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 End Function
 
 MainProgress()
@@ -426,5 +451,3 @@ GUI
 拆除方案,整体/部分
 写屏
 */
-
-

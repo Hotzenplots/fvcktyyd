@@ -1,3 +1,4 @@
+dim iRet = ""
 Import TURING
 
 TracePrint("版本号：",TURING.Version())
@@ -7,3 +8,8 @@ Do While shape <> 0
     TracePrint shape
     Delay 500
 Loop
+dTime = Time.Timer()
+dTime = Time.Now()
+dTime = Time.Time()
+iRet = Time.ToUnixTime(dTime, false)
+
