@@ -90,9 +90,14 @@ Const OC_Sys_Name_Constant        = 13 //Other_Info 光缆系统名称常量
 Const OC_Sys_Type_Constant        = 14 //Other_Info 光缆规格常量
 Const BackUp_Fiber_Count          = 15 //Other_Info 备芯,1主X备
 
-Const FSB_Name_Constant_2_Constant       = 1 //FSB_and_OC_Topology FSB名称
-Const FSB_Downlink_Width_Constant        = 2 //FSB_and_OC_Topology FSB下行芯数
-Const FSB_FS_Count_Constant              = 3 //FSB_and_OC_Topology FSB分光器数
+Const FaOT_UL_FSB_Name                = 1 //FSB_and_OC_Topology 上行FSB名称
+Const FaOT_UL_Width                   = 2 //FSB_and_OC_Topology 上行光缆芯数
+Const FaOT_FSB_Name                   = 3 //FSB_and_OC_Topology FSB名称
+Const FaOT_DL_Width                   = 4 //FSB_and_OC_Topology 下行光缆芯数
+Const FaOT_DL_FSB_Name                = 5 //FSB_and_OC_Topology 下行FSB名称
+Const FaOT_Ordinary_Num               = 6 //FSB_and_OC_Topology FSB位置
+Const FaOT_FS_1_Count                 = 7 //FSB_and_OC_Topology 1级FS个数
+Const FaOT_FS_2_Count                 = 8 //FSB_and_OC_Topology 2级FS个数
 
 Const FFP_FSB_Name                  = 1 //FSB_FP FSB名称
 
@@ -284,7 +289,18 @@ Function Prepare_Data()
             //TracePrint(OC_Draw_Vector[PD_CL1][PD_CL2][2])
         Next
     Next
-    //FSB_and_OC_Topology 加载FSB名字&下行光缆芯数
+
+    //处理7013表
+    CSV_obj = CSV.Open(CSV_File)
+    DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
+    DT_obj = Datatable.SliceDataTable(DT_obj,[],[5,7,21])
+    DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
+    List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
+    //TracePrint(DT_obj)
+    //TracePrint(List_7013)
+    //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
+
+    //FSB_and_OC_Topology 填充 FaOT_FSB_Name FaOT_DL_Width FaOT_Ordinary_Num
     For PD_CL1 = 1 To Ubound(OCS_CC)
         PD_Temp_List_2[0] = 0
         PD_Temp_List_2[1] = 0
@@ -292,7 +308,7 @@ Function Prepare_Data()
             If PD_CL2 = 1
                 PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,1]) //第 PD_CL1 条的起点坐标
                 PD_Temp_List_1 = split(PD_Temp_Data,"&")
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Name_Constant_2_Constant] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[CNumber(PD_Temp_List_1[1]),CNumber(PD_Temp_List_1[0])]) //第 PD_CL1 条的起点FSB名字
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FSB_Name] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[CNumber(PD_Temp_List_1[1]),CNumber(PD_Temp_List_1[0])]) //第 PD_CL1 条的起点FSB名字
             Else
                 PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,PD_CL2])
                 PD_Temp_List_1 = split(PD_Temp_Data,"&")
@@ -311,68 +327,93 @@ Function Prepare_Data()
                 End If
                 PD_Temp_Data = Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1,1]) //第 PD_CL1 条的起点坐标
                 PD_Temp_List_3 = split(PD_Temp_Data,"&")
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Name_Constant_2_Constant] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[(CNumber(PD_Temp_List_3[1]) + CNumber(PD_Temp_List_2[1])),(CNumber(PD_Temp_List_3[0]) + CNumber(PD_Temp_List_2[0]))])
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FSB_Name] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[(CNumber(PD_Temp_List_3[1]) + CNumber(PD_Temp_List_2[1])),(CNumber(PD_Temp_List_3[0]) + CNumber(PD_Temp_List_2[0]))])
             End If
-            FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant] = CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) //FSB下行芯数,顺便处理结尾箱子,下行0芯
-            If CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) = null
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant] = 0
+            FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_Width] = CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) //下行芯数
+            If CNumber(Excel.ReadCell(Opened_Excel_Obj,OCS_Fiber_Count_Sheet,[PD_CL1,(PD_CL2 + 1)])) = null //处理结尾箱子,下行0芯
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_Width] = 0
             End If
-            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Name_Constant_2_Constant])
-            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant])
+            FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_Ordinary_Num] = PD_CL2 //FSB位置
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FSB_Name])
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_Width])
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_Ordinary_Num])
         Next
     Next
-    //处理7013表
-    CSV_obj = CSV.Open(CSV_File)
-    DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
-    DT_obj = Datatable.SliceDataTable(DT_obj,[],[5,7,21])
-    DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
-    List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
-    //TracePrint(DT_obj)
-    //TracePrint(List_7013)
-    //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
-    //FSB_and_OC_Topology 加载分光器数
-    For PD_CL1 = 1 To Ubound(OCS_CC)
+    //FSB_and_OC_Topology 填充 FaOT_DL_FSB_Name
+    For PD_CL1 = 1 To Ubound(OCS_CC) 
         For PD_CL2 = 1 To (Max_Lenth + 1)
-            PD_Temp_Data = FSB_and_OC_Topology[PD_CL1][PD_CL2][1]
-            FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] = 0
-            For PD_CL3 = 1 to DT_Shape[0]
-                If PD_Temp_Data = List_7013[PD_CL3-1][1]
-                    FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] + 1
-                End If
-            Next
-            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant])
-            If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant] = 0 //短光缆跳出循环,避免数组越界
+            If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0
                 Break
             End If
-        Next
-    Next
-    //FSB_and_OC_Topology 加载完成,[A][B][C],第A条光缆,第B个箱子,C,1名字,2下行芯数,3分光器数
-    //FSB_and_OC_Topology 加载分光器名字&上行POS端口
-    //FSB_FP 填充数据
-    PD_Temp_Data = 1
-    For PD_CL1 = 1 to Ubound(OCS_CC)
-        For PD_CL2 = 1 to (Max_Lenth + 1)
-            If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0 //空箱跳过
-                break
-            End If
-            If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] <> null
-                If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] <> 0
-                    FSB_FP[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
-                    If PD_CL2 > 1
-                        FSB_FP[PD_Temp_Data] = push(FSB_FP[PD_Temp_Data],FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][2]) //上行
-                        If FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][FSB_FS_Count_Constant] = 0 //处理空箱,判断上一个箱子的分光器数量
-                            FSB_FP[PD_Temp_Data][4] = 0
-                        End If
-                    Elseif PD_CL2 = 1
-                        FSB_FP[PD_Temp_Data] = push(FSB_FP[PD_Temp_Data],0) //第一个箱子上行为0
-                    End If
-                    PD_Temp_Data = PD_Temp_Data + 1
-                End If
+            If FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_Width] > 0
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_FSB_Name] = FSB_and_OC_Topology[PD_CL1][(PD_CL2 + 1)][FaOT_FSB_Name]
+            Else
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_FSB_Name] = "End"
             End If
         Next
     Next
-    // Step6_Circulation_Sum 循环合计
-    Step6_Circulation_Sum = Ubound(FSB_FP)
+    //FSB_and_OC_Topology 填充 FaOT_UL_FSB_Name 和 FaOT_UL_Width
+    For PD_CL1 = 1 To Ubound(OCS_CC) 
+        For PD_CL2 = 1 To (Max_Lenth + 1)
+            If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0
+                Break
+            End If
+            If PD_CL2 = 1
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_FSB_Name] = "Begin"
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_Width] = 0
+            Else
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_FSB_Name] = FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][FaOT_FSB_Name]
+                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_Width] = FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][FaOT_DL_Width]
+            End If
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_FSB_Name])
+            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_Width])
+        Next
+    Next
+    //TracePrint(FSB_and_OC_Topology)
+    
+    //FSB_and_OC_Topology 加载分光器数
+    // For PD_CL1 = 1 To Ubound(OCS_CC)
+    //     For PD_CL2 = 1 To (Max_Lenth + 1)
+    //         PD_Temp_Data = FSB_and_OC_Topology[PD_CL1][PD_CL2][1]
+    //         FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] = 0
+    //         For PD_CL3 = 1 to DT_Shape[0]
+    //             If PD_Temp_Data = List_7013[PD_CL3-1][1]
+    //                 FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] + 1
+    //             End If
+    //         Next
+    //         //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant])
+    //         If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant] = 0 //短光缆跳出循环,避免数组越界
+    //             Break
+    //         End If
+    //     Next
+    // Next
+    // //FSB_and_OC_Topology 加载完成,[A][B][C],第A条光缆,第B个箱子,C,1名字,2下行芯数,3分光器数
+    // //FSB_and_OC_Topology 加载分光器名字&上行POS端口
+    // //FSB_FP 填充数据
+    // PD_Temp_Data = 1
+    // For PD_CL1 = 1 to Ubound(OCS_CC)
+    //     For PD_CL2 = 1 to (Max_Lenth + 1)
+    //         If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0 //空箱跳过
+    //             break
+    //         End If
+    //         If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] <> null
+    //             If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] <> 0
+    //                 FSB_FP[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
+    //                 If PD_CL2 > 1
+    //                     FSB_FP[PD_Temp_Data] = push(FSB_FP[PD_Temp_Data],FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][2]) //上行
+    //                     If FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][FSB_FS_Count_Constant] = 0 //处理空箱,判断上一个箱子的分光器数量
+    //                         FSB_FP[PD_Temp_Data][4] = 0
+    //                     End If
+    //                 Elseif PD_CL2 = 1
+    //                     FSB_FP[PD_Temp_Data] = push(FSB_FP[PD_Temp_Data],0) //第一个箱子上行为0
+    //                 End If
+    //                 PD_Temp_Data = PD_Temp_Data + 1
+    //             End If
+    //         End If
+    //     Next
+    // Next
+    // // Step6_Circulation_Sum 循环合计
+    // Step6_Circulation_Sum = Ubound(FSB_FP)
     // Step6_Circulation_Sum 写入
     Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,3],Step6_Circulation_Sum,true) //立即保存
     // Step6_Circulation_Start 循环起点
@@ -440,6 +481,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
 End Function
 
 MainProgress()
+
 TracePrint("版本号：",TURING.Version())
 
 /*
@@ -451,3 +493,4 @@ GUI
 拆除方案,整体/部分
 写屏
 */
+
