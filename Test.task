@@ -1,15 +1,9 @@
-dim iRet = ""
-Import TURING
-
-TracePrint("版本号：",TURING.Version())
-Do While shape <> 0
-     //鼠标形状识别
-    shape = TURING.FindMouseShape(0)
-    TracePrint shape
-    Delay 500
-Loop
-dTime = Time.Timer()
-dTime = Time.Now()
-dTime = Time.Time()
-iRet = Time.ToUnixTime(dTime, false)
-
+    Const CSV_File = "C:\\Users\\Administrator\\Desktop\\分光器的配置查询结果.csv"
+    CSV_obj = CSV.Open(CSV_File)
+    DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
+    DT_obj = Datatable.SliceDataTable(DT_obj,[],[5,7,21])
+    DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
+    List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
+    TracePrint(list_7013[1][1])
+    TracePrint(list_7013[2][1])
+    TracePrint(list_7013[3][1])

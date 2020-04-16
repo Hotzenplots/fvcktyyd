@@ -200,7 +200,7 @@ Function Prepare_Data()
         Next
         OC_Draw_Vector[PD_CL1] = Clone(PD_Temp_List_2)
     Next
-    //构建FSB_and_OC_Topology[][][10] 第三维长度还有说法,目前只加载分光器数,不考虑上行pos
+    //构建FSB_and_OC_Topology[][][10] 这个List已经重构
     Max_Lenth = 0 //计算最长光缆的段落数
     For PD_CL1 = 1 To Ubound(OCS_CC)
         Max_Lenth = Max_Number(Max_Lenth,OCS_CC[PD_CL1])
@@ -369,26 +369,27 @@ Function Prepare_Data()
             //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_Width])
         Next
     Next
-    //TracePrint(FSB_and_OC_Topology)
+    //FSB_and_OC_Topology 加载 FaOT_FS_1_Count FaOT_FS_2_Count
+    For PD_CL1 = 1 To Ubound(OCS_CC)
+        For PD_CL2 = 1 To (Max_Lenth + 1)
+            PD_Temp_Data = FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FSB_Name]
+            FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] = 0
+            FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] = 0
+            For PD_CL3 = 1 to DT_Shape[0]
+                If PD_Temp_Data = List_7013[PD_CL3 - 1][1]
+                    If len(List_7013[PD_CL3 - 1][2]) = 0
+                        FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] + 1
+                    Else
+                        FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] + 1
+                    End If
+                End If
+            Next
+            If FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_Width] = 0 //短光缆跳出循环,避免数组越界
+                Break
+            End If
+        Next
+    Next
     
-    //FSB_and_OC_Topology 加载分光器数
-    // For PD_CL1 = 1 To Ubound(OCS_CC)
-    //     For PD_CL2 = 1 To (Max_Lenth + 1)
-    //         PD_Temp_Data = FSB_and_OC_Topology[PD_CL1][PD_CL2][1]
-    //         FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] = 0
-    //         For PD_CL3 = 1 to DT_Shape[0]
-    //             If PD_Temp_Data = List_7013[PD_CL3-1][1]
-    //                 FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] + 1
-    //             End If
-    //         Next
-    //         //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant])
-    //         If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_Downlink_Width_Constant] = 0 //短光缆跳出循环,避免数组越界
-    //             Break
-    //         End If
-    //     Next
-    // Next
-    // //FSB_and_OC_Topology 加载完成,[A][B][C],第A条光缆,第B个箱子,C,1名字,2下行芯数,3分光器数
-    // //FSB_and_OC_Topology 加载分光器名字&上行POS端口
     // //FSB_FP 填充数据
     // PD_Temp_Data = 1
     // For PD_CL1 = 1 to Ubound(OCS_CC)
@@ -412,8 +413,9 @@ Function Prepare_Data()
     //         End If
     //     Next
     // Next
-    // // Step6_Circulation_Sum 循环合计
-    // Step6_Circulation_Sum = Ubound(FSB_FP)
+
+    // Step6_Circulation_Sum 循环合计
+    Step6_Circulation_Sum = Ubound(FSB_FP)
     // Step6_Circulation_Sum 写入
     Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,3],Step6_Circulation_Sum,true) //立即保存
     // Step6_Circulation_Start 循环起点
