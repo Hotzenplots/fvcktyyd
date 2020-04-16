@@ -33,6 +33,7 @@ Dim Max_Lenth
 Dim CSV_obj
 Dim DT_obj
 Dim List_7013
+Dim Correction_Num
 Dim Step6_Circulation_Sum
 Dim Step6_Circulation_Start
 
@@ -156,6 +157,7 @@ Function Prepare_Data()
         FSB_CC[PD_CL1] = PD_CL2 - 1
         //TracePrint(FSB_CC[PD_CL1])
     Next
+
     //构建OSC_CC[]
     For PD_CL1 = 1 To C_End
         For PD_CL2 =1 To C_End
@@ -170,6 +172,7 @@ Function Prepare_Data()
         End If
         OCS_CC[PD_CL1] = PD_CL2 - 1
     Next
+
     //构建FSB_Info[][][3]
     For PD_CL1 = 1 To Ubound(FSB_CC)
         For PD_CL2 = 1 To FSB_CC[PD_CL1]
@@ -180,6 +183,7 @@ Function Prepare_Data()
         Next
         FSB_Info[PD_CL1] = Clone(PD_Temp_List_2)
     Next
+
     //构建OC_Info[][][4]
     For PD_CL1 = 1 To Ubound(OCS_CC)
         For PD_CL2 = 1 To OCS_CC[PD_CL1]
@@ -190,6 +194,7 @@ Function Prepare_Data()
         Next
         OC_Info[PD_CL1] = Clone(PD_Temp_List_2)
     Next
+
     //构建OC_Draw_Vector[][][2]
     For PD_CL1 = 1 To Ubound(OCS_CC)
         For PD_CL2 = 1 To OCS_CC[PD_CL1]
@@ -200,7 +205,8 @@ Function Prepare_Data()
         Next
         OC_Draw_Vector[PD_CL1] = Clone(PD_Temp_List_2)
     Next
-    //构建FSB_and_OC_Topology[][][10] 这个List已经重构
+
+    //构建FSB_and_OC_Topology[][][10] 已重构
     Max_Lenth = 0 //计算最长光缆的段落数
     For PD_CL1 = 1 To Ubound(OCS_CC)
         Max_Lenth = Max_Number(Max_Lenth,OCS_CC[PD_CL1])
@@ -215,6 +221,7 @@ Function Prepare_Data()
         Next
         FSB_and_OC_Topology[PD_CL1] = Clone(PD_Temp_List_2)
     Next
+
     //OC_Info 加载芯数
     For PD_CL1 = 1 To Ubound(OCS_CC)
         For PD_CL2 = 1 To OCS_CC[PD_CL1]
@@ -229,6 +236,7 @@ Function Prepare_Data()
             Break
         End If
     Next
+
     //OC_Info 加载长度
     Horizontal_Density = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[Horizontal_Density_Constant,Other_Info_Data_Column])
     Vertical_Density = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[Vertical_Density_Constant,Other_Info_Data_Column])
@@ -250,6 +258,7 @@ Function Prepare_Data()
             End If
         Next
     Next
+
     //OC_Info 加载型号
     For PD_CL1 = 1 To Ubound(OCS_CC)
         For PD_CL2 = 1 To OCS_CC[PD_CL1]
@@ -262,6 +271,7 @@ Function Prepare_Data()
         Other_Info[PD_CL1] = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[PD_CL1,Other_Info_Data_Column])
         //TracePrint(Other_Info[PD_CL1])
     Next
+
     //FSB_Info 加载名称/经度/维度
     For PD_CL1 = 1 To Ubound(FSB_CC)
         For PD_CL2 = 1 To FSB_CC[PD_CL1]
@@ -273,12 +283,14 @@ Function Prepare_Data()
             //TracePrint(FSB_Info[PD_CL1][PD_CL2][FSB_Latitude_Constant])
         Next
     Next
+
     //OC_Info 加载起点
     For PD_CL1 = 1 To Ubound(OCS_CC)
         PD_Temp_List_1 = split(Excel.ReadCell(Opened_Excel_Obj,OC_Topology_Sheet,[PD_CL1, 1]), "&") //起点FSB坐标
         OC_Info[PD_CL1][1][Start_Point_Constant] = Excel.ReadCell(Opened_Excel_Obj,FSB_Topology_Sheet,[CNumber(PD_Temp_List_1[1]),CNumber(PD_Temp_List_1[0])])//起点FSB名称
         //TracePrint(OC_Info[PD_CL1][1][Start_Point_Constant])
     Next
+
     //OC_Draw_Vector 加载向量
     For PD_CL1 = 1 To Ubound(OCS_CC)
         For PD_CL2 = 1 to OCS_CC[PD_CL1] //光缆段向量存入二维数组
@@ -390,29 +402,23 @@ Function Prepare_Data()
         Next
     Next
     
-    // //FSB_FP 填充数据
-    // PD_Temp_Data = 1
-    // For PD_CL1 = 1 to Ubound(OCS_CC)
-    //     For PD_CL2 = 1 to (Max_Lenth + 1)
-    //         If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0 //空箱跳过
-    //             break
-    //         End If
-    //         If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] <> null
-    //             If FSB_and_OC_Topology[PD_CL1][PD_CL2][FSB_FS_Count_Constant] <> 0
-    //                 FSB_FP[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
-    //                 If PD_CL2 > 1
-    //                     FSB_FP[PD_Temp_Data] = push(FSB_FP[PD_Temp_Data],FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][2]) //上行
-    //                     If FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][FSB_FS_Count_Constant] = 0 //处理空箱,判断上一个箱子的分光器数量
-    //                         FSB_FP[PD_Temp_Data][4] = 0
-    //                     End If
-    //                 Elseif PD_CL2 = 1
-    //                     FSB_FP[PD_Temp_Data] = push(FSB_FP[PD_Temp_Data],0) //第一个箱子上行为0
-    //                 End If
-    //                 PD_Temp_Data = PD_Temp_Data + 1
-    //             End If
-    //         End If
-    //     Next
-    // Next
+    //FSB_FP 填充数据
+    PD_Temp_Data = 1
+    For PD_CL1 = 1 to Ubound(OCS_CC)
+        Correction_Num = 0
+        For PD_CL2 = 1 to (Max_Lenth + 1)
+            If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0 //跳过短光缆
+                Break
+            End If
+            If (FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] = 0 And FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] = 0)
+                Correction_Num = Correction_Num + 1
+                Continue
+            End If
+            FSB_FP[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
+            FSB_FP[PD_Temp_Data][FaOT_Ordinary_Num] = FSB_FP[PD_Temp_Data][FaOT_Ordinary_Num] - Correction_Num //空箱修正
+            PD_Temp_Data = PD_Temp_Data + 1
+        Next
+    Next
 
     // Step6_Circulation_Sum 循环合计
     Step6_Circulation_Sum = Ubound(FSB_FP)
