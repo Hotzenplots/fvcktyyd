@@ -6,7 +6,7 @@ Const Control_Step2_Push_Box          = 0 //箱子
 Const Control_Step3_Draw_SS           = 0 //引上
 Const Control_Step4_Draw_OC           = 0 //光缆
 Const Control_Step5_OC_Laying         = 0 //敷设
-Const Control_Step6_FSB_Fiber_Process = 1 //上架
+Const Control_Step6_FSB_Fiber_Process = 0 //上架
 Const Control_Step7_OA_Process        = 0 //工单
 
 Dim FSB_CC = []
@@ -419,6 +419,7 @@ Function Prepare_Data()
             FSB_FP[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
             FSB_FP[PD_Temp_Data][FaOT_Ordinary_Num] = FSB_FP[PD_Temp_Data][FaOT_Ordinary_Num] - Correction_Num //空箱修正
             PD_Temp_Data = PD_Temp_Data + 1
+            //TracePrint(FSB_FP)
         Next
     Next
 
@@ -540,16 +541,17 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
 End Function
 
 MainProgress()
-
-TracePrint("版本号：",TURING.Version())
-
+TracePrint(FSB_FP)
+//Todolist
 /*
-Todolist
-FSB二次上架的逻辑实现
-GUI
+编辑ODM逻辑实现
+跳纤
+直熔
+工单的处理
 重构按键精灵部分的代码
-拖屏方案
+拖屏方案(重构代码之后
 拆除方案,整体/部分
-写屏
+GUI
+写屏(目前没有好的方案)
 */
 
