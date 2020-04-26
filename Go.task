@@ -6,7 +6,7 @@ Const Control_Step2_Push_Box          = 0 //箱子
 Const Control_Step3_Draw_SS           = 0 //引上
 Const Control_Step4_Draw_OC           = 0 //光缆
 Const Control_Step5_OC_Laying         = 0 //敷设
-Const Control_Step6_FSB_Fiber_Process = 1 //上架
+Const Control_Step6_FSB_Fiber_Process = 0 //上架
 Const Control_Step7_OA_Process        = 0 //工单
 
 Dim FSB_CC = []
@@ -106,6 +106,19 @@ Const FaOT_Ordinary_Num               = 6 //FSB_and_OC_Topology FSB位置
 Const FaOT_FS_1_Count                 = 7 //FSB_and_OC_Topology 1级FS个数
 Const FaOT_FS_2_Count                 = 8 //FSB_and_OC_Topology 2级FS个数
 
+Const FSB_FP_UL_FSB_Name            =  1 //FSB_FP 上行FSB名称
+Const FSB_FP_UL_Width               =  2 //FSB_FP 上行芯数
+Const FSB_FP_FSB_Name               =  3 //FSB_FP FSB名称
+Const FSB_FP_DL_Width               =  4 //FSB_FP 下行芯数
+Const FSB_FP_DL_FSB_Name            =  5 //FSB_FP 下行FSB名称
+Const FSB_FP_Ordinary_Num           =  6 //FSB_FP FSB在光缆中的位置(去除空箱)
+Const FSB_FP_FS_1_Count             =  7 //FSB_FP 1级FS个数
+Const FSB_FP_FS_2_Count             =  8 //FSB_FP 2级FS个数
+Const FSB_FP_DL_FS_Count            =  9 //FSB_FP 下行FS个数
+Const FSB_FP_FP_Start               = 10 //FSB_FP 上架开始的芯数
+Const FSB_FP_FP_Count               = 11 //FSB_FP 上架芯数
+Const FSB_FP_DM_Start               = 12 //FSB_FP 直熔开始的芯数
+Const FSB_FP_DM_Count               = 13 //FSB_FP 直熔芯数
 
 Function Determine_Box_Type(Box_Name)
     If InStr(Box_Name,"GJ",1,false) <> 0
@@ -426,6 +439,15 @@ Function Prepare_Data()
         Next
     Next
 
+    //FSB_FP 加载DL_FS_Count
+    For PD_CL1 = Ubound(FSB_FP) to 1 Step -1
+        If FSB_FP[PD_CL1][FaOT_DL_FSB_Name] = "End"
+            FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] = 0
+        Else
+            FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] = FSB_FP[PD_CL1 + 1][FaOT_FS_2_Count] + FSB_FP[PD_CL1 + 1][FSB_FP_DL_FS_Count]
+        End If
+    Next
+
     // Step6_Circulation_Sum 循环合计
     Step6_Circulation_Sum = Ubound(FSB_FP)
     // Step6_Circulation_Sum 写入
@@ -539,6 +561,51 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             Delay Delay_Base_Unit*2
         Loop
         //上架
+        #icon("@res:pho3su87-bj4q-nf11-tthr-7ir6u54hpv0u.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"pho3su87-bj4q-nf11-tthr-7ir6u54hpv0u.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":-165,"iCursorOffsetY":-5,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:pho3su87-bj4q-nf11-tthr-7ir6u54hpv0u.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"pho3su87-bj4q-nf11-tthr-7ir6u54hpv0u.png",0.9,"right","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":-165,"iCursorOffsetY":-5,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:21r7rfqi-055l-u1g2-h47t-7t2bg4kpkb8i.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"21r7rfqi-055l-u1g2-h47t-7t2bg4kpkb8i.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:2e9jqp9q-sf2b-7q9n-99k3-frim9e1fjlf2.png")
+        FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2e9jqp9q-sf2b-7q9n-99k3-frim9e1fjlf2.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+        Do While FFP_Temp <> true
+            #icon("@res:2e9jqp9q-sf2b-7q9n-99k3-frim9e1fjlf2.png")
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2e9jqp9q-sf2b-7q9n-99k3-frim9e1fjlf2.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+            Delay Delay_Base_Unit*2
+        Loop
+        #icon("@res:348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        
+        Keyboard.Input(FFP_FSB_FP[FaOT_DL_FSB_Name],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+        #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        If FFP_FSB_FP[FaOT_FS_2_Count] = 0
+            //一级FSB，从第一芯开始，上架下行光缆芯数的芯数
+            #icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+            Keyboard.Input(FFP_FSB_FP[FaOT_DL_Width],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+            Do While FFP_Temp <> true
+            #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+                Delay Delay_Base_Unit*2
+            Loop
+            #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Else
+            //二级FSB
+
+
+        End If
     Else
         //利旧ODM
         #icon("@res:nr6em8dj-en54-s7o7-di6t-ed246rkpk62k.png")
@@ -596,7 +663,6 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
 End Function
 
 MainProgress()
-
 //Todolist
 /*
 
@@ -608,11 +674,13 @@ MainProgress()
 拖屏方案(重构代码之后
 拆除方案,整体/部分
 GUI
-写屏(目前没有好的方案)
+写屏(目前没有好的方案)  
+二级FSB多下行的处理（参考一级FSB，多一条光缆的情况)
 */
 
 //Known_Bug
 /*
 编辑ODM没有判断已存在的空熔纤盘是否够用
+一级分纤箱串联的情况未考虑，可以作为单独光缆处理，把一级FSB当作二级FSB（去掉判断）处理
 */
 

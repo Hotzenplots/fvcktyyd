@@ -1,14 +1,4 @@
-Const Delay_Base_Unit = 100
-Dim FFP_Found_Pic = []
-Dim FFP_Temp_List = []
-Import TURING
-Window.SetActive({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]})
-FFP_Found_Pic = TURING.FindImageExS(0, 0, 1919, 1079, "C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\ODM-Arrow-Up.png", 0.9)
-FFP_Temp_List = Split(FFP_Found_Pic[1],",")
-TracePrint(CNumber(FFP_Temp_List[1]))
-TracePrint(CNumber(FFP_Temp_List[2]))
-Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
-Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
-
-
+#icon("@res:t7j71rv6-v55u-1eu6-669q-mgujou7munmg.png")
+objRect = Window.GetSize({"wnd":[{"cls":"Progman","title":"Program Manager","app":"explorer"}]})
+TracePrint(objrect)
 
