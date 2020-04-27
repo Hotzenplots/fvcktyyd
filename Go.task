@@ -34,6 +34,7 @@ Dim CSV_obj
 Dim DT_obj
 Dim List_7013
 Dim Correction_Num
+Dim Single_FS_Use_Count //每FSB使用芯数
 Dim Step6_Circulation_Sum
 Dim Step6_Circulation_Start
 
@@ -447,7 +448,34 @@ Function Prepare_Data()
             FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] = FSB_FP[PD_CL1 + 1][FaOT_FS_2_Count] + FSB_FP[PD_CL1 + 1][FSB_FP_DL_FS_Count]
         End If
     Next
-
+    
+    //FSB_FP 加载FSB_FP_FP_Start FSB_FP_FP_Count FSB_FP_DM_Start FSB_FP_DM_Count
+    Single_FS_Use_Count = Other_Info[BackUp_Fiber_Count] + 1
+    For PD_CL1 = Ubound(FSB_FP) to 1 Step -1
+        If FSB_FP[PD_CL1][FSB_FP_DL_FSB_Name] = "End" 
+            FSB_FP[PD_CL1][FSB_FP_FP_Start] = 1
+            FSB_FP[PD_CL1][FSB_FP_FP_Count] = Math.Int(FSB_FP[PD_CL1][FSB_FP_FS_2_Count] * Single_FS_Use_Count)
+            FSB_FP[PD_CL1][FSB_FP_DM_Start] = 0
+            FSB_FP[PD_CL1][FSB_FP_DM_Count] = 0
+        Else
+            If FSB_FP[PD_CL1][FSB_FP_UL_FSB_Name] = "Begin"
+                FSB_FP[PD_CL1][FSB_FP_FP_Start] = 1
+                FSB_FP[PD_CL1][FSB_FP_FP_Count] = Math.Int(FSB_FP[PD_CL1][FSB_FP_DL_Width])
+                FSB_FP[PD_CL1][FSB_FP_DM_Start] = 0
+                FSB_FP[PD_CL1][FSB_FP_DM_Count] = 0
+            Else
+                FSB_FP[PD_CL1][FSB_FP_FP_Start] = Math.Int(FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] * Single_FS_Use_Count + 1)
+                FSB_FP[PD_CL1][FSB_FP_FP_Count] = Math.Int(FSB_FP[PD_CL1][FSB_FP_FS_2_Count] * Single_FS_Use_Count)
+                FSB_FP[PD_CL1][FSB_FP_DM_Start] = 1
+                FSB_FP[PD_CL1][FSB_FP_DM_Count] = Math.Int(FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] * Single_FS_Use_Count)
+            End If
+        End If
+    Next
+    //FSB_FP 数据验证
+    //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\111.xls",false)
+    //Excel.WriteRange(TestExcelObj,"Sheet1","A2",FSB_FP,false)
+    //Excel.CloseExcel(TestExcelObj,true)
+    
     // Step6_Circulation_Sum 循环合计
     Step6_Circulation_Sum = Ubound(FSB_FP)
     // Step6_Circulation_Sum 写入
