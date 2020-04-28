@@ -76,14 +76,14 @@ Const Longitude_Sheet = "longitude"
 Const Latitude_Sheet = "latitude"
 Const OCS_Fiber_Count_Sheet = "OCS_Fiber_Count"
 
-Const FSB_Name_Constant         = 1 //FSB_Info 分纤箱名字
-Const FSB_Longitude_Constant    = 2 //FSB_Info 分纤箱经度
-Const FSB_Latitude_Constant     = 3 //FSB_Info 分纤箱纬度
+Const FSB_Name_Constant           =  1 //FSB_Info 分纤箱名字
+Const FSB_Longitude_Constant      =  2 //FSB_Info 分纤箱经度
+Const FSB_Latitude_Constant       =  3 //FSB_Info 分纤箱纬度
 
-Const Fiber_Count_Constant    = 1    //OC_Info 芯数常量
-Const Lenth_Constant          = 2    //OC_Info 长度常量
-Const Type_Constant           = 3    //OC_Info 类型常量
-Const Start_Point_Constant    = 4    //OC_Info 起点常量 
+Const Fiber_Count_Constant        =  1 //OC_Info 芯数常量
+Const Lenth_Constant              =  2 //OC_Info 长度常量
+Const Type_Constant               =  3 //OC_Info 类型常量
+Const Start_Point_Constant        =  4 //OC_Info 起点常量 
 
 Const Other_Info_Data_Column      =  2 //Other_Info 数据列
 Const Other_Info_Count            = 15 //Other_Info 数据个数
@@ -103,28 +103,28 @@ Const OC_Sys_Name_Constant        = 13 //Other_Info 光缆系统名称常量
 Const OC_Sys_Type_Constant        = 14 //Other_Info 光缆规格常量
 Const BackUp_Fiber_Count          = 15 //Other_Info 备芯,1主X备
 
-Const FaOT_UL_FSB_Name                = 1 //FSB_and_OC_Topology 上行FSB名称
-Const FaOT_UL_Width                   = 2 //FSB_and_OC_Topology 上行光缆芯数
-Const FaOT_FSB_Name                   = 3 //FSB_and_OC_Topology FSB名称
-Const FaOT_DL_Width                   = 4 //FSB_and_OC_Topology 下行光缆芯数
-Const FaOT_DL_FSB_Name                = 5 //FSB_and_OC_Topology 下行FSB名称
-Const FaOT_Ordinary_Num               = 6 //FSB_and_OC_Topology FSB位置
-Const FaOT_FS_1_Count                 = 7 //FSB_and_OC_Topology 1级FS个数
-Const FaOT_FS_2_Count                 = 8 //FSB_and_OC_Topology 2级FS个数
+Const FaOT_UL_FSB_Name            =  1 //FSB_and_OC_Topology 上行FSB名称
+Const FaOT_UL_Width               =  2 //FSB_and_OC_Topology 上行光缆芯数
+Const FaOT_FSB_Name               =  3 //FSB_and_OC_Topology FSB名称
+Const FaOT_DL_Width               =  4 //FSB_and_OC_Topology 下行光缆芯数
+Const FaOT_DL_FSB_Name            =  5 //FSB_and_OC_Topology 下行FSB名称
+Const FaOT_Ordinary_Num           =  6 //FSB_and_OC_Topology FSB位置
+Const FaOT_FS_1_Count             =  7 //FSB_and_OC_Topology 1级FS个数
+Const FaOT_FS_2_Count             =  8 //FSB_and_OC_Topology 2级FS个数
 
-Const FSB_FP_UL_FSB_Name            =  1 //FSB_FP 上行FSB名称
-Const FSB_FP_UL_Width               =  2 //FSB_FP 上行芯数
-Const FSB_FP_FSB_Name               =  3 //FSB_FP FSB名称
-Const FSB_FP_DL_Width               =  4 //FSB_FP 下行芯数
-Const FSB_FP_DL_FSB_Name            =  5 //FSB_FP 下行FSB名称
-Const FSB_FP_Ordinary_Num           =  6 //FSB_FP FSB在光缆中的位置(去除空箱)
-Const FSB_FP_FS_1_Count             =  7 //FSB_FP 1级FS个数
-Const FSB_FP_FS_2_Count             =  8 //FSB_FP 2级FS个数
-Const FSB_FP_DL_FS_Count            =  9 //FSB_FP 下行FS个数
-Const FSB_FP_FP_Start               = 10 //FSB_FP 上架开始的芯数
-Const FSB_FP_FP_Count               = 11 //FSB_FP 上架芯数
-Const FSB_FP_DM_Start               = 12 //FSB_FP 直熔开始的芯数
-Const FSB_FP_DM_Count               = 13 //FSB_FP 直熔芯数
+Const FSB_FP_UL_FSB_Name          =  1 //FSB_FP 上行FSB名称
+Const FSB_FP_UL_Width             =  2 //FSB_FP 上行芯数
+Const FSB_FP_FSB_Name             =  3 //FSB_FP FSB名称
+Const FSB_FP_DL_Width             =  4 //FSB_FP 下行芯数
+Const FSB_FP_DL_FSB_Name          =  5 //FSB_FP 下行FSB名称
+Const FSB_FP_Ordinary_Num         =  6 //FSB_FP FSB在光缆中的位置(去除空箱)
+Const FSB_FP_FS_1_Count           =  7 //FSB_FP 1级FS个数
+Const FSB_FP_FS_2_Count           =  8 //FSB_FP 2级FS个数
+Const FSB_FP_DL_FS_Count          =  9 //FSB_FP 下行FS个数
+Const FSB_FP_FP_Start             = 10 //FSB_FP 上架开始的芯数
+Const FSB_FP_FP_Count             = 11 //FSB_FP 上架芯数
+Const FSB_FP_DM_Start             = 12 //FSB_FP 直熔开始的芯数
+Const FSB_FP_DM_Count             = 13 //FSB_FP 直熔芯数
 
 Function Determine_Box_Type(Box_Name)
     If InStr(Box_Name,"GJ",1,false) <> 0
@@ -524,11 +524,11 @@ Function MainProgress()
 End Function
 
 Function FSB_Fiber_Process(FFP_FSB_FP)
-    Determine_Box_Type(FFP_FSB_FP[FaOT_FSB_Name])
+    Determine_Box_Type(FFP_FSB_FP[FSB_FP_FSB_Name])
     #icon("@res:katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png")
     Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":60,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     Delay Delay_Base_Unit*10
-    Keyboard.Input(FFP_FSB_FP[FaOT_FSB_Name],{"iDelayAfter":Delay_Base_Unit*5,"iDelayBefore":Delay_Base_Unit*5,"sSimulate":"message"})
+    Keyboard.Input(FFP_FSB_FP[FSB_FP_FSB_Name],{"iDelayAfter":Delay_Base_Unit*5,"iDelayBefore":Delay_Base_Unit*5,"sSimulate":"message"})
     Delay Delay_Base_Unit*10
     Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
     Search_Waiting() //判断鼠标指针
@@ -557,15 +557,15 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
         #icon("@res:kbldr2t7-fkqj-f5b5-gr96-0471g07ooldh.png")
         Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kbldr2t7-fkqj-f5b5-gr96-0471g07ooldh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         //FSB类型,上架芯数,DOM/熔纤盘行数
-        If FFP_FSB_FP[FaOT_FS_1_Count] = 0 //二级FSB
-            Used_Fiber_Count = FFP_FSB_FP[FaOT_FS_2_Count] * (CNumber(Other_Info[15]) + 1)
+        If FFP_FSB_FP[FSB_FP_FS_1_Count] = 0 //二级FSB
+            Used_Fiber_Count = FFP_FSB_FP[FSB_FP_FS_2_Count] * (CNumber(Other_Info[15]) + 1)
             If Used_Fiber_Count <= 12
                 Melted_Disk = 1
             Else
                 Melted_Disk = 2
             End If
         Else //一级FSB
-            Used_Fiber_Count = FFP_FSB_FP[FaOT_DL_Width]
+            Used_Fiber_Count = FFP_FSB_FP[FSB_FP_DL_Width]
             If Math.Int(Used_Fiber_Count / 12) = (Used_Fiber_Count / 12)
                 Melted_Disk = Math.Int(Used_Fiber_Count / 12)
             Else
@@ -661,7 +661,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             FFP_Found_Pic = TURING.FindImageExS(0,0,Monitor_X,Monitor_Y,"C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\fmra6mkd-d034-ui0i-emit-72t1a6u8s5o2.png",0.9)
             FFP_Temp_List = Split(FFP_Found_Pic[(FFP_FSB_FP[FSB_FP_FP_Start] - 1)],",")
             Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
-Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+            Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
             Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
             #icon("@res:33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
@@ -836,12 +836,9 @@ Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Bas
     Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6up6oddd-uk30-uv1e-bgve-vmfsdm7tg4sc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 End Function
 
-
-
 MainProgress()
 //Todolist
 /*
-上架
 直熔
 工单的处理
 重构按键精灵部分的代码
@@ -857,6 +854,5 @@ GUI
 添加托盘后的延迟判定
 编辑ODM没有判断已存在的空熔纤盘是否够用
 一级分纤箱串联的情况未考虑，可以作为单独光缆处理，把一级FSB当作二级FSB（去掉判断）处理
-FSB_Fiber_Process函数使用了部分FaOT的索引
 */
 
