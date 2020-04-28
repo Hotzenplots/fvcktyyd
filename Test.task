@@ -1,12 +1,12 @@
-// #icon("@res:fmra6mkd-d034-ui0i-emit-72t1a6u8s5o2.png")
-// Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"fmra6mkd-d034-ui0i-emit-72t1a6u8s5o2.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 Import turing
-Dim list1 = []
-Window.SetActive({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]})
-FFP_Found_Pic = TURING.FindImageExS(0,0,1920,1080,"C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\fmra6mkd-d034-ui0i-emit-72t1a6u8s5o2.png",0.9)
+Dim Delay_Base_Unit=500
+Dim FFP_Temp_List
+FFP_Found_Pic = TURING.FindImageExS(0,0,1920,1080,"C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\Empty_Tray.png",0.8)
 
-list1 = Split(FFP_Found_Pic[6],",")
-TracePrint(list1)
-#icon("@res:3s0ji40f-m11b-fiqi-ud75-0eejo7apjdb8.png")
-bRet = Image.Exists({"wnd":[{"cls":"MSPaintApp","title":"无标题 - 画图","app":"mspaint"}]},{"height":0,"width":0,"x":0,"y":0},@res"3s0ji40f-m11b-fiqi-ud75-0eejo7apjdb8.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true})
+FFP_Temp_List = Split(FFP_Found_Pic[0],",")
+TracePrint(FFP_Temp_List)
+Mouse.Move(FFP_Temp_List[1], FFP_Temp_List[2], false,{"iDelayAfter":300,"iDelayBefore":200})
+Mouse.Move(13,13, true,{"iDelayAfter":300,"iDelayBefore":200})
+//#icon("@res:Empty_Tray.png")
+//Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"Empty_Tray.png",0.8,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":-165,"iCursorOffsetY":-5,"sKeyModifiers":[],"sSimulate":"simulate"})
 
