@@ -1,7 +1,32 @@
 Dim Monitor_X = 1920
 Dim Monitor_Y = 1080
 Dim Delay_Base_Unit =100
-Dim FFP_Temp
-        #icon("@res:Empty_Tray.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"Empty_Tray.png",0.8,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":-165,"iCursorOffsetY":-5,"sKeyModifiers":[],"sSimulate":"simulate"})
-        Mouse.Click("right", "click", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+#icon("@res:bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 3 * 2),"x":0,"y":0},@res"bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+#icon("@res:a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":200,"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+#icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+//右侧
+#icon("@res:bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 3),"x":(Monitor_X / 3 * 2),"y":0},@res"bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+#icon("@res:a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+#icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+#icon("@res:64480q2s-dav5-nc0p-kcgu-7apoa57g8cvf.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"64480q2s-dav5-nc0p-kcgu-7apoa57g8cvf.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+#icon("@res:6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+Keyboard.Input(6,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+#icon("@res:kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+#icon("@res:42oksfvb-026t-2hbp-ja66-aln18i129g80.png")
+Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"42oksfvb-026t-2hbp-ja66-aln18i129g80.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+
