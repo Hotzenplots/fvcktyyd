@@ -96,7 +96,7 @@ Const Type_Constant               =  3 //OC_Info 类型常量
 Const Start_Point_Constant        =  4 //OC_Info 起点常量 
 
 Const Other_Info_Data_Column      =  2 //Other_Info 数据列
-Const Other_Info_Count            = 15 //Other_Info 数据个数
+Const Other_Info_Count            = 20 //Other_Info 数据个数
 Const RD_Name_Constant            =  1 //Other_Info 小区名称常量
 Const SS_Name_Constant            =  2 //Other_Info 承载系统名称常量
 Const Project_Num_Constant        =  3 //Other_Info 项目编号常量
@@ -104,7 +104,7 @@ Const Task_Name_Constant          =  4 //Other_Info 任务名称常量
 Const DQS_Porject_Constant        =  5 //Other_Info 数据质量责任人_工程常量
 Const DQS_City_Constant           =  6 //Other_Info 数据质量责任人_地市常量
 Const DQS_District_Constant       =  7 //Other_Info 数据质量责任人_区县常量
-Const DQS_Maintenance_Constant    =  8 //Other_Info 数据质量责任人_维护常量
+Const DQS_Maintaince_Constant     =  8 //Other_Info 数据质量责任人_维护常量
 Const District_Constant           =  9 //Other_Info 区县常量
 Const Horizontal_Density_Constant = 10 //Other_Info 水平密度常量
 Const Vertical_Density_Constant   = 11 //Other_Info 垂直密度常量
@@ -112,6 +112,11 @@ Const City_Constant               = 12 //Other_Info 地市常量
 Const OC_Sys_Name_Constant        = 13 //Other_Info 光缆系统名称常量
 Const OC_Sys_Type_Constant        = 14 //Other_Info 光缆规格常量
 Const BackUp_Fiber_Count          = 15 //Other_Info 备芯,1主X备
+Const OA_Sheet_Name               = 16 //Other_Info 工单名称
+Const AORD_DQS_Project_Constant   = 17 //Other_Info 数据质量责任人_工程_光路
+Const AORD_DQS_City_Constant      = 18 //Other_Info 数据质量责任人_地市_光路
+Const AORD_DQS_District_Constant  = 19 //Other_Info 数据质量责任人_区县_光路
+Const AORD_DQS_Maintaince_Constant= 20 //Other_Info 数据质量责任人_维护_光路
 
 Const FaOT_UL_FSB_Name            =  1 //FSB_and_OC_Topology 上行FSB名称
 Const FaOT_UL_Width               =  2 //FSB_and_OC_Topology 上行光缆芯数
@@ -135,6 +140,23 @@ Const FSB_FP_FP_Start             = 10 //FSB_FP 上架开始的芯数
 Const FSB_FP_FP_Count             = 11 //FSB_FP 上架芯数
 Const FSB_FP_DM_Start             = 12 //FSB_FP 直熔开始的芯数
 Const FSB_FP_DM_Count             = 13 //FSB_FP 直熔芯数
+
+//Add_Optical_Route_Data Index
+Const AORD_A_Location =  1
+Const AORD_A_Equipment =  2
+Const AORD_A_DownLink_Port =  3
+Const AORD_Z_Location =  4
+Const AORD_Z_Equipment =  5
+Const AORD_Optical_Route_Name =  6
+Const AORD_Project_Num =  7
+Const AORD_Task_Name =  8
+Const AORD_DQS_Project =  9
+Const AORD_DQS_City = 10
+Const AORD_DQS_District = 11
+Const AORD_DQS_Maintaince = 12
+Const AORD_Vocational_Name = 13
+
+
 
 Function Determine_Box_Type(Box_Name)
     If InStr(Box_Name,"GJ",1,false) <> 0
@@ -184,7 +206,7 @@ Function Prepare_Data()
     //处理7013表
     CSV_obj = CSV.Open(CSV_File)
     DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
-    DT_obj = Datatable.SliceDataTable(DT_obj,[],[5,7,21])
+    DT_obj = Datatable.SliceDataTable(DT_obj,[],[1,2,4,5,7,10,11,21])
     DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
     List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
     //TracePrint(DT_obj)
@@ -429,8 +451,8 @@ Function Prepare_Data()
             FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] = 0
             FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] = 0
             For PD_CL3 = 1 to DT_Shape[0]
-                If PD_Temp_Data = List_7013[PD_CL3 - 1][1]
-                    If len(List_7013[PD_CL3 - 1][2]) = 0
+                If PD_Temp_Data = List_7013[PD_CL3 - 1][4]
+                    If len(List_7013[PD_CL3 - 1][7]) = 0
                         FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] + 1
                     Else
                         FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] + 1
@@ -458,7 +480,7 @@ Function Prepare_Data()
             FSB_FP[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
             FSB_FP[PD_Temp_Data][FaOT_Ordinary_Num] = FSB_FP[PD_Temp_Data][FaOT_Ordinary_Num] - Correction_Num //空箱修正
             PD_Temp_Data = PD_Temp_Data + 1
-            //TracePrint(FSB_FP)
+            //TracePrint(FSB_FP[PD_Temp_Data])
         Next
     Next
 
@@ -499,22 +521,22 @@ Function Prepare_Data()
     //Excel.CloseExcel(TestExcelObj,true)
 
     // Step6_Circulation_Start 循环起点
-    Step6_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[26,2])
+    Step6_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[36,2])
     // Step6_Circulation_Sum 循环合计
     Step6_Circulation_Sum = Ubound(FSB_FP)
     // Step6_Circulation_Sum 合计写入
-    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,3],Step6_Circulation_Sum,true) //立即保存
+    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[36,3],Step6_Circulation_Sum,true) //立即保存
 
 
     // Step7_Circulation_Start 循环起点
-    Step7_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[27,2])
+    Step7_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[37,2])
     // Step7_Circulation_Sum 循环合计
     Step7_Circulation_Sum = 0
     For PD_CL1 = 1 to Ubound(FSB_FP)
         Step7_Circulation_Sum = Step7_Circulation_Sum + FSB_FP[PD_CL1][FSB_FP_FS_2_Count]
     Next
     // Step7_Circulation_Sum 合计写入
-    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[27,3],Step7_Circulation_Sum,true) //立即保存
+    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[37,3],Step7_Circulation_Sum,true) //立即保存
 
     //构建 Add_Optical_Route_Data[][13]
     For PD_CL1 = 1 To Step7_Circulation_Sum
@@ -524,26 +546,37 @@ Function Prepare_Data()
         Add_Optical_Route_Data[PD_CL1] = Clone(PD_Temp_List_1)
     Next
 
-    //Add_Optical_Route_Data 加载AZ端分光器,安装位置
+    //Add_Optical_Route_Data 加载数据
     PD_Temp_Data = 0 
-    For PD_CL1 = 1 to DT_Shape[0]
-        If PD_CL1 = DT_Shape[0]
-            Break
-        End If
-        If List_7013[PD_CL1][2] = ""
+    For PD_CL1 = 1 to DT_Shape[0] - 1
+        If List_7013[PD_CL1][7] = ""
             Continue
         End If
         PD_Temp_Data = PD_Temp_Data + 1
-        Add_Optical_Route_Data[PD_Temp_Data][4] = Clone(List_7013[PD_CL1][0])
-        Add_Optical_Route_Data[PD_Temp_Data][3] = Replace(Clone(Add_Optical_Route_Data[PD_Temp_Data][4]),"分光器","GF0001",false)
-        Add_Optical_Route_Data[PD_Temp_Data][2] = left(List_7013[PD_CL1][2],(len(List_7013[PD_CL1][2]) - 6))
-        Add_Optical_Route_Data[PD_Temp_Data][1] = Replace(Clone(Add_Optical_Route_Data[PD_Temp_Data][2]),"分光器","GF0001",false)
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_Z_Equipment] = Clone(List_7013[PD_CL1][3])
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_Z_Location] = Clone(List_7013[PD_CL1][4])
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_A_Equipment] = left(List_7013[PD_CL1][7],(len(List_7013[PD_CL1][7]) - 6))
+        For PD_CL2 = 1 to DT_Shape[0] - 1
+            If Add_Optical_Route_Data[PD_Temp_Data][AORD_A_Equipment] = List_7013[PD_CL2][3]
+                Add_Optical_Route_Data[PD_Temp_Data][AORD_A_Location] = List_7013[PD_CL2][4]
+            End If
+        Next
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_A_DownLink_Port] = Right(List_7013[PD_CL1][7],5)
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_Optical_Route_Name] = "光路名称"
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_Project_Num] = List_7013[PD_CL2][5]
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_Task_Name] = List_7013[PD_CL2][6]
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_DQS_Project] = Other_Info[AORD_DQS_Project_Constant]
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_DQS_City] = Other_Info[AORD_DQS_City_Constant]
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_DQS_District] = Other_Info[AORD_DQS_District_Constant]
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_DQS_Maintaince] = Other_Info[AORD_DQS_Maintaince_Constant]
+        Add_Optical_Route_Data[PD_Temp_Data][AORD_Vocational_Name] = List_7013[PD_CL2][2]
     Next
     //Add_Optical_Route_Data 数据验证
     //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\222.xls",false)
     //Excel.WriteRange(TestExcelObj,"Sheet1","A2",Add_Optical_Route_Data,false)
     //Excel.CloseExcel(TestExcelObj,true)
-    //Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
+
+    Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
 End Function
 
 Function MainProgress()
@@ -564,7 +597,7 @@ Function MainProgress()
             For MP_CL1 = Step6_Circulation_Start to Step6_Circulation_Sum
                 FSB_Fiber_Process(FSB_FP[MP_CL1])
                 Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
-                Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,2],(MP_CL1+1),true)
+                Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[36,2],(MP_CL1+1),true)
                 Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
             Next
             If Control_Step0_SemiAuto = 1
@@ -623,9 +656,9 @@ Function MainProgress()
             End If
             //执行Step7主循环
             For MP_CL1 = Step7_Circulation_Start to Step7_Circulation_Sum //执行Step7主循环
-                //功能函数
+                Add_Optical_Route(Add_Optical_Route_Data[MP_CL1])
                 Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
-                Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[27,2],(MP_CL1+1),true)
+                Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[37,2],(MP_CL1+1),true)
                 Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
             Next
             If Control_Step0_SemiAuto = 1
@@ -1008,8 +1041,9 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
 End Function
 
 Function Add_Optical_Route(AORD)
-
+    
 End Function
+
 MainProgress()
 
 //Todolist
@@ -1025,6 +1059,7 @@ GUI
 
 //Known_Bug
 /*
+按键精灵,引上和光缆需要考虑1段的情况
 添加托盘后的判定取了巧,需要调整
 编辑ODM没有判断已存在的空熔纤盘是否够用
 一级分纤箱串联的情况未考虑，可以作为单独光缆处理，把一级FSB当作二级FSB（去掉判断）处理
