@@ -6,8 +6,9 @@ Const Control_Step2_Push_Box          = 0 //箱子
 Const Control_Step3_Draw_SS           = 0 //引上
 Const Control_Step4_Draw_OC           = 0 //光缆
 Const Control_Step5_OC_Laying         = 0 //敷设
-Const Control_Step6_FSB_Fiber_Process = 1 //上架
-Const Control_Step7_OA_Process        = 0 //工单
+Const Control_Step6_FSB_Fiber_Process   = 0 //上架
+Const Control_Step7_Add_Optical_Route = 1 //新增光路
+Const Control_Step8_Transmission_Design   = 0 //传输设计
 
 Dim FSB_CC = []
 Dim OCS_CC = []
@@ -37,6 +38,8 @@ Dim Correction_Num
 Dim Single_FS_Use_Count //每FSB使用芯数
 Dim Step6_Circulation_Sum
 Dim Step6_Circulation_Start
+Dim Step7_Circulation_Sum
+Dim Step7_Circulation_Start
 
 Dim PD_Temp_List_1 = []
 Dim PD_Temp_List_2 = []
@@ -66,7 +69,7 @@ Dim Monitor_X
 Dim Monitor_Y
 
 Const C_End = 100
-Const Delay_Base_Unit = 100
+Const Delay_Unit = 100
 Const CSV_File = "C:\\Users\\Administrator\\Desktop\\分光器的配置查询结果.csv"
 Const Source_File_Path = "C:\\Users\\Administrator\\Desktop\\test.xls"
 Const FSB_Topology_Sheet = "FSB_Topology"
@@ -131,20 +134,20 @@ Function Determine_Box_Type(Box_Name)
         If InStr(Box_Name,"光交",1,false) <> 0
             //光交
             #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         End If
     Else
         //分纤箱
         #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     End If
 End Function
 
@@ -160,7 +163,7 @@ Function Search_Waiting()
     Mouse_shape = TURING.FindMouseShape(0)
     Do While Mouse_shape = 0
         Mouse_shape = TURING.FindMouseShape(0)
-        Delay Delay_Base_Unit
+        Delay Delay_Unit
     Loop
 End Function
 
@@ -487,12 +490,24 @@ Function Prepare_Data()
     //Excel.WriteRange(TestExcelObj,"Sheet1","A2",FSB_FP,false)
     //Excel.CloseExcel(TestExcelObj,true)
 
-    // Step6_Circulation_Sum 循环合计
-    Step6_Circulation_Sum = Ubound(FSB_FP)
-    // Step6_Circulation_Sum 写入
-    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,3],Step6_Circulation_Sum,true) //立即保存
     // Step6_Circulation_Start 循环起点
     Step6_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[26,2])
+    // Step6_Circulation_Sum 循环合计
+    Step6_Circulation_Sum = Ubound(FSB_FP)
+    // Step6_Circulation_Sum 合计写入
+    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,3],Step6_Circulation_Sum,true) //立即保存
+
+
+    // Step7_Circulation_Start 循环起点
+    Step7_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[27,2])
+    // Step7_Circulation_Sum 循环合计
+    Step7_Circulation_Sum = 0
+    For PD_CL1 = 1 to Ubound(FSB_FP)
+        Step7_Circulation_Sum = Step7_Circulation_Sum + FSB_FP[PD_CL1][FSB_FP_FS_2_Count]
+    Next
+    // Step7_Circulation_Sum 合计写入
+    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[27,3],Step7_Circulation_Sum,true) //立即保存
+
     Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
 End Function
 
@@ -504,13 +519,14 @@ Function MainProgress()
             Dialog.MsgBox("完成","Step1","0",3,0)
         End If
     End If
+    // 666
     If Control_Step6_FSB_Fiber_Process = 1
         For MP_CL0 = 1 to 1 //套一层一次循环,判断 Step6_Circulation_Start 和 Step6_Circulation_Sum
             If Step6_Circulation_Start > Step6_Circulation_Sum
                 Dialog.MsgBox("完成,情况B","Step6","0",3,0)
                 Break
             End If
-            For MP_CL1 = Step6_Circulation_Start to Ubound(FSB_FP)
+            For MP_CL1 = Step6_Circulation_Start to Step6_Circulation_Sum
                 FSB_Fiber_Process(FSB_FP[MP_CL1])
                 Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
                 Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[26,2],(MP_CL1+1),true)
@@ -521,40 +537,102 @@ Function MainProgress()
             End If
         Next
     End If
+    // 777
+    If Control_Step7_Add_Optical_Route = 1
+        For MP_CL0 = 1 to 1 //套一层一次循环,判断 Step7_Circulation_Start 和 Step7_Circulation_Sum
+            If Step7_Circulation_Sum > Step7_Circulation_Sum
+                Dialog.MsgBox("完成,情况B","Step7","0",3,0)
+                Break
+            End If
+            App.Kill("360se.exe")
+            Delay 3000
+            iPID = App.Run("C:\\360\\360se6\\Application\\360se.exe", "0", "1")
+            #icon("@res:S7-收藏夹7112-按钮.png")
+            Mouse.Action({"wnd":[{"app":"360se","cls":"360se6_Frame","title":"百度一下，你就知道 - 360安全浏览器 11.1"}],"ctrl":[{"role":"ROLE_SYSTEM_PANE","name":"百度一下，你就知道 - 360安全浏览器 11.1"},{"role":"ROLE_SYSTEM_PANE","name":"360安全浏览器"},{"role":"ROLE_SYSTEM_TOOLBAR","name":"书签"},{"role":"ROLE_SYSTEM_PUSHBUTTON","name":"7112"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:S7-登录-按钮.png")
+            Mouse.Action({"html":{"attrMap":{"id":"ext-gen38","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":2000,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:S7-右箭头-按钮.png")
+            Mouse.Action({"html":{"attrMap":{"css-selector":"body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>a>img","tableCol":"37","tag":"IMG"},"index":0,"tagName":"IMG"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:S7-右箭头-按钮.png")
+            Mouse.Action({"html":{"attrMap":{"css-selector":"body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>a>img","tableCol":"37","tag":"IMG"},"index":0,"tagName":"IMG"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:S7-右箭头-按钮.png")
+            Mouse.Action({"html":{"attrMap":{"css-selector":"body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>a>img","tableCol":"37","tag":"IMG"},"index":0,"tagName":"IMG"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:S7-光路调度-按钮.png")
+            Mouse.Action({"html":{"attrMap":{"parentid":"sysmodel","tableCol":"8","tag":"IMG"},"index":0,"tagName":"IMG"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            If Step7_Circulation_Start = 1
+                //新建工单
+                #icon("@res:S7-光路调度左侧十字-按钮.png")
+                Mouse.Action({"html":{"attrMap":{"parentid":"ext-gen42","tag":"IMG"},"index":5,"tagName":"IMG"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                #icon("@res:S7-光路调度-按钮 (2).png")
+                Mouse.Action({"html":{"attrMap":{"aaname":"光路调度","parentid":"ext-gen49","tag":"SPAN"},"index":0,"tagName":"SPAN"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                #icon("@res:S7-工单主题-文本框.png")
+                Keyboard.InputText({"html":{"attrMap":{"name":"title","tag":"INPUT","type":"text"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"二级光路测试工单1",true,10,10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"sKeyModifiers":[],"sSimulate":"message"})
+                #icon("@res:S7-要求完成时间-文本框.png")
+                Mouse.Action({"html":{"attrMap":{"id":"requestTime","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                #icon("@res:S7-右箭头-按钮 (2).png")
+                Mouse.Action({"html":{"attrMap":{"parentid":"dpTitle","tag":"A"},"index":4,"tagName":"A"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                #icon("@res:S7-确定-按钮.png")
+                Mouse.Action({"html":{"attrMap":{"id":"dpOkInput","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                #icon("@res:S7-调度理由-文本框.png")
+                Keyboard.InputText({"html":{"attrMap":{"tag":"TEXTAREA"},"index":0,"tagName":"TEXTAREA"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"二级光路测试工单1",true,10,10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"sKeyModifiers":[],"sSimulate":"message"})
+            Else
+                //搜索工单
+                #icon("@res:S7-下箭头-按钮.png")
+                Mouse.Action({"html":{"attrMap":{"id":"ext-gen10","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                #icon("@res:S7-主题-文本框.png")
+                Keyboard.InputText({"html":{"attrMap":{"name":"processinstname","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"南城开发",true,10,10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"sKeyModifiers":[],"sSimulate":"message"})
+                #icon("@res:S7-查询-按钮.png")
+                Mouse.Action({"html":{"attrMap":{"id":"ext-gen38","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":3000,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                #icon("@res:S7-主题-按钮.png")
+                Mouse.Action({"html":{"attrMap":{"aaname":"主题","parentid":"ext-gen28","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":25,"sKeyModifiers":[],"sSimulate":"simulate"})
+            End If
+            //执行Step7主循环
+            For MP_CL1 = Step7_Circulation_Start to Step7_Circulation_Sum //执行Step7主循环
+                //功能函数
+                Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
+                Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[27,2],(MP_CL1+1),true)
+                Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
+            Next
+            If Control_Step0_SemiAuto = 1
+                Dialog.MsgBox("完成,情况A","Step7","0",3,0)
+            End If
+
+        Next
+    End If
 End Function
 
 Function FSB_Fiber_Process(FFP_FSB_FP)
     Determine_Box_Type(FFP_FSB_FP[FSB_FP_FSB_Name])
     #icon("@res:katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":60,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-    Delay Delay_Base_Unit*10
-    Keyboard.Input(FFP_FSB_FP[FSB_FP_FSB_Name],{"iDelayAfter":Delay_Base_Unit*5,"iDelayBefore":Delay_Base_Unit*5,"sSimulate":"message"})
-    Delay Delay_Base_Unit*10
-    Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":60,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Delay Delay_Unit*10
+    Keyboard.Input(FFP_FSB_FP[FSB_FP_FSB_Name],{"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sSimulate":"message"})
+    Delay Delay_Unit*10
+    Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
     Search_Waiting() //判断鼠标指针
     #icon("@res:86d3jo8e-mfbf-uuim-vntv-25ug36otjm6p.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"86d3jo8e-mfbf-uuim-vntv-25ug36otjm6p.png",0.9,"left","dbclick",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":30,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"86d3jo8e-mfbf-uuim-vntv-25ug36otjm6p.png",0.9,"left","dbclick",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":30,"sKeyModifiers":[],"sSimulate":"simulate"})
     Search_Waiting()
     #icon("@res:1k7d4nc9-6g5i-6vhl-d372-ms0sgjkcdifo.png")
-    Image.Hover({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1k7d4nc9-6g5i-6vhl-d372-ms0sgjkcdifo.png",0.7,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Image.Hover({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1k7d4nc9-6g5i-6vhl-d372-ms0sgjkcdifo.png",0.7,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:f0vf3qs7-9har-fncr-kl3s-4cc3onqg2nqf.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"f0vf3qs7-9har-fncr-kl3s-4cc3onqg2nqf.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"f0vf3qs7-9har-fncr-kl3s-4cc3onqg2nqf.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:2b4id6jb-vvv7-s8d1-v120-8p7toocurktk.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2b4id6jb-vvv7-s8d1-v120-8p7toocurktk.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2b4id6jb-vvv7-s8d1-v120-8p7toocurktk.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png")
-    FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+    FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
     Do While FFP_Temp <> true
         #icon("@res:ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png")
-        FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
-        Delay Delay_Base_Unit*2
+        FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"ndhpcp7c-mmak-upqe-7vlp-mhcmkoevbgin.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
+        Delay Delay_Unit*2
     Loop
     //此处已打开传输资源场景化配置
     #icon("@res:it3a6eq6-pheh-rnj3-5n5d-eqrijhad0hu8.png")
-    No_ODM = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"it3a6eq6-pheh-rnj3-5n5d-eqrijhad0hu8.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+    No_ODM = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"it3a6eq6-pheh-rnj3-5n5d-eqrijhad0hu8.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
     If No_ODM
         //新建ODM
         #icon("@res:kbldr2t7-fkqj-f5b5-gr96-0471g07ooldh.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kbldr2t7-fkqj-f5b5-gr96-0471g07ooldh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kbldr2t7-fkqj-f5b5-gr96-0471g07ooldh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         //FSB类型,上架芯数,DOM/熔纤盘行数
         If FFP_FSB_FP[FSB_FP_FS_1_Count] = 0 //二级FSB
             Used_Fiber_Count = FFP_FSB_FP[FSB_FP_FS_2_Count] * (CNumber(Other_Info[15]) + 1)
@@ -572,108 +650,108 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             End If
         End If
         #icon("@res:ccdsor7e-tg0b-85ki-t8in-hh3krutuj9an.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"ccdsor7e-tg0b-85ki-t8in-hh3krutuj9an.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":80,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        Keyboard.Input(Melted_Disk,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
-        Keyboard.Press("Tab", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-        Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-        Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-        Keyboard.Press("Tab", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-        Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"ccdsor7e-tg0b-85ki-t8in-hh3krutuj9an.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":80,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Keyboard.Input(Melted_Disk,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+        Keyboard.Press("Tab", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+        Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+        Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+        Keyboard.Press("Tab", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+        Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
         #icon("@res:pg3gplf5-ngdg-pmmk-m3qe-mdhhgrkaqeoc.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"pg3gplf5-ngdg-pmmk-m3qe-mdhhgrkaqeoc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"pg3gplf5-ngdg-pmmk-m3qe-mdhhgrkaqeoc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         //放熔纤盘
         #icon("@res:j7v3k4dg-s66d-5e98-2c7r-tg10l9odhbfu.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"j7v3k4dg-s66d-5e98-2c7r-tg10l9odhbfu.png",0.9,"right","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"j7v3k4dg-s66d-5e98-2c7r-tg10l9odhbfu.png",0.9,"right","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:14qqe2pj-vvgq-igrj-bauc-7oh2g8hr4os3.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"14qqe2pj-vvgq-igrj-bauc-7oh2g8hr4os3.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"14qqe2pj-vvgq-igrj-bauc-7oh2g8hr4os3.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:gs9j2j0r-p0k6-d6f0-3dh8-35jghf5r7atn.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"gs9j2j0r-p0k6-d6f0-3dh8-35jghf5r7atn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":80,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        Keyboard.Press("A", "press", ["Ctrl"],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-        Keyboard.Input(Melted_Disk,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"gs9j2j0r-p0k6-d6f0-3dh8-35jghf5r7atn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":80,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Keyboard.Press("A", "press", ["Ctrl"],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+        Keyboard.Input(Melted_Disk,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
         #icon("@res:st7fj8sj-2m71-jnbl-c812-75hp3n7u0a1v.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"st7fj8sj-2m71-jnbl-c812-75hp3n7u0a1v.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"st7fj8sj-2m71-jnbl-c812-75hp3n7u0a1v.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         Delay 5000
         //上架
-        Mouse.Move(Monitor_X, Monitor_Y, false,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+        Mouse.Move(Monitor_X, Monitor_Y, false,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
         #icon("@res:Empty_Tray.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"Empty_Tray.png",0.8,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":-165,"iCursorOffsetY":-5,"sKeyModifiers":[],"sSimulate":"simulate"})
-        Mouse.Click("right", "click", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"Empty_Tray.png",0.8,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":-165,"iCursorOffsetY":-5,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Mouse.Click("right", "click", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
         #icon("@res:21r7rfqi-055l-u1g2-h47t-7t2bg4kpkb8i.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"21r7rfqi-055l-u1g2-h47t-7t2bg4kpkb8i.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"21r7rfqi-055l-u1g2-h47t-7t2bg4kpkb8i.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-        FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
+        FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
         Do While FFP_Temp <> true
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
-            Delay Delay_Base_Unit*1
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
+            Delay Delay_Unit*1
         Loop
         #icon("@res:348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         If FFP_FSB_FP[FSB_FP_FS_2_Count] = 0
             //一级FSB
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_FSB_Name],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
             Do While FFP_Temp <> true
                 #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
-                Delay Delay_Base_Unit*1
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
+                Delay Delay_Unit*1
             Loop
             #icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_Width],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_Width],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
             Do While FFP_Temp <> true
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
-                Delay Delay_Base_Unit*1
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
+                Delay Delay_Unit*1
             Loop
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         Else
             //二级FSB
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_UL_FSB_Name],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFP_FSB_FP[FSB_FP_UL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
             Do While FFP_Temp <> true
                 #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
-                Delay Delay_Base_Unit*2
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
+                Delay Delay_Unit*2
             Loop
             FFP_Found_Pic = TURING.FindImageExS(0,0,Monitor_X,Monitor_Y,"C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\fmra6mkd-d034-ui0i-emit-72t1a6u8s5o2.png",0.9)
             FFP_Temp_List = Split(FFP_Found_Pic[(FFP_FSB_FP[FSB_FP_FP_Start] - 1)],",")
-            Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
-            Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
-            Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+            Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
+            Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
+            Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
             #icon("@res:33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_FP_Count],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+            Keyboard.Input(FFP_FSB_FP[FSB_FP_FP_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
             Do While FFP_Temp <> true
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
-                Delay Delay_Base_Unit*2
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
+                Delay Delay_Unit*2
             Loop
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         End If
         //直熔
         If FFP_FSB_FP[FSB_FP_FS_2_Count] = 0
@@ -684,45 +762,45 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
                 #icon("@res:rc13di59-ribs-573j-odld-14u0ldblpvo7.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"rc13di59-ribs-573j-odld-14u0ldblpvo7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
                 Delay 5000
                 //左侧
                 #icon("@res:bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 3 * 2),"x":0,"y":0},@res"bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
                 #icon("@res:a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":200,"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":200,"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 //右侧
                 #icon("@res:bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 3),"x":(Monitor_X / 3 * 2),"y":0},@res"bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
                 #icon("@res:a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:64480q2s-dav5-nc0p-kcgu-7apoa57g8cvf.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"64480q2s-dav5-nc0p-kcgu-7apoa57g8cvf.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"64480q2s-dav5-nc0p-kcgu-7apoa57g8cvf.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-                Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Input(FFP_FSB_FP[FSB_FP_DM_Count],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Input(FFP_FSB_FP[FSB_FP_DM_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
                 #icon("@res:kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:42oksfvb-026t-2hbp-ja66-aln18i129g80.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"42oksfvb-026t-2hbp-ja66-aln18i129g80.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"42oksfvb-026t-2hbp-ja66-aln18i129g80.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             End If
         End If
     Else
         //利旧ODM
         #icon("@res:nr6em8dj-en54-s7o7-di6t-ed246rkpk62k.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"nr6em8dj-en54-s7o7-di6t-ed246rkpk62k.png",0.9,"right","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"nr6em8dj-en54-s7o7-di6t-ed246rkpk62k.png",0.9,"right","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:2m8bb8jh-t0r0-ub9c-vni7-roi58gtenaeq.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2m8bb8jh-t0r0-ub9c-vni7-roi58gtenaeq.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2m8bb8jh-t0r0-ub9c-vni7-roi58gtenaeq.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         //FSB类型,上架芯数,DOM/熔纤盘行数
         If FFP_FSB_FP[FSB_FP_FS_1_Count] = 0 //二级FSB
             Used_Fiber_Count = FFP_FSB_FP[FSB_FP_FS_2_Count] * (CNumber(Other_Info[15]) + 1)
@@ -739,108 +817,108 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
                 Melted_Disk = Math.Int(Used_Fiber_Count / 12) + 1
             End If
         End If
-        Delay Delay_Base_Unit*20
+        Delay Delay_Unit*20
         FFP_Found_Pic = TURING.FindImageExS(0,0,Monitor_X,Monitor_Y,"C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\ODM-Arrow-Up.png",0.9)
         FFP_Temp_List = Split(FFP_Found_Pic[1],",")
-        Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+        Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
         For FFD_CL1 = 1 to Melted_Disk
-            Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+            Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
         Next
         #icon("@res:pg3gplf5-ngdg-pmmk-m3qe-mdhhgrkaqeoc.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"pg3gplf5-ngdg-pmmk-m3qe-mdhhgrkaqeoc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"pg3gplf5-ngdg-pmmk-m3qe-mdhhgrkaqeoc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         //放熔纤盘
         #icon("@res:j7v3k4dg-s66d-5e98-2c7r-tg10l9odhbfu.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"j7v3k4dg-s66d-5e98-2c7r-tg10l9odhbfu.png",0.9,"right","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"j7v3k4dg-s66d-5e98-2c7r-tg10l9odhbfu.png",0.9,"right","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:14qqe2pj-vvgq-igrj-bauc-7oh2g8hr4os3.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"14qqe2pj-vvgq-igrj-bauc-7oh2g8hr4os3.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"14qqe2pj-vvgq-igrj-bauc-7oh2g8hr4os3.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:gs9j2j0r-p0k6-d6f0-3dh8-35jghf5r7atn.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"gs9j2j0r-p0k6-d6f0-3dh8-35jghf5r7atn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":80,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        Keyboard.Press("A", "press", ["Ctrl"],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-        Keyboard.Input(Melted_Disk,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"gs9j2j0r-p0k6-d6f0-3dh8-35jghf5r7atn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":80,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Keyboard.Press("A", "press", ["Ctrl"],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+        Keyboard.Input(Melted_Disk,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
         #icon("@res:st7fj8sj-2m71-jnbl-c812-75hp3n7u0a1v.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"st7fj8sj-2m71-jnbl-c812-75hp3n7u0a1v.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"st7fj8sj-2m71-jnbl-c812-75hp3n7u0a1v.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         Delay 5000
         //上架
-        Mouse.Move(Monitor_X, Monitor_Y, false,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+        Mouse.Move(Monitor_X, Monitor_Y, false,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
         #icon("@res:Empty_Tray.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"Empty_Tray.png",0.8,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":-165,"iCursorOffsetY":-5,"sKeyModifiers":[],"sSimulate":"simulate"})
-        Mouse.Click("right", "click", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"Empty_Tray.png",0.8,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":-165,"iCursorOffsetY":-5,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Mouse.Click("right", "click", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
         #icon("@res:21r7rfqi-055l-u1g2-h47t-7t2bg4kpkb8i.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"21r7rfqi-055l-u1g2-h47t-7t2bg4kpkb8i.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"21r7rfqi-055l-u1g2-h47t-7t2bg4kpkb8i.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-        FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
+        FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
         Do While FFP_Temp <> true
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
-            Delay Delay_Base_Unit*1
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
+            Delay Delay_Unit*1
         Loop
         #icon("@res:348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         If FFP_FSB_FP[FSB_FP_FS_2_Count] = 0
             //一级FSB
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_FSB_Name],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
             Do While FFP_Temp <> true
                 #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
-                Delay Delay_Base_Unit*1
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
+                Delay Delay_Unit*1
             Loop
             #icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_Width],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_Width],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
             Do While FFP_Temp <> true
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
-                Delay Delay_Base_Unit*2
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
+                Delay Delay_Unit*2
             Loop
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         Else
             //二级FSB
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_UL_FSB_Name],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFP_FSB_FP[FSB_FP_UL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
             Do While FFP_Temp <> true
                 #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
-                Delay Delay_Base_Unit*1
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"laog9796-02q9-8qfr-b63t-p440bnh563cr.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
+                Delay Delay_Unit*1
             Loop
             FFP_Found_Pic = TURING.FindImageExS(0,0,Monitor_X,Monitor_Y,"C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\fmra6mkd-d034-ui0i-emit-72t1a6u8s5o2.png",0.9)
             FFP_Temp_List = Split(FFP_Found_Pic[FFP_FSB_FP[FSB_FP_FP_Start] - 1],",")
-            Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
-            Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
-            Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2})
+            Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
+            Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
+            Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
             #icon("@res:33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"33md3mmu-bh3b-uqnj-7v1f-la4hdjmq8ttp.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_FP_Count],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+            Keyboard.Input(FFP_FSB_FP[FSB_FP_FP_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
+            FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
             Do While FFP_Temp <> true
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true})
-                Delay Delay_Base_Unit*2
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true})
+                Delay Delay_Unit*2
             Loop
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         End If
         //直熔
         If FFP_FSB_FP[FSB_FP_FS_2_Count] = 0
@@ -851,49 +929,52 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
                 #icon("@res:rc13di59-ribs-573j-odld-14u0ldblpvo7.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"rc13di59-ribs-573j-odld-14u0ldblpvo7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png")
-                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
+                FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
                 Do While FFP_Temp <> true
                     #icon("@res:igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png")
-                    FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*1,"iDelayBefore":Delay_Base_Unit*1,"bSetForeground":true})
-                    Delay Delay_Base_Unit*1
+                    FFP_Temp = Image.Exists({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png",1,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*1,"iDelayBefore":Delay_Unit*1,"bSetForeground":true})
+                    Delay Delay_Unit*1
                 loop
                 //左侧
                 #icon("@res:bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 3 * 2),"x":0,"y":0},@res"bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
                 #icon("@res:a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":200,"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":200,"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 //右侧
                 #icon("@res:bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 3),"x":(Monitor_X / 3 *2),"y":0},@res"bfgph7ce-s6uu-3ihb-e2c9-qm9elep73b40.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Down", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
                 #icon("@res:a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"a11fiuma-3l0r-dsa4-hhpk-e87s6tl4g950.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"jv239dq7-qt49-lhrb-bo8t-e0piphca9vpb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:64480q2s-dav5-nc0p-kcgu-7apoa57g8cvf.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"64480q2s-dav5-nc0p-kcgu-7apoa57g8cvf.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"64480q2s-dav5-nc0p-kcgu-7apoa57g8cvf.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-                Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Input(FFP_FSB_FP[FSB_FP_DM_Count],{"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"sSimulate":"message"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
+                Keyboard.Input(FFP_FSB_FP[FSB_FP_DM_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
                 #icon("@res:kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:42oksfvb-026t-2hbp-ja66-aln18i129g80.png")
-                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"42oksfvb-026t-2hbp-ja66-aln18i129g80.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"42oksfvb-026t-2hbp-ja66-aln18i129g80.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             End If
         End If
     End If
     //关闭窗口
     #icon("@res:6up6oddd-uk30-uv1e-bgve-vmfsdm7tg4sc.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6up6oddd-uk30-uv1e-bgve-vmfsdm7tg4sc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Base_Unit*2,"iDelayBefore":Delay_Base_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6up6oddd-uk30-uv1e-bgve-vmfsdm7tg4sc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 End Function
 
+Function Add_Optical_Route(传入啥)
+
+End Function
 MainProgress()
 //Todolist
 /*
@@ -902,7 +983,7 @@ MainProgress()
 拖屏方案(重构代码之后
 拆除方案,整体/部分
 GUI
-写屏(目前没有好的方案)  
+写屏(目前没有好的方案)
 二级FSB多下行的处理（参考一级FSB，多一条光缆的情况)
 */
 
