@@ -17,7 +17,7 @@ Dim OC_Info = []
 Dim Other_Info = []
 Dim OC_Draw_Vector = [] //[1]x,[2]y
 Dim FSB_and_OC_Topology = []
-Dim FSB_FP = []
+Dim FSB_Fiber_Process_Data = []
 Dim Add_Optical_Route_Data = []
 
 //Prepare_Data 函数变量
@@ -127,19 +127,19 @@ Const FaOT_Ordinary_Num           =  6 //FSB_and_OC_Topology FSB在光缆中的�
 Const FaOT_FS_1_Count             =  7 //FSB_and_OC_Topology 1级FS个数
 Const FaOT_FS_2_Count             =  8 //FSB_and_OC_Topology 2级FS个数
 
-Const FSB_FP_UL_FSB_Name          =  1 //FSB_FP 上行FSB名称
-Const FSB_FP_UL_Width             =  2 //FSB_FP 上行芯数
-Const FSB_FP_FSB_Name             =  3 //FSB_FP FSB名称
-Const FSB_FP_DL_Width             =  4 //FSB_FP 下行芯数
-Const FSB_FP_DL_FSB_Name          =  5 //FSB_FP 下行FSB名称
-Const FSB_FP_Ordinary_Num         =  6 //FSB_FP FSB在光缆中的位置(去除空箱)
-Const FSB_FP_FS_1_Count           =  7 //FSB_FP 1级FS个数
-Const FSB_FP_FS_2_Count           =  8 //FSB_FP 2级FS个数
-Const FSB_FP_DL_FS_Count          =  9 //FSB_FP 下行FS个数
-Const FSB_FP_FP_Start             = 10 //FSB_FP 上架开始的芯数
-Const FSB_FP_FP_Count             = 11 //FSB_FP 上架芯数
-Const FSB_FP_DM_Start             = 12 //FSB_FP 直熔开始的芯数
-Const FSB_FP_DM_Count             = 13 //FSB_FP 直熔芯数
+Const FFPD_UL_FSB_Name          =  1 //FSB_Fiber_Process_Data 上行FSB名称
+Const FFPD_UL_Width             =  2 //FSB_Fiber_Process_Data 上行芯数
+Const FFPD_FSB_Name             =  3 //FSB_Fiber_Process_Data FSB名称
+Const FFPD_DL_Width             =  4 //FSB_Fiber_Process_Data 下行芯数
+Const FFPD_DL_FSB_Name          =  5 //FSB_Fiber_Process_Data 下行FSB名称
+Const FFPD_Ordinary_Num         =  6 //FSB_Fiber_Process_Data FSB在光缆中的位置(去除空箱)
+Const FFPD_FS_1_Count           =  7 //FSB_Fiber_Process_Data 1级FS个数
+Const FFPD_FS_2_Count           =  8 //FSB_Fiber_Process_Data 2级FS个数
+Const FFPD_DL_FS_Count          =  9 //FSB_Fiber_Process_Data 下行FS个数
+Const FFPD_FP_Start             = 10 //FSB_Fiber_Process_Data 上架开始的芯数
+Const FFPD_FP_Count             = 11 //FSB_Fiber_Process_Data 上架芯数
+Const FFPD_DM_Start             = 12 //FSB_Fiber_Process_Data 直熔开始的芯数
+Const FFPD_DM_Count             = 13 //FSB_Fiber_Process_Data 直熔芯数
 
 //Add_Optical_Route_Data Index
 Const AORD_A_Location             =  1
@@ -465,7 +465,7 @@ Function Prepare_Data()
         Next
     Next
     
-    //FSB_FP 填充数据
+    //FSB_Fiber_Process_Data 填充数据
     PD_Temp_Data = 1
     For PD_CL1 = 1 to Ubound(OCS_CC)
         Correction_Num = 0
@@ -477,53 +477,53 @@ Function Prepare_Data()
                 Correction_Num = Correction_Num + 1
                 Continue
             End If
-            FSB_FP[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
-            FSB_FP[PD_Temp_Data][FaOT_Ordinary_Num] = FSB_FP[PD_Temp_Data][FaOT_Ordinary_Num] - Correction_Num //空箱修正
+            FSB_Fiber_Process_Data[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
+            FSB_Fiber_Process_Data[PD_Temp_Data][FaOT_Ordinary_Num] = FSB_Fiber_Process_Data[PD_Temp_Data][FaOT_Ordinary_Num] - Correction_Num //空箱修正
             PD_Temp_Data = PD_Temp_Data + 1
-            //TracePrint(FSB_FP[PD_Temp_Data])
+            //TracePrint(FSB_Fiber_Process_Data[PD_Temp_Data])
         Next
     Next
 
-    //FSB_FP 加载DL_FS_Count
-    For PD_CL1 = Ubound(FSB_FP) to 1 Step -1
-        If FSB_FP[PD_CL1][FaOT_DL_FSB_Name] = "End"
-            FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] = 0
+    //FSB_Fiber_Process_Data 加载DL_FS_Count
+    For PD_CL1 = Ubound(FSB_Fiber_Process_Data) to 1 Step -1
+        If FSB_Fiber_Process_Data[PD_CL1][FaOT_DL_FSB_Name] = "End"
+            FSB_Fiber_Process_Data[PD_CL1][FFPD_DL_FS_Count] = 0
         Else
-            FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] = FSB_FP[PD_CL1 + 1][FaOT_FS_2_Count] + FSB_FP[PD_CL1 + 1][FSB_FP_DL_FS_Count]
+            FSB_Fiber_Process_Data[PD_CL1][FFPD_DL_FS_Count] = FSB_Fiber_Process_Data[PD_CL1 + 1][FaOT_FS_2_Count] + FSB_Fiber_Process_Data[PD_CL1 + 1][FFPD_DL_FS_Count]
         End If
     Next
     
-    //FSB_FP 加载FSB_FP_FP_Start FSB_FP_FP_Count FSB_FP_DM_Start FSB_FP_DM_Count
+    //FSB_Fiber_Process_Data 加载FFPD_FP_Start FFPD_FP_Count FFPD_DM_Start FFPD_DM_Count
     Single_FS_Use_Count = Other_Info[BackUp_Fiber_Count] + 1
-    For PD_CL1 = Ubound(FSB_FP) to 1 Step -1
-        If FSB_FP[PD_CL1][FSB_FP_DL_FSB_Name] = "End" 
-            FSB_FP[PD_CL1][FSB_FP_FP_Start] = 1
-            FSB_FP[PD_CL1][FSB_FP_FP_Count] = Math.Int(FSB_FP[PD_CL1][FSB_FP_FS_2_Count] * Single_FS_Use_Count)
-            FSB_FP[PD_CL1][FSB_FP_DM_Start] = 0
-            FSB_FP[PD_CL1][FSB_FP_DM_Count] = 0
+    For PD_CL1 = Ubound(FSB_Fiber_Process_Data) to 1 Step -1
+        If FSB_Fiber_Process_Data[PD_CL1][FFPD_DL_FSB_Name] = "End" 
+            FSB_Fiber_Process_Data[PD_CL1][FFPD_FP_Start] = 1
+            FSB_Fiber_Process_Data[PD_CL1][FFPD_FP_Count] = Math.Int(FSB_Fiber_Process_Data[PD_CL1][FFPD_FS_2_Count] * Single_FS_Use_Count)
+            FSB_Fiber_Process_Data[PD_CL1][FFPD_DM_Start] = 0
+            FSB_Fiber_Process_Data[PD_CL1][FFPD_DM_Count] = 0
         Else
-            If FSB_FP[PD_CL1][FSB_FP_UL_FSB_Name] = "Begin"
-                FSB_FP[PD_CL1][FSB_FP_FP_Start] = 1
-                FSB_FP[PD_CL1][FSB_FP_FP_Count] = Math.Int(FSB_FP[PD_CL1][FSB_FP_DL_Width])
-                FSB_FP[PD_CL1][FSB_FP_DM_Start] = 0
-                FSB_FP[PD_CL1][FSB_FP_DM_Count] = 0
+            If FSB_Fiber_Process_Data[PD_CL1][FFPD_UL_FSB_Name] = "Begin"
+                FSB_Fiber_Process_Data[PD_CL1][FFPD_FP_Start] = 1
+                FSB_Fiber_Process_Data[PD_CL1][FFPD_FP_Count] = Math.Int(FSB_Fiber_Process_Data[PD_CL1][FFPD_DL_Width])
+                FSB_Fiber_Process_Data[PD_CL1][FFPD_DM_Start] = 0
+                FSB_Fiber_Process_Data[PD_CL1][FFPD_DM_Count] = 0
             Else
-                FSB_FP[PD_CL1][FSB_FP_FP_Start] = Math.Int(FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] * Single_FS_Use_Count + 1)
-                FSB_FP[PD_CL1][FSB_FP_FP_Count] = Math.Int(FSB_FP[PD_CL1][FSB_FP_FS_2_Count] * Single_FS_Use_Count)
-                FSB_FP[PD_CL1][FSB_FP_DM_Start] = 1
-                FSB_FP[PD_CL1][FSB_FP_DM_Count] = Math.Int(FSB_FP[PD_CL1][FSB_FP_DL_FS_Count] * Single_FS_Use_Count)
+                FSB_Fiber_Process_Data[PD_CL1][FFPD_FP_Start] = Math.Int(FSB_Fiber_Process_Data[PD_CL1][FFPD_DL_FS_Count] * Single_FS_Use_Count + 1)
+                FSB_Fiber_Process_Data[PD_CL1][FFPD_FP_Count] = Math.Int(FSB_Fiber_Process_Data[PD_CL1][FFPD_FS_2_Count] * Single_FS_Use_Count)
+                FSB_Fiber_Process_Data[PD_CL1][FFPD_DM_Start] = 1
+                FSB_Fiber_Process_Data[PD_CL1][FFPD_DM_Count] = Math.Int(FSB_Fiber_Process_Data[PD_CL1][FFPD_DL_FS_Count] * Single_FS_Use_Count)
             End If
         End If
     Next
-    //FSB_FP 数据验证
+    //FSB_Fiber_Process_Data 数据验证
     //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\111.xls",false)
-    //Excel.WriteRange(TestExcelObj,"Sheet1","A2",FSB_FP,false)
+    //Excel.WriteRange(TestExcelObj,"Sheet1","A2",FSB_Fiber_Process_Data,false)
     //Excel.CloseExcel(TestExcelObj,true)
 
     // Step6_Circulation_Start 循环起点
     Step6_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[36,2])
     // Step6_Circulation_Sum 循环合计
-    Step6_Circulation_Sum = Ubound(FSB_FP)
+    Step6_Circulation_Sum = Ubound(FSB_Fiber_Process_Data)
     // Step6_Circulation_Sum 合计写入
     Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[36,3],Step6_Circulation_Sum,true) //立即保存
 
@@ -532,8 +532,8 @@ Function Prepare_Data()
     Step7_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[37,2])
     // Step7_Circulation_Sum 循环合计
     Step7_Circulation_Sum = 0
-    For PD_CL1 = 1 to Ubound(FSB_FP)
-        Step7_Circulation_Sum = Step7_Circulation_Sum + FSB_FP[PD_CL1][FSB_FP_FS_2_Count]
+    For PD_CL1 = 1 to Ubound(FSB_Fiber_Process_Data)
+        Step7_Circulation_Sum = Step7_Circulation_Sum + FSB_Fiber_Process_Data[PD_CL1][FFPD_FS_2_Count]
     Next
     // Step7_Circulation_Sum 合计写入
     Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[37,3],Step7_Circulation_Sum,true) //立即保存
@@ -579,12 +579,12 @@ Function Prepare_Data()
     Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
 End Function
 
-Function FSB_Fiber_Process(FFP_FSB_FP)
-    Determine_Box_Type(FFP_FSB_FP[FSB_FP_FSB_Name])
+Function FSB_Fiber_Process(FFPD)
+    Determine_Box_Type(FFPD[FFPD_FSB_Name])
     #icon("@res:katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png")
     Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"katlv26g-71ro-0jo0-u1fr-4ggddasb14cb.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":60,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     Delay Delay_Unit*10
-    Keyboard.Input(FFP_FSB_FP[FSB_FP_FSB_Name],{"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sSimulate":"message"})
+    Keyboard.Input(FFPD[FFPD_FSB_Name],{"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sSimulate":"message"})
     Delay Delay_Unit*10
     Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
     Search_Waiting() //判断鼠标指针
@@ -612,15 +612,15 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
         #icon("@res:kbldr2t7-fkqj-f5b5-gr96-0471g07ooldh.png")
         Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kbldr2t7-fkqj-f5b5-gr96-0471g07ooldh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         //FSB类型,上架芯数,DOM/熔纤盘行数
-        If FFP_FSB_FP[FSB_FP_FS_1_Count] = 0 //二级FSB
-            Used_Fiber_Count = FFP_FSB_FP[FSB_FP_FS_2_Count] * (CNumber(Other_Info[15]) + 1)
+        If FFPD[FFPD_FS_1_Count] = 0 //二级FSB
+            Used_Fiber_Count = FFPD[FFPD_FS_2_Count] * (CNumber(Other_Info[15]) + 1)
             If Used_Fiber_Count <= 12
                 Melted_Disk = 1
             Else
                 Melted_Disk = 2
             End If
         Else //一级FSB
-            Used_Fiber_Count = FFP_FSB_FP[FSB_FP_DL_Width]
+            Used_Fiber_Count = FFPD[FFPD_DL_Width]
             If Math.Int(Used_Fiber_Count / 12) = (Used_Fiber_Count / 12)
                 Melted_Disk = Math.Int(Used_Fiber_Count / 12)
             Else
@@ -665,9 +665,9 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
         Loop
         #icon("@res:348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png")
         Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        If FFP_FSB_FP[FSB_FP_FS_2_Count] = 0
+        If FFPD[FFPD_FS_2_Count] = 0
             //一级FSB
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFPD[FFPD_DL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
@@ -684,7 +684,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_Width],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFPD[FFPD_DL_Width],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
@@ -698,7 +698,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         Else
             //二级FSB
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_UL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFPD[FFPD_UL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
@@ -709,7 +709,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
                 Delay Delay_Unit*2
             Loop
             FFP_Found_Pic = TURING.FindImageExS(0,0,Monitor_X,Monitor_Y,"C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\fmra6mkd-d034-ui0i-emit-72t1a6u8s5o2.png",0.9)
-            FFP_Temp_List = Split(FFP_Found_Pic[(FFP_FSB_FP[FSB_FP_FP_Start] - 1)],",")
+            FFP_Temp_List = Split(FFP_Found_Pic[(FFPD[FFPD_FP_Start] - 1)],",")
             Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
             Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
             Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
@@ -718,7 +718,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_FP_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFPD[FFPD_FP_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
@@ -732,11 +732,11 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         End If
         //直熔
-        If FFP_FSB_FP[FSB_FP_FS_2_Count] = 0
+        If FFPD[FFPD_FS_2_Count] = 0
             //一级FSB，不涉及直熔
         Else
             //二级FSB
-            If FFP_FSB_FP[FSB_FP_DM_Start] <> 0
+            If FFPD[FFPD_DM_Start] <> 0
                 #icon("@res:rc13di59-ribs-573j-odld-14u0ldblpvo7.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"rc13di59-ribs-573j-odld-14u0ldblpvo7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png")
@@ -766,7 +766,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
                 #icon("@res:6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Input(FFP_FSB_FP[FSB_FP_DM_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+                Keyboard.Input(FFPD[FFPD_DM_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
                 #icon("@res:kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:42oksfvb-026t-2hbp-ja66-aln18i129g80.png")
@@ -780,15 +780,15 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
         #icon("@res:2m8bb8jh-t0r0-ub9c-vni7-roi58gtenaeq.png")
         Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2m8bb8jh-t0r0-ub9c-vni7-roi58gtenaeq.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         //FSB类型,上架芯数,DOM/熔纤盘行数
-        If FFP_FSB_FP[FSB_FP_FS_1_Count] = 0 //二级FSB
-            Used_Fiber_Count = FFP_FSB_FP[FSB_FP_FS_2_Count] * (CNumber(Other_Info[15]) + 1)
+        If FFPD[FFPD_FS_1_Count] = 0 //二级FSB
+            Used_Fiber_Count = FFPD[FFPD_FS_2_Count] * (CNumber(Other_Info[15]) + 1)
             If Used_Fiber_Count <= 12
                 Melted_Disk = 1
             Else
                 Melted_Disk = 2
             End If
         Else //一级FSB
-            Used_Fiber_Count = FFP_FSB_FP[FSB_FP_DL_Width]
+            Used_Fiber_Count = FFPD[FFPD_DL_Width]
             If Math.Int(Used_Fiber_Count / 12) = (Used_Fiber_Count / 12)
                 Melted_Disk = Math.Int(Used_Fiber_Count / 12)
             Else
@@ -832,9 +832,9 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
         Loop
         #icon("@res:348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png")
         Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"348ag6ha-q2u1-68rm-uld7-q8fkolp49c7u.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        If FFP_FSB_FP[FSB_FP_FS_2_Count] = 0
+        If FFPD[FFPD_FS_2_Count] = 0
             //一级FSB
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFPD[FFPD_DL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
@@ -851,7 +851,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_DL_Width],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFPD[FFPD_DL_Width],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
@@ -865,7 +865,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         Else
             //二级FSB
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_UL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFPD[FFPD_UL_FSB_Name],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":Monitor_Y,"width":(Monitor_X / 2),"x":(Monitor_X / 2),"y":0},@res"itrnakdg-08bn-7j9r-eja6-grog6hnlmkdl.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:laog9796-02q9-8qfr-b63t-p440bnh563cr.png")
@@ -876,7 +876,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
                 Delay Delay_Unit*1
             Loop
             FFP_Found_Pic = TURING.FindImageExS(0,0,Monitor_X,Monitor_Y,"C:\\Users\\Administrator\\Documents\\UIBot\\Projects\\fvcktyyd\\res\\fmra6mkd-d034-ui0i-emit-72t1a6u8s5o2.png",0.9)
-            FFP_Temp_List = Split(FFP_Found_Pic[FFP_FSB_FP[FSB_FP_FP_Start] - 1],",")
+            FFP_Temp_List = Split(FFP_Found_Pic[FFPD[FFPD_FP_Start] - 1],",")
             Mouse.Move(FFP_Temp_List[1],FFP_Temp_List[2], false,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
             Mouse.Move(10, 2, true,{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
             Mouse.Click("left", "click", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2})
@@ -885,7 +885,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             #icon("@res:7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"7s1mha6r-fg8l-pe5b-2rjv-5rund60oi1l9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
-            Keyboard.Input(FFP_FSB_FP[FSB_FP_FP_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+            Keyboard.Input(FFPD[FFPD_FP_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
             #icon("@res:aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png")
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"aad4j09h-t6gu-3cct-u5hg-1cj0oaf3jfsh.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
             #icon("@res:1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png")
@@ -899,11 +899,11 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
             Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1se6vb0a-332t-sj31-oe4r-vbeoo7isodha.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
         End If
         //直熔
-        If FFP_FSB_FP[FSB_FP_FS_2_Count] = 0
+        If FFPD[FFPD_FS_2_Count] = 0
             //一级FSB，不涉及直熔
         Else
             //二级FSB
-            If FFP_FSB_FP[FSB_FP_DM_Start] <> 0
+            If FFPD[FFPD_DM_Start] <> 0
                 #icon("@res:rc13di59-ribs-573j-odld-14u0ldblpvo7.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"rc13di59-ribs-573j-odld-14u0ldblpvo7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:igmijgqh-pfrt-6fev-ts7r-iku90nkd3sep.png")
@@ -937,7 +937,7 @@ Function FSB_Fiber_Process(FFP_FSB_FP)
                 #icon("@res:6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6tuf18ul-6op4-bhhs-rsmg-o3ht9lan9isn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 Keyboard.Press("Backspace", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
-                Keyboard.Input(FFP_FSB_FP[FSB_FP_DM_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
+                Keyboard.Input(FFPD[FFPD_DM_Count],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
                 #icon("@res:kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png")
                 Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"kn3b0318-niq4-rsjg-512j-9l1eqk8r9ep1.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
                 #icon("@res:42oksfvb-026t-2hbp-ja66-aln18i129g80.png")
@@ -966,7 +966,7 @@ Function MainProgress()
                 Break
             End If
             For MP_CL1 = Step6_Circulation_Start to Step6_Circulation_Sum
-                FSB_Fiber_Process(FSB_FP[MP_CL1])
+                FSB_Fiber_Process(FSB_Fiber_Process_Data[MP_CL1])
                 Opened_Excel_Obj = Excel.OpenExcel(Source_File_Path,false) //后台打开
                 Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[36,2],(MP_CL1+1),true)
                 Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
@@ -1083,6 +1083,8 @@ Function MainProgress()
             End If
         Next
     End If
+    /// 888
+
 End Function
 
 Function Add_Optical_Route(AORD)

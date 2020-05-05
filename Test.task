@@ -1,10 +1,29 @@
-Dim Var1 = "某个gjFFSB"
+dim bRet = ""
+dim sRet = ""
+#icon("@res:S8-测试1.png")
+Mouse.Hover({"html":{"attrMap":{"id":"ext-comp-1009","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+#icon("@res:S8-测试1.png")
+text0 = UiElement.GetValue({"html":{"attrMap":{"id":"ext-comp-1009","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
+text1 = Split(text0,"一共有")
+text2 = Replace(text1[1],"条","")
+text3 = text2 / 10
+maxpage = math.Int(text2 / 10) + 1
+maxpage_s_max_num = math.Int(text2 mod 10)
+TracePrint(maxpage)
+TracePrint(maxpage_s_max_num)
+for i = 0 to 10
 
-
-If InStr(Var1,"GJ",0,false) <> 0
-    TracePrint("有GJ")
-elseif InStr(Var1,"光交",0,false) <> 0
-    TracePrint("有光交")
-else 
-    TracePrint("不是光交")
+#icon("@res:S8-测试2.png")
+Element_Exist = UiElement.Exists({"html":{"attrMap":{"aaname":"设计中","parentid":"ext-gen22","tag":"DIV"},"index":i,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
+if not element_exist
+    Continue
 end if
+#icon("@res:S8-测试2.png")
+text4 = UiElement.GetValue({"html":{"attrMap":{"aaname":"设计中","parentid":"ext-gen22","tag":"DIV"},"index":i,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
+if text4 = "设计完成"
+    Continue
+end if
+#icon("@res:S8-测试2.png")
+Mouse.Hover({"html":{"attrMap":{"aaname":"设计中","parentid":"ext-gen22","tag":"DIV"},"index":i,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+next
+
