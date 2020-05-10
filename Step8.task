@@ -1,0 +1,42 @@
+Dim Element_Exist
+Dim TD_Temp_Data
+Dim TD_Temp_List = []
+
+Function Transmission_Design_Traversal_Current_Page_Recursion()
+    For TD_CL1 = 1 to 10
+        #icon("@res:S8-测试2.png")
+        Element_Exist = UiElement.Exists({"html":{"attrMap":{"aaname":"设计中","parentid":"ext-gen22","tag":"DIV"},"index":TD_CL1,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
+        If Element_Exist
+            #icon("@res:S8-测试2.png")
+            Mouse.Hover({"html":{"attrMap":{"aaname":"设计中","parentid":"ext-gen22","tag":"DIV"},"index":TD_CL1,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Else
+            Continue
+        End If
+    Next
+    //遍历当前页
+    //递归
+End Function
+
+Function Transmission_Design_Phase_A_Traversal_All_Pages()
+    #icon("@res:S8-总条数-图片.png")
+    TD_Temp_Data = UiElement.GetValue({"html":{"attrMap":{"id":"ext-comp-1009","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
+    TD_Temp_List = Split(TD_Temp_Data,"一共有")
+    TD_Temp_Data = Replace(TD_Temp_List[1],"条","")
+    G_S8_Page_Count = Math.Int(TD_Temp_Data / 10) + 1
+    G_S8_Last_Page_Item_Count = Math.Int(TD_Temp_Data mod 10)
+    #icon("@res:S8-第一页-按钮.png")
+    Mouse.Action({"html":{"attrMap":{"id":"ext-gen33","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    For TD_CL1 = 1 to G_S8_Page_Count
+        Transmission_Design_Traversal_Current_Page_Recursion()
+        
+
+    Next
+End Function
+Function Transmission_Design_Phase_B_Verify_and_Recall()
+
+End Function
+
+Function Transmission_Design()
+
+End Function
+

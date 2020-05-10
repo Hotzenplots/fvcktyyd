@@ -1,0 +1,6 @@
+Import testfunc
+
+Const test1 = "1234123"
+
+testfunc.tttyyy(test1)
+

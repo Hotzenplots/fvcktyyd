@@ -1,0 +1,3 @@
+Function tttyyy(ty)
+    TracePrint(ty)
+End Function

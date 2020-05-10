@@ -1,5 +1,3 @@
-dim bRet = ""
-dim sRet = ""
 #icon("@res:S8-测试1.png")
 Mouse.Hover({"html":{"attrMap":{"id":"ext-comp-1009","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 #icon("@res:S8-测试1.png")
@@ -26,4 +24,6 @@ end if
 #icon("@res:S8-测试2.png")
 Mouse.Hover({"html":{"attrMap":{"aaname":"设计中","parentid":"ext-gen22","tag":"DIV"},"index":i,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 next
+#icon("@res:i0uuvk3s-v5p6-jthd-chur-1oquhetqis29.png")
+Mouse.Action({"html":{"attrMap":{"id":"ext-gen33","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 
