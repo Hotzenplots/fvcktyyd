@@ -1,6 +1,7 @@
 Dim Element_Exist
-Dim TD_Temp_Data
-Dim TD_Temp_List = []
+Dim Temp_Data
+dim sRet = ""
+Dim Temp_List = []
 
 Function Transmission_Design_Traversal_Current_Page_Recursion()
     For TD_CL1 = 1 to 10
@@ -19,24 +20,43 @@ End Function
 
 Function Transmission_Design_Phase_A_Traversal_All_Pages()
     #icon("@res:S8-总条数-图片.png")
-    TD_Temp_Data = UiElement.GetValue({"html":{"attrMap":{"id":"ext-comp-1009","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
-    TD_Temp_List = Split(TD_Temp_Data,"一共有")
-    TD_Temp_Data = Replace(TD_Temp_List[1],"条","")
-    G_S8_Page_Count = Math.Int(TD_Temp_Data / 10) + 1
-    G_S8_Last_Page_Item_Count = Math.Int(TD_Temp_Data mod 10)
-    #icon("@res:S8-第一页-按钮.png")
-    Mouse.Action({"html":{"attrMap":{"id":"ext-gen33","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Temp_Data = UiElement.GetValue({"html":{"attrMap":{"id":"ext-comp-1009","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
+    Temp_List = Split(Temp_Data,"一共有")
+    Temp_Data = Replace(Temp_List[1],"条","")
+    G_S8_Page_Count = Math.Int(Temp_Data / 10) + 1
+    G_S8_Last_Page_Item_Count = Math.Int(Temp_Data mod 10)
+    #icon("@res:S8-当前页-文本框.png")
+    Temp_Data = UiElement.GetValue({"html":[{"id":"ext-comp-1004","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
+    If Temp_Data <> "1"
+        #icon("@res:S8-第一页-按钮.png")
+        Mouse.Action({"html":{"attrMap":{"id":"ext-gen33","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:S7-读取中-图片.png")
+        Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-读取中-图片.png",0.9,"show",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*0.1,"iDelayBefore":Delay_Unit*0.1,"bSetForeground":true,"sMatchType":"GrayMatch"})
+        #icon("@res:S7-读取中-图片.png")
+        Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-读取中-图片.png",0.9,"hide",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit,"iDelayBefore":Delay_Unit*0.1,"bSetForeground":true,"sMatchType":"GrayMatch"})
+    End If
     For TD_CL1 = 1 to G_S8_Page_Count
         Transmission_Design_Traversal_Current_Page_Recursion()
-        
-
-    Next
+        If TD_CL1 <> G_S8_Page_Count
+            #icon("@res:S8-右箭头-按钮.png")
+            Mouse.Action({"html":[{"id":"ext-gen47","tag":"BUTTON"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+            #icon("@res:S7-读取中-图片.png")
+            Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-读取中-图片.png",0.9,"show",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*0.1,"iDelayBefore":Delay_Unit*0.1,"bSetForeground":true,"sMatchType":"GrayMatch"})
+            #icon("@res:S7-读取中-图片.png")
+            Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-读取中-图片.png",0.9,"hide",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit,"iDelayBefore":Delay_Unit*0.1,"bSetForeground":true,"sMatchType":"GrayMatch"})
+        End If
+Next
 End Function
 Function Transmission_Design_Phase_B_Verify_and_Recall()
-
+    
+#icon("@res:3fsu2a7q-gea1-jg0e-f09s-0rco2bqj6dvu.png")
+Keyboard.InputText({"html":[{"tag":"TEXTAREA"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"同意",true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
+#icon("@res:ol0g9j5l-1su1-np1r-nkv5-ikimjvhq02lb.png")
+Mouse.Action({"html":[{"parentid":"submitbtn","tableCol":"2","tableRow":"2","tag":"TD"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 End Function
 
 Function Transmission_Design()
 
 End Function
+
 
