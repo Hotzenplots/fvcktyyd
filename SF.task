@@ -6,8 +6,9 @@ Function Max_Number(MN_Num1,MN_Num2)
     End If
 End Function
 
-Dim Mouse_shape
+
 Function Wait_Searching() //未测试
+    Dim Mouse_shape
     Mouse_shape = TURING.FindMouseShape(0)
     Do While Mouse_shape = 0
         Mouse_shape = TURING.FindMouseShape(0)
@@ -15,8 +16,9 @@ Function Wait_Searching() //未测试
     Loop
 End Function
 
-Dim GR_Dic
+
 Function Get_Resolution()
+    Dim GR_Dic
     GR_Dic = Window.GetSize({"wnd":[{"app":"explorer","cls":"Progman","title":"Program Manager"}]})
     //GR_Dic = Window.GetSize({"wnd":[{"app":"explorer","cls":"Progman","title":"Program Manager"},{"cls":"SHELLDLL_DefView"},{"cls":"SysListView32","title":"FolderView","ctrlid":1,"aaname":"桌面"}]})
     G_Monitor_X = GR_Dic["width"]
