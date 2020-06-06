@@ -1,0 +1,20 @@
+Import TURING
+Import SF
+Import P0S1
+Import P0S2
+Import P1S1
+Import P1S2
+Import P1S3
+Import P1S4
+Import P1S5
+Import P2S1
+Import P2S2
+
+Traceprint(TURING.version())
+G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\test.xls"
+G_FSB_Topology_Sheet = "FSB_Topology"
+G_Info_Sheet = "Info"
+G_P1S1 = 1
+
+P0S1.Prepare_Data()
+TracePrint(G_FSB_Info)

@@ -1,0 +1,77 @@
+Traceprint("保留") //方便输入
+Function Prepare_Data()
+    Dim PD_Temp_Data
+    Dim PD_CL1
+    Dim PD_CL2
+    Dim XLS_Obj
+    Dim FSB_Count_Correction
+    Dim PD_Temp_List_1 = []
+    Dim PD_Temp_List_2 = []
+    Dim Longitude_Start
+    Dim Horizontal_Density
+    Dim Latitude_Start
+    Dim Vertical_Density
+
+    Dim Constant_FSB_Name = 1
+    Dim Constant_FSB_Longitude = 2
+    Dim Constant_FSB_Latitude = 3
+    Dim Constant_Info_Data_Column = 2
+    Dim Constant_Longitude_Start = 1
+    Dim Constant_Latitude_Start = 2
+    Dim Constant_Horizontal_Density = 3
+    Dim Constant_Vertical_Density = 4
+
+    XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)
+   
+    If G_P1S1 = 1
+        FSB_Count_Correction = 0
+        G_FSB_Count = 0
+        //构建G_FSB_RC,计算G_FSB_Count,G_FSB_RC未排除空箱,应用时遇到空箱直接Continue
+        For PD_CL1 = 1 to 100
+            For PD_CL2 = 1 to 100
+                PD_Temp_Data = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[PD_CL1,PD_CL2])
+                If PD_Temp_Data = ""
+                    Break
+                End If
+                If PD_Temp_Data = "empty"
+                    FSB_Count_Correction = FSB_Count_Correction + 1
+                End If
+            Next
+            PD_Temp_Data = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[PD_CL1,1])
+            If PD_Temp_Data = ""
+                Break
+            End If
+            G_FSB_RC[PD_CL1] = PD_CL2 - 1
+            G_FSB_Count = G_FSB_Count + G_FSB_RC[PD_CL1]
+        Next
+        G_FSB_Count = G_FSB_Count - FSB_Count_Correction
+
+        //构建G_FSB_Info[][][3]
+        For PD_CL1 = 1 To Ubound(G_FSB_RC)
+            For PD_CL2 = 0 To G_FSB_RC[PD_CL1]
+                For PD_CL3 = 0 To 3
+                    PD_Temp_List_1[PD_CL3] = ""
+                Next
+                PD_Temp_List_2[PD_CL2] = Clone(PD_Temp_List_1)
+            Next
+            G_FSB_Info[PD_CL1] = Clone(PD_Temp_List_2)
+        Next
+        G_FSB_Info[0] = ""
+
+        //G_FSB_Info 加载名称/经度/维度
+        Longitude_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Longitude_Start,Constant_Info_Data_Column])
+        Latitude_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Latitude_Start,Constant_Info_Data_Column])
+        Horizontal_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Horizontal_Density,Constant_Info_Data_Column])
+        Vertical_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Vertical_Density,Constant_Info_Data_Column])
+        For PD_CL1 = 1 To Ubound(G_FSB_RC)
+            For PD_CL2 = 1 To G_FSB_RC[PD_CL1]
+                G_FSB_Info[PD_CL1][PD_CL2][Constant_FSB_Name] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[PD_CL1,PD_CL2])
+                G_FSB_Info[PD_CL1][PD_CL2][Constant_FSB_Longitude] = Longitude_Start + (PD_CL2 - 1) * Horizontal_Density
+                G_FSB_Info[PD_CL1][PD_CL2][Constant_FSB_Latitude] = Latitude_Start - (PD_CL1 - 1) * Vertical_Density
+            Next
+        Next
+    End If
+    
+    Excel.CloseExcel(XLS_Obj,true)
+End Function
+
