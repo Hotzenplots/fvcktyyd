@@ -1,0 +1,42 @@
+Import TURING
+Import SF
+Import P0S1
+Import P0S2
+Import P1S1
+Import P1S2
+Import P1S3
+Import P1S4
+Import P1S5
+Import P2S1
+Import P2S2
+
+Dim XLS_Obj 
+
+//Traceprint(TURING.version())
+
+G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\mly.xls"
+G_FSB_Topology_Sheet = "FSB_Topology"
+G_Info_Sheet = "Info"
+G_P1S1 = 1
+
+Function MainProgress()
+    If G_P1S1 = 1 
+        P0S1.Prepare_Data()
+        For MP_RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P1S1_Repeat_Start 和 G_P1S1_Repeat_Sum
+            If G_P1S1_Repeat_Start = G_P1S1_Repeat_Sum
+                Break
+            End If
+            For MP_RL1 = G_P1S1_Repeat_Start to G_P1S1_Repeat_Sum
+                P1S1.Push_FSB(G_FSB_Info[MP_RL1])
+                XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
+                Excel.WriteCell(XLS_Obj,G_Info_Sheet,[2,5],MP_RL1,true)
+                Excel.CloseExcel(XLS_Obj,true) //立即保存
+            Next
+        Next
+    End If
+    
+End Function
+MainProgress()
+Traceprint(Ubound(G_FSB_Info))
+Traceprint(G_P1S1_Repeat_Start)
+Traceprint(G_P1S1_Repeat_Sum)
