@@ -6,7 +6,6 @@ Function Max_Number(MN_Num1,MN_Num2)
     End If
 End Function
 
-
 Function Wait_Searching() //未测试
     Dim Mouse_shape
     Mouse_shape = TURING.FindMouseShape(0)
@@ -16,7 +15,6 @@ Function Wait_Searching() //未测试
     Loop
 End Function
 
-
 Function Get_Resolution()
     Dim GR_Dic
     GR_Dic = Window.GetSize({"wnd":[{"app":"explorer","cls":"Progman","title":"Program Manager"}]})
@@ -24,4 +22,25 @@ Function Get_Resolution()
     G_Monitor_X = GR_Dic["width"]
     G_Monitor_Y = GR_Dic["height"]
 End Function
+
+Function Determine_FSB_Type(Box_Name)
+    If InStr(Box_Name,"光交",1,false) <> 0
+        //光交
+        #icon("@res:SF-光交点-图片.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-光交点-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-光交点类型-图片.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-光交点类型-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-光交接箱-图片.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-光交接箱-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Else
+        //分纤箱
+        #icon("@res:SF-光交点-图片.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-光交点-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-光交点类型-图片.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-光交点类型-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-光分纤箱-图片.png")
+        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-光分纤箱-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    End If
+End Function
+
 

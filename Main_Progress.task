@@ -34,10 +34,5 @@ Function MainProgress()
             Next
         Next
     End If
-    
-    
 End Function
 MainProgress()
-Traceprint(Ubound(G_FSB_Info))
-Traceprint(G_P1S1_Repeat_Start)
-Traceprint(G_P1S1_Repeat_Sum)
