@@ -16,11 +16,13 @@ Function Prepare_Data()
     Dim Constant_FSB_Name = 1
     Dim Constant_FSB_Longitude = 2
     Dim Constant_FSB_Latitude = 3
+
     Dim Constant_Info_Data_Column = 2
     Dim Constant_Longitude_Start = 1
     Dim Constant_Latitude_Start = 2
     Dim Constant_Horizontal_Density = 3
     Dim Constant_Vertical_Density = 4
+
 
     XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)
    

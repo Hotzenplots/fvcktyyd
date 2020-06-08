@@ -38,5 +38,5 @@ Function Push_FSB(Para_FSB_Info)
     SF.Wait_Searching()
     Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
 End Function
-
+//v1.1 修复了输入坐标后确定按钮遮挡的问题
 

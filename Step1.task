@@ -1,6 +1,0 @@
-dim sRet = ""
-            sRet = Sys.Command("ping 192.168.137.1")
-
-TracePrint(sret)
-
-
