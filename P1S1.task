@@ -1,9 +1,9 @@
 Import SF
 Function Push_FSB(Para_FSB_Info)
 
-    Dim Constant_FSB_Name = 1
+    Dim Constant_FSB_Name      = 1
     Dim Constant_FSB_Longitude = 2
-    Dim Constant_FSB_Latitude = 3
+    Dim Constant_FSB_Latitude  = 3
 
     SF.Determine_FSB_Type(Para_FSB_Info[Constant_FSB_Name])
     #icon("@res:P1S1-下箭头-图片.png")
@@ -39,4 +39,5 @@ Function Push_FSB(Para_FSB_Info)
     Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"simulate"})
 End Function
 //v1.1 修复了输入坐标后确定按钮遮挡的问题
+
 
