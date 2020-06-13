@@ -24,7 +24,7 @@ Function Prepare_Data()
         Dim Constant_OC_Widtht = 1
         Dim Constant_OC_Lenth = 2
         Dim Constant_OC_Type = 3
-        Dim FSB_and_OC_Topology =[]
+        Dim G_Termination_OC_Info =[]
 
         Dim Constant_FSB_Name       = 1
         Dim Constant_FSB_Longitude  = 2
@@ -36,8 +36,11 @@ Function Prepare_Data()
         Dim Constant_Horizontal_Density = 3
         Dim Constant_Vertical_Density   = 4
 
-        Dim Constant_FSB_Name_TOC = 3
-        Dim Constant_DL_Width_TOC = 4
+        Dim Constant_UL_FSB_Name_TOC  = 1
+        Dim Constant_UL_Width_TOC     = 2
+        Dim Constant_FSB_Name_TOC     = 3
+        Dim Constant_DL_Width_TOC     = 4
+        Dim Constant_DL_FSB_Name_TOC  = 5
         Dim Constant_Ordinary_Num_TOC = 6
 
 
@@ -214,7 +217,7 @@ Function Prepare_Data()
                 G_Termination_OC_Info[RL1] = Clone(Temp_List_2)
             Next
 
-            //G_Termination_OC_Info 填充 FSB_Name DL_Width Ordinary_Num
+            //G_Termination_OC_Info 填充数据
             For RL1 = 1 To Ubound(G_OCS_RC)
                 Temp_List_1 = []
                 Temp_List_2 = [0,0]
@@ -228,7 +231,7 @@ Function Prepare_Data()
                         G_Termination_OC_Info[RL1][RL2][Constant_FSB_Name_TOC] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[CNumber(Temp_List_1[1]),CNumber(Temp_List_1[0])]) //第 RL1 条的起点FSB名
                     Else
                         Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,RL2])
-                        If len(Temp_Data) = 0
+                        If Len(Temp_Data) = 0
                             Break
                         End If
                         Temp_List_1 = Split(Temp_Data,"&")
@@ -238,21 +241,52 @@ Function Prepare_Data()
                         Temp_List_3 = Split(Temp_Data,"&")
                         G_Termination_OC_Info[RL1][RL2][Constant_FSB_Name_TOC] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[(CNumber(Temp_List_3[1]) - CNumber(Temp_List_2[1])),(CNumber(Temp_List_3[0]) + CNumber(Temp_List_2[0]))])
                     End If
+
                     //DL_Width
                     Temp_List_4 = Split(Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)]),"&") //下行芯数
-                    If len(Temp_List_4) < 3
+                    If Len(Temp_List_4) < 3
                         G_Termination_OC_Info[RL1][RL2][Constant_DL_Width_TOC] = 0
                     Else
                         G_Termination_OC_Info[RL1][RL2][Constant_DL_Width_TOC] = Math.Round(CNumber(Temp_List_4[2]),0)
                     End If
+
                     //Ordinary_Num
-                    G_Termination_OC_Info[RL1][RL2][Constant_Ordinary_Num_TOC] = RL2 //FSB位置
+                    G_Termination_OC_Info[RL1][RL2][Constant_Ordinary_Num_TOC] = RL2 //FSB位置 
                 Next
             Next
 
+            //G_Termination_OC_Info 填充数据2
+            For RL1 = 1 To Ubound(G_OCS_RC)
+                For RL2 = 1 To (Max_Lenth + 1)
+                    //DL_FSB_Name
+                    If Len(G_Termination_OC_Info[RL1][RL2][Constant_FSB_Name_TOC]) = 0
+                        Break
+                    End If
+                    If G_Termination_OC_Info[RL1][RL2][Constant_DL_Width_TOC] <> 0
+                        G_Termination_OC_Info[RL1][RL2][Constant_DL_FSB_Name_TOC] = G_Termination_OC_Info[RL1][(RL2 + 1)][Constant_FSB_Name_TOC]
+                    Else
+                        G_Termination_OC_Info[RL1][RL2][Constant_DL_FSB_Name_TOC] = "End"
+                    End If
+                Next
+            Next
 
-        Traceprint(G_Termination_OC_Info)
-
+            //G_Termination_OC_Info 填充数据3
+            For RL1 = 1 To Ubound(G_OCS_RC)
+                For RL2 = 1 To (Max_Lenth + 1)
+                    //UL_FSB_Name 
+                    //UL_Width
+                    If Len(G_Termination_OC_Info[RL1][RL2][Constant_FSB_Name_TOC]) = 0
+                        Break
+                    End If
+                    If RL2 = 1
+                        G_Termination_OC_Info[RL1][RL2][Constant_UL_FSB_Name_TOC] = "Begin"
+                        G_Termination_OC_Info[RL1][RL2][Constant_UL_Width_TOC] = 0
+                    Else
+                        G_Termination_OC_Info[RL1][RL2][Constant_UL_FSB_Name_TOC] = G_Termination_OC_Info[RL1][(RL2 - 1)][Constant_FSB_Name_TOC]
+                        G_Termination_OC_Info[RL1][RL2][Constant_UL_Width_TOC] = G_Termination_OC_Info[RL1][(RL2 - 1)][Constant_DL_Width_TOC]
+                    End If
+                Next
+            Next
         End If
         Excel.CloseExcel(XLS_Obj,true)
     //Catch

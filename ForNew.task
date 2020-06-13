@@ -243,37 +243,7 @@ Function Prepare_Data()
         Next
     Next
 
-    
-    //FSB_and_OC_Topology 填充 FaOT_DL_FSB_Name
-    For PD_CL1 = 1 To Ubound(OCS_CC) 
-        For PD_CL2 = 1 To (Max_Lenth + 1)
-            If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0
-                Break
-            End If
-            If FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_Width] > 0
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_FSB_Name] = FSB_and_OC_Topology[PD_CL1][(PD_CL2 + 1)][FaOT_FSB_Name]
-            Else
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_FSB_Name] = "End"
-            End If
-        Next
-    Next
-    //FSB_and_OC_Topology 填充 FaOT_UL_FSB_Name 和 FaOT_UL_Width
-    For PD_CL1 = 1 To Ubound(OCS_CC) 
-        For PD_CL2 = 1 To (Max_Lenth + 1)
-            If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0
-                Break
-            End If
-            If PD_CL2 = 1
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_FSB_Name] = "Begin"
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_Width] = 0
-            Else
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_FSB_Name] = FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][FaOT_FSB_Name]
-                FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_Width] = FSB_and_OC_Topology[PD_CL1][(PD_CL2 - 1)][FaOT_DL_Width]
-            End If
-            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_FSB_Name])
-            //TracePrint(FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_UL_Width])
-        Next
-    Next
+
     //FSB_and_OC_Topology 加载 FaOT_FS_1_Count FaOT_FS_2_Count
     For PD_CL1 = 1 To Ubound(OCS_CC)
         For PD_CL2 = 1 To (Max_Lenth + 1)
