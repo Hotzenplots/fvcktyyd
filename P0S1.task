@@ -220,7 +220,8 @@ Function Prepare_Data()
                 Temp_List_2 = [0,0]
                 Temp_List_3 = []
                 Temp_List_4 = []
-                For RL2 = 1 To (Max_Lenth + 1) //test 5 mly 2 mly2 3
+                For RL2 = 1 To (Max_Lenth + 1)
+                    //FSB_Name
                     If RL2 = 1
                         Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,1]) //第 RL1 条的起点坐标
                         Temp_List_1 = Split(Temp_Data,"&")
@@ -237,18 +238,20 @@ Function Prepare_Data()
                         Temp_List_3 = Split(Temp_Data,"&")
                         G_Termination_OC_Info[RL1][RL2][Constant_FSB_Name_TOC] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[(CNumber(Temp_List_3[1]) - CNumber(Temp_List_2[1])),(CNumber(Temp_List_3[0]) + CNumber(Temp_List_2[0]))])
                     End If
-                    //Temp_List_4 = Split(Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)]),"&") //下行芯数
-                    //G_Termination_OC_Info[RL1][RL2][Constant_DL_Width_TOC] = Temp_List_4[2]
-                    //If Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)]) = null //处理结尾箱子,下行0芯
-                    //    G_Termination_OC_Info[RL1][RL2][Constant_DL_Width_TOC] = 0
-                    //End If
-                    //G_Termination_OC_Info[RL1][RL2][Constant_Ordinary_Num_TOC] = RL2 //FSB位置
+                    //DL_Width
+                    Temp_List_4 = Split(Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)]),"&") //下行芯数
+                    If len(Temp_List_4) < 3
+                        G_Termination_OC_Info[RL1][RL2][Constant_DL_Width_TOC] = 0
+                    Else
+                        G_Termination_OC_Info[RL1][RL2][Constant_DL_Width_TOC] = Math.Round(CNumber(Temp_List_4[2]),0)
+                    End If
+                    //Ordinary_Num
+                    G_Termination_OC_Info[RL1][RL2][Constant_Ordinary_Num_TOC] = RL2 //FSB位置
                 Next
             Next
 
 
-        //Traceprint(G_Termination_OC_Info)
-        //Traceprint(Max_Lenth)
+        Traceprint(G_Termination_OC_Info)
 
         End If
         Excel.CloseExcel(XLS_Obj,true)

@@ -14,7 +14,7 @@ Dim XLS_Obj
 
 //Traceprint(TURING.version())
 
-G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\test.xls"
+G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\mly2.xls"
 G_FSB_Topology_Sheet = "FSB_Topology"
 G_OC_Topology_Sheet = "OC_Topology"
 G_Info_Sheet = "Info"
