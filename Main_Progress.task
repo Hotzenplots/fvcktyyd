@@ -14,10 +14,12 @@ Dim XLS_Obj
 
 //Traceprint(TURING.version())
 
-G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\mly.xls"
+G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\test.xls"
 G_FSB_Topology_Sheet = "FSB_Topology"
+G_OC_Topology_Sheet = "OC_Topology"
 G_Info_Sheet = "Info"
-G_P1S1 = 1
+G_P1S1 = 0
+G_P1S5 = 1
 
 Function MainProgress()
     If G_P1S1 = 1 
@@ -34,7 +36,8 @@ Function MainProgress()
             Next
         Next
     End If
+    If G_P1S5 = 1 
+        P0S1.Prepare_Data()
+    End If
 End Function
 MainProgress()
-
-

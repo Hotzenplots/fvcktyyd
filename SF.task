@@ -6,7 +6,7 @@ Function Max_Number(MN_Num1,MN_Num2)
     End If
 End Function
 
-Function Wait_Searching() //未测试
+Function Wait_Searching()
     Dim Mouse_shape
     Mouse_shape = TURING.FindMouseShape(0)
     Do While Mouse_shape = 0

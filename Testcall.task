@@ -4,3 +4,9 @@ Const test1 = "1234123"
 
 testfunc.tttyyy(test1)
 
+try 
+ catch 
+ end try
+
+Throw ""
+

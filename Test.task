@@ -27,3 +27,4 @@ next
 #icon("@res:i0uuvk3s-v5p6-jthd-chur-1oquhetqis29.png")
 Mouse.Action({"html":{"attrMap":{"id":"ext-gen33","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 
+
