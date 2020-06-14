@@ -209,15 +209,6 @@ Function Get_Resolution()
 End Function
 
 Function Prepare_Data()
-    //处理7013表
-    CSV_obj = CSV.Open(CSV_File)
-    DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
-    DT_obj = Datatable.SliceDataTable(DT_obj,[],[1,2,4,5,7,10,11,21])
-    DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
-    List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
-    //TracePrint(DT_obj)
-    //TracePrint(List_7013)
-    //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
 
     //Other_Info 加载其他信息
     For PD_CL1 = 1 To Other_Info_Count
@@ -242,48 +233,7 @@ Function Prepare_Data()
             //TracePrint(OC_Draw_Vector[PD_CL1][PD_CL2][2])
         Next
     Next
-
-
-    //FSB_and_OC_Topology 加载 FaOT_FS_1_Count FaOT_FS_2_Count
-    For PD_CL1 = 1 To Ubound(OCS_CC)
-        For PD_CL2 = 1 To (Max_Lenth + 1)
-            PD_Temp_Data = FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FSB_Name]
-            FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] = 0
-            FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] = 0
-            For PD_CL3 = 1 to DT_Shape[0]
-                If PD_Temp_Data = List_7013[PD_CL3 - 1][4]
-                    If len(List_7013[PD_CL3 - 1][7]) = 0
-                        FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] + 1
-                    Else
-                        FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] = FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] + 1
-                    End If
-                End If
-            Next
-            If FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_DL_Width] = 0 //短光缆跳出循环,避免数组越界
-                Break
-            End If
-        Next
-    Next
-    
-    //FSB_Fiber_Process_Data 填充数据
-    PD_Temp_Data = 1
-    For PD_CL1 = 1 to Ubound(OCS_CC)
-        Correction_Num = 0
-        For PD_CL2 = 1 to (Max_Lenth + 1)
-            If len(FSB_and_OC_Topology[PD_CL1][PD_CL2]) = 0 //跳过短光缆
-                Break
-            End If
-            If (FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_1_Count] = 0 And FSB_and_OC_Topology[PD_CL1][PD_CL2][FaOT_FS_2_Count] = 0)
-                Correction_Num = Correction_Num + 1
-                Continue
-            End If
-            FSB_Fiber_Process_Data[PD_Temp_Data] = clone(FSB_and_OC_Topology[PD_CL1][PD_CL2]) //直接利用FSB_and_OC_Topology的数据
-            FSB_Fiber_Process_Data[PD_Temp_Data][FaOT_Ordinary_Num] = FSB_Fiber_Process_Data[PD_Temp_Data][FaOT_Ordinary_Num] - Correction_Num //空箱修正
-            PD_Temp_Data = PD_Temp_Data + 1
-            //TracePrint(FSB_Fiber_Process_Data[PD_Temp_Data])
-        Next
-    Next
-
+  
     //FSB_Fiber_Process_Data 加载DL_FS_Count
     For PD_CL1 = Ubound(FSB_Fiber_Process_Data) to 1 Step -1
         If FSB_Fiber_Process_Data[PD_CL1][FaOT_DL_FSB_Name] = "End"
