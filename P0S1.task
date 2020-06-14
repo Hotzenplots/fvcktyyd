@@ -84,7 +84,7 @@ Function Prepare_Data()
             //Traceprint(List_7013)
         End If
     
-        If G_P1S1 = 1
+        If (G_P1S1 = 1 Or G_P2S1 = 1)
             FSB_Count_Correction = 0
             G_FSB_Count = 0
 

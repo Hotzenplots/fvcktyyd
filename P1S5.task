@@ -441,5 +441,5 @@ Found_Pic = TURING.FindImageExS(0,0,G_Monitor_X,G_Monitor_Y,"C:\\Users\\Administ
     #icon("@res:6up6oddd-uk30-uv1e-bgve-vmfsdm7tg4sc.png")
     Image.Click({"wnd":[{"cls":"360se6_Frame","title":"传输资源场景化配置 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"6up6oddd-uk30-uv1e-bgve-vmfsdm7tg4sc.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
 End Function
-v1.1 修复了绿线的选取问题
+//v1.1 修复了绿线的选取问题
 

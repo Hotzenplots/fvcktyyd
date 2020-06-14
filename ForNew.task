@@ -43,32 +43,8 @@ Dim Step6_Circulation_Start
 Dim Step7_Circulation_Sum
 Dim Step7_Circulation_Start
 
-Dim PD_Temp_List_1 = []
-Dim PD_Temp_List_2 = []
-Dim PD_Temp_List_3 = []
-Dim PD_OCS_Lenth_X_Y = []
-Dim DT_Shape = []
 
-//Max_Number 函数变量
-Dim MN_Num1
-Dim MN_Num2
 
-//Mouse_shape 函数变量
-Dim Mouse_shape
-
-//FSB_Fiber_Process 函数变量
-Dim FFP_Temp
-Dim Melted_Disk
-Dim No_ODM
-Dim Used_Fiber_Count
-
-Dim FFP_Found_Pic = []
-Dim FFP_Temp_List =[]
-
-//Get_Resolution 函数变量
-Dim GR_List ={}
-Dim Monitor_X
-Dim Monitor_Y
 
 //Transmission_Design_Phase_A_Traversal_All_Pages 函数变量
 Dim TD_Last_Page_Item_Count
@@ -77,26 +53,8 @@ Dim TD_Temp_Data
 Dim TD_Temp_List = []
 Dim Element_Exist
 
-//MainProgress 函数变量
-Dim MP_Temp
-Dim MP_CL0
-dim bRet = ""
-Dim MP_CL1
 
 
-Const C_End = 100
-Const CSV_File = "C:\\Users\\Administrator\\Desktop\\榆次\\288.csv"
-Const Source_File_Path = "C:\\Users\\Administrator\\Desktop\\榆次\\test2.xls"
-Const FSB_Topology_Sheet = "FSB_Topology"
-Const OC_Topology_Sheet = "OC_Topology"
-Const Info_Sheet = "Info"
-Const Longitude_Sheet = "longitude"
-Const Latitude_Sheet = "latitude"
-Const OCS_Fiber_Count_Sheet = "OCS_Fiber_Count"
-
-Const FSB_Name_Constant           =  1 //FSB_Info 分纤箱名字
-Const FSB_Longitude_Constant      =  2 //FSB_Info 分纤箱经度
-Const FSB_Latitude_Constant       =  3 //FSB_Info 分纤箱纬度
 
 Const Fiber_Count_Constant        =  1 //OC_Info 芯数常量
 Const Lenth_Constant              =  2 //OC_Info 长度常量
@@ -126,28 +84,6 @@ Const AORD_DQS_City_Constant      = 18 //Other_Info 数据质量责任人_地市
 Const AORD_DQS_District_Constant  = 19 //Other_Info 数据质量责任人_区县_光路
 Const AORD_DQS_Maintaince_Constant= 20 //Other_Info 数据质量责任人_维护_光路
 
-Const FaOT_UL_FSB_Name            =  1 //FSB_and_OC_Topology 上行FSB名称
-Const FaOT_UL_Width               =  2 //FSB_and_OC_Topology 上行光缆芯数
-Const FaOT_FSB_Name               =  3 //FSB_and_OC_Topology FSB名称
-Const FaOT_DL_Width               =  4 //FSB_and_OC_Topology 下行光缆芯数
-Const FaOT_DL_FSB_Name            =  5 //FSB_and_OC_Topology 下行FSB名称
-Const FaOT_Ordinary_Num           =  6 //FSB_and_OC_Topology FSB在光缆中的位置
-Const FaOT_FS_1_Count             =  7 //FSB_and_OC_Topology 1级FS个数
-Const FaOT_FS_2_Count             =  8 //FSB_and_OC_Topology 2级FS个数
-
-Const FFPD_UL_FSB_Name          =  1 //FSB_Fiber_Process_Data 上行FSB名称
-Const FFPD_UL_Width             =  2 //FSB_Fiber_Process_Data 上行芯数
-Const FFPD_FSB_Name             =  3 //FSB_Fiber_Process_Data FSB名称
-Const FFPD_DL_Width             =  4 //FSB_Fiber_Process_Data 下行芯数
-Const FFPD_DL_FSB_Name          =  5 //FSB_Fiber_Process_Data 下行FSB名称
-Const FFPD_Ordinary_Num         =  6 //FSB_Fiber_Process_Data FSB在光缆中的位置(去除空箱)
-Const FFPD_FS_1_Count           =  7 //FSB_Fiber_Process_Data 1级FS个数
-Const FFPD_FS_2_Count           =  8 //FSB_Fiber_Process_Data 2级FS个数
-Const FFPD_DL_FS_Count          =  9 //FSB_Fiber_Process_Data 下行FS个数
-Const FFPD_FP_Start             = 10 //FSB_Fiber_Process_Data 上架开始的芯数
-Const FFPD_FP_Count             = 11 //FSB_Fiber_Process_Data 上架芯数
-Const FFPD_DM_Start             = 12 //FSB_Fiber_Process_Data 直熔开始的芯数
-Const FFPD_DM_Count             = 13 //FSB_Fiber_Process_Data 直熔芯数
 
 //Add_Optical_Route_Data Index
 Const AORD_A_Location             =  1
@@ -164,49 +100,7 @@ Const AORD_DQS_District           = 11
 Const AORD_DQS_Maintaince         = 12
 Const AORD_Vocational_Name        = 13
 
-Function Determine_Box_Type(Box_Name)
-    If InStr(Box_Name,"光交",1,false) <> 0
-        If InStr(Box_Name,"光交",1,false) <> 0
-            //光交
-            #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            #icon("@res:qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-            #icon("@res:jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"jnggnihj-eio2-l2r4-03l8-o8oefhchu2ki.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        End If
-    Else
-        //分纤箱
-        #icon("@res:3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"3qm833v9-2l3q-4kdk-8av3-kgn89tnsdrc7.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        #icon("@res:qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"qtkil3l9-kgvi-1287-l4du-3eej94npljhv.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-        #icon("@res:0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png")
-        Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 11.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"0j8ecsss-3gqq-ith2-1d2g-ao53chmj827n.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-    End If
-End Function
 
-Function Max_Number(MN_Num1,MN_Num2)
-    If MN_Num1 > MN_Num2
-        Return MN_Num1
-    Else
-        Return MN_Num2
-    End If
-End Function
-
-Function Search_Waiting()
-    Mouse_shape = TURING.FindMouseShape(0)
-    Do While Mouse_shape = 0
-        Mouse_shape = TURING.FindMouseShape(0)
-        Delay Delay_Unit
-    Loop
-End Function
-
-Function Get_Resolution()
-    GR_List = Window.GetSize({"wnd":[{"cls":"WorkerW","app":"explorer"}]})
-    Monitor_X = GR_List["width"]
-    Monitor_Y = GR_List["height"]
-End Function
 
 Function Prepare_Data()
 
@@ -234,8 +128,6 @@ Function Prepare_Data()
         Next
     Next
   
-
-
 
     // Step7_Circulation_Start 循环起点
     Step7_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[37,2])
