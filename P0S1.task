@@ -24,6 +24,7 @@ Function Prepare_Data()
         Dim Vertical_Metre
         Dim Termination_OC_3D =[]
         Dim TOC_Correction
+        Dim Single_FS_Use_Fiber_Count
 
         //CSV相关
         Dim CSV_obj
@@ -41,6 +42,8 @@ Function Prepare_Data()
         Dim Constant_FSB_Longitude  = 2
         Dim Constant_FSB_Latitude   = 3
 
+        //G_Other_Info_Index
+        Dim Constant_Info_Data_Count   = 5
         Dim Constant_Info_Data_Column   = 2
         Dim Constant_Longitude_Start    = 1
         Dim Constant_Latitude_Start     = 2
@@ -62,7 +65,6 @@ Function Prepare_Data()
         Dim Constant_T_Count_TOC      = 11
         Dim Constant_DM_Start_TOC     = 12
         Dim Constant_DM_Count_TOC     = 13
-
 
         XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)
 
@@ -87,8 +89,8 @@ Function Prepare_Data()
             G_FSB_Count = 0
 
             //构建G_FSB_RC,计算G_FSB_Count,G_FSB_RC未排除空箱,应用时遇到空箱直接Continue
-            For RL1 = 1 to 100
-                For RL2 = 1 to 100
+            For RL1 = 1 To 100
+                For RL2 = 1 To 100
                     Temp_Data = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[RL1,RL2])
                     If Temp_Data = ""
                         Break
@@ -151,6 +153,10 @@ Function Prepare_Data()
         End If
 
         If G_P1S5 = 1
+            For RL1 = 1 To Constant_Info_Data_Count
+                G_Other_Info[RL1] = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[RL1,Constant_Info_Data_Column])
+            Next
+
             //构建G_OCS_RC[]
             For RL1 = 1 To 100
                 For RL2 =1 To 100
@@ -330,7 +336,7 @@ Function Prepare_Data()
                     Temp_Data = Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]
                     Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] = 0
                     Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] = 0
-                    For RL3 = 1 to DT_Shape[0]
+                    For RL3 = 1 To DT_Shape[0]
                         If Temp_Data = List_7013[RL3 - 1][4]
                             If len(List_7013[RL3 - 1][7]) = 0
                                 Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] = Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] + 1
@@ -347,9 +353,9 @@ Function Prepare_Data()
 
             //G_Termination_OC_Info 填充数据
             Temp_Data = 1
-            For RL1 = 1 to Ubound(G_OCS_RC)
+            For RL1 = 1 To Ubound(G_OCS_RC)
                 TOC_Correction = 0
-                For RL2 = 1 to (Max_Lenth + 1)
+                For RL2 = 1 To (Max_Lenth + 1)
                     If Len(Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]) = 0 //跳过短光缆
                         Break
                     End If
@@ -364,7 +370,7 @@ Function Prepare_Data()
             Next
 
             //G_Termination_OC_Info 加载DL_FS_Count
-            For RL1 = Ubound(G_Termination_OC_Info) to 1 Step -1
+            For RL1 = Ubound(G_Termination_OC_Info) To 1 Step -1
                 If G_Termination_OC_Info[RL1][Constant_DL_FSB_Name_TOC] = "End"
                     G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] = 0
                 Else
@@ -372,34 +378,45 @@ Function Prepare_Data()
                 End If
             Next
 
-            //G_Termination_OC_Info 加载FFPD_FP_Start FFPD_FP_Count FFPD_DM_Start FFPD_DM_Count
-            Single_FS_Use_Count = Other_Info[BackUp_Fiber_Count] + 1
-            For PD_CL1 = Ubound(G_Termination_OC_Info) to 1 Step -1
-                If G_Termination_OC_Info[PD_CL1][FFPD_DL_FSB_Name] = "End" 
-                    G_Termination_OC_Info[PD_CL1][FFPD_FP_Start] = 1
-                    G_Termination_OC_Info[PD_CL1][FFPD_FP_Count] = Math.Int(G_Termination_OC_Info[PD_CL1][FFPD_FS_2_Count] * Single_FS_Use_Count)
-                    G_Termination_OC_Info[PD_CL1][FFPD_DM_Start] = 0
-                    G_Termination_OC_Info[PD_CL1][FFPD_DM_Count] = 0
+            //G_Termination_OC_Info 加载
+            //T_Start_TOC
+            //T_Count_TOC
+            //DM_Start_TOC
+            //DM_Count_TOC
+            
+            Single_FS_Use_Fiber_Count = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Back_Fiber_Count,Constant_Info_Data_Column]) + 1
+            For RL1 = Ubound(G_Termination_OC_Info) To 1 Step -1
+                If G_Termination_OC_Info[RL1][Constant_DL_FSB_Name_TOC] = "End" 
+                    G_Termination_OC_Info[RL1][Constant_T_Start_TOC] = 1
+                    G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_2FS_Count_TOC] * Single_FS_Use_Fiber_Count)
+                    G_Termination_OC_Info[RL1][Constant_DM_Start_TOC] = 0
+                    G_Termination_OC_Info[RL1][Constant_DM_Count_TOC] = 0
                 Else
-                    If G_Termination_OC_Info[PD_CL1][FFPD_UL_FSB_Name] = "Begin"
-                        G_Termination_OC_Info[PD_CL1][FFPD_FP_Start] = 1
-                        G_Termination_OC_Info[PD_CL1][FFPD_FP_Count] = Math.Int(G_Termination_OC_Info[PD_CL1][FFPD_DL_Width])
-                        G_Termination_OC_Info[PD_CL1][FFPD_DM_Start] = 0
-                        G_Termination_OC_Info[PD_CL1][FFPD_DM_Count] = 0
+                    If G_Termination_OC_Info[RL1][Constant_UL_FSB_Name_TOC] = "Begin"
+                        G_Termination_OC_Info[RL1][Constant_T_Start_TOC] = 1
+                        G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC])
+                        G_Termination_OC_Info[RL1][Constant_DM_Start_TOC] = 0
+                        G_Termination_OC_Info[RL1][Constant_DM_Count_TOC] = 0
                     Else
-                        G_Termination_OC_Info[PD_CL1][FFPD_FP_Start] = Math.Int(G_Termination_OC_Info[PD_CL1][FFPD_DL_FS_Count] * Single_FS_Use_Count + 1)
-                        G_Termination_OC_Info[PD_CL1][FFPD_FP_Count] = Math.Int(G_Termination_OC_Info[PD_CL1][FFPD_FS_2_Count] * Single_FS_Use_Count)
-                        G_Termination_OC_Info[PD_CL1][FFPD_DM_Start] = 1
-                        G_Termination_OC_Info[PD_CL1][FFPD_DM_Count] = Math.Int(G_Termination_OC_Info[PD_CL1][FFPD_DL_FS_Count] * Single_FS_Use_Count)
+                        G_Termination_OC_Info[RL1][Constant_T_Start_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] * Single_FS_Use_Fiber_Count + 1)
+                        G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_2FS_Count_TOC] * Single_FS_Use_Fiber_Count)
+                        G_Termination_OC_Info[RL1][Constant_DM_Start_TOC] = 1
+                        G_Termination_OC_Info[RL1][Constant_DM_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] * Single_FS_Use_Fiber_Count)
                     End If
                 End If
             Next
 
-
             //验证二维数据
-            TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\验证数据.xls",false)
-            Excel.WriteRange(TestExcelObj,"Sheet1","A1",G_Termination_OC_Info,false)
-            Excel.CloseExcel(TestExcelObj,true)
+            //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\验证数据.xls",false)
+            //Excel.WriteRange(TestExcelObj,"Sheet1","A1",G_Termination_OC_Info,false)
+            //Excel.CloseExcel(TestExcelObj,true)
+        
+            //写入P1S5的Repeat_Sum
+            Temp_Data = Ubound(G_Termination_OC_Info)
+            G_P1S5_Repeat_Sum = Excel.WriteCell(XLS_Obj,G_Info_Sheet,[6,6],Temp_Data,true)
+            //读取P1S5的Repeat_Start和Repeat_Sum
+            G_P1S5_Repeat_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[6,5])
+            G_P1S5_Repeat_Sum = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[6,6])
         End If
         Excel.CloseExcel(XLS_Obj,true)
     //Catch
@@ -407,4 +424,3 @@ Function Prepare_Data()
     //    Excel.CloseExcel(XLS_Obj,true)
     //End Try
 End Function
-

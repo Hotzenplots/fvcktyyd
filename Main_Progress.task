@@ -14,8 +14,8 @@ Dim XLS_Obj
 
 //Traceprint(TURING.version())
 
-G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\test.xls"
-G_CSV_File_Path = "C:\\Users\\Administrator\\Desktop\\test.csv"
+G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\mly.xls"
+G_CSV_File_Path = "C:\\Users\\Administrator\\Desktop\\mly.csv"
 G_FSB_Topology_Sheet = "FSB_Topology"
 G_OC_Topology_Sheet = "OC_Topology"
 G_Info_Sheet = "Info"
@@ -39,6 +39,18 @@ Function MainProgress()
     End If
     If G_P1S5 = 1 
         P0S1.Prepare_Data()
+        SF.Get_Resolution()
+        For MP_RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P1S5_Repeat_Start 和 G_P1S5_Repeat_Sum
+            If G_P1S5_Repeat_Start = G_P1S5_Repeat_Sum
+                Break
+            End If
+            For MP_RL1 = G_P1S5_Repeat_Start to G_P1S5_Repeat_Sum
+                P1S5.Termination_OC(G_Termination_OC_Info[MP_RL1])
+                XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
+                Excel.WriteCell(XLS_Obj,G_Info_Sheet,[6,5],MP_RL1,true)
+                Excel.CloseExcel(XLS_Obj,true) //立即保存
+            Next
+        Next
     End If
 End Function
 MainProgress()
