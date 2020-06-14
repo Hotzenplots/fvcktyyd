@@ -234,15 +234,6 @@ Function Prepare_Data()
         Next
     Next
   
-    //FSB_Fiber_Process_Data 加载DL_FS_Count
-    For PD_CL1 = Ubound(FSB_Fiber_Process_Data) to 1 Step -1
-        If FSB_Fiber_Process_Data[PD_CL1][FaOT_DL_FSB_Name] = "End"
-            FSB_Fiber_Process_Data[PD_CL1][FFPD_DL_FS_Count] = 0
-        Else
-            FSB_Fiber_Process_Data[PD_CL1][FFPD_DL_FS_Count] = FSB_Fiber_Process_Data[PD_CL1 + 1][FaOT_FS_2_Count] + FSB_Fiber_Process_Data[PD_CL1 + 1][FFPD_DL_FS_Count]
-        End If
-    Next
-    
     //FSB_Fiber_Process_Data 加载FFPD_FP_Start FFPD_FP_Count FFPD_DM_Start FFPD_DM_Count
     Single_FS_Use_Count = Other_Info[BackUp_Fiber_Count] + 1
     For PD_CL1 = Ubound(FSB_Fiber_Process_Data) to 1 Step -1
