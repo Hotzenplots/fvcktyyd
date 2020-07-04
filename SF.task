@@ -43,4 +43,14 @@ Function Determine_FSB_Type(Box_Name)
     End If
 End Function
 
-
+Function Tail_Add(OC_Name)
+    Dim Temp_Data
+    Dim Temp_Data2
+    Temp_Data =  Clipboard.GetText()
+    Temp_Data2 = 0
+    Temp_Data2 = CNumber(Right(Temp_Data,1))
+    Temp_Data2 = Math.Round(Temp_Data2 + 1,0)
+    Temp_Data = Left(Temp_Data,(Len(Temp_Data) - 1))
+    Temp_Data = Temp_Data&Temp_Data2
+    Return Temp_Data
+End Function

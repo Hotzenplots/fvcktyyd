@@ -26,14 +26,14 @@ G_P2S1 = 1
 Function MainProgress()
     If G_P1S1 = 1 
         P0S1.Prepare_Data()
-        For MP_RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P1S1_Repeat_Start 和 G_P1S1_Repeat_Sum
+        For RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P1S1_Repeat_Start 和 G_P1S1_Repeat_Sum
             If G_P1S1_Repeat_Start = G_P1S1_Repeat_Sum
                 Break
             End If
-            For MP_RL1 = G_P1S1_Repeat_Start to G_P1S1_Repeat_Sum
-                P1S1.Push_FSB(G_FSB_Info[MP_RL1])
+            For RL1 = G_P1S1_Repeat_Start to G_P1S1_Repeat_Sum
+                P1S1.Push_FSB(G_FSB_Info[RL1])
                 XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
-                Excel.WriteCell(XLS_Obj,G_Info_Sheet,[2,5],MP_RL1,true)
+                Excel.WriteCell(XLS_Obj,G_Info_Sheet,[2,5],RL1 + 1,true)
                 Excel.CloseExcel(XLS_Obj,true) //立即保存
             Next
         Next
@@ -41,31 +41,40 @@ Function MainProgress()
     If G_P1S5 = 1 
         P0S1.Prepare_Data()
         SF.Get_Resolution()
-        For MP_RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P1S5_Repeat_Start 和 G_P1S5_Repeat_Sum
+        For RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P1S5_Repeat_Start 和 G_P1S5_Repeat_Sum
             If G_P1S5_Repeat_Start = G_P1S5_Repeat_Sum
                 Break
             End If
-            For MP_RL1 = G_P1S5_Repeat_Start to G_P1S5_Repeat_Sum
-                P1S5.Termination_OC(G_Termination_OC_Info[MP_RL1])
+            For RL1 = G_P1S5_Repeat_Start to G_P1S5_Repeat_Sum
+                P1S5.Termination_OC(G_Termination_OC_Info[RL1])
                 XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
-                Excel.WriteCell(XLS_Obj,G_Info_Sheet,[6,5],MP_RL1,true)
+                Excel.WriteCell(XLS_Obj,G_Info_Sheet,[6,5],RL1 + 1,true)
                 Excel.CloseExcel(XLS_Obj,true) //立即保存
             Next
         Next
     End If
 
     If G_P2S1 = 1
-        P0S1.Prepare_Data()
         P0S2.Prepare_Data()
         SF.Get_Resolution()
-        For MP_RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P2S1_Repeat_Start 和 G_P2S1_Repeat_Sum
+        For RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P2S1_Repeat_Start 和 G_P2S1_Repeat_Sum
             If G_P2S1_Repeat_Start = G_P2S1_Repeat_Sum
                 Break
             End If
-            For MP_RL1 = G_P2S1_Repeat_Start to G_P2S1_Repeat_Sum
-                Traceprint("666")
+            G_P2S1_Repeat_Count = G_P2S1_Repeat_Start
+            For RL1 = G_P2S1_Repeat_Start to G_P2S1_Repeat_Sum
+                P2S1.Add_Optical_Route(G_Add_Optical_Route_Info[RL1])
+                XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
+                Excel.WriteCell(XLS_Obj,G_Info_Sheet,[G_P2S1_Repeat_Count,35],G_OC_Name,true)
+                Excel.WriteCell(XLS_Obj,G_Info_Sheet,[7,5],RL1 + 1,true)
+                Excel.CloseExcel(XLS_Obj,true) //立即保存
             Next
         Next
     End If
 End Function
 MainProgress()
+
+//TODO
+//P0S2 优化,利用7013表
+//P0S2 解耦合
+

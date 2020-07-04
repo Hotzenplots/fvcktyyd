@@ -43,13 +43,17 @@ Function Prepare_Data()
         Dim Constant_FSB_Latitude   = 3
 
         //G_Other_Info_Index
-        Dim Constant_Info_Data_Count   = 5
+        Dim Constant_Info_Data_Count   = 9
         Dim Constant_Info_Data_Column   = 2
         Dim Constant_Longitude_Start    = 1
         Dim Constant_Latitude_Start     = 2
         Dim Constant_Horizontal_Density = 3
         Dim Constant_Vertical_Density   = 4
         Dim Constant_Back_Fiber_Count   = 5
+        Dim Constant_DQS_Project_AOR    = 6
+        Dim Constant_DQS_City_AOR       = 7
+        Dim Constant_DQS_District_AOR   = 8
+        Dim Constant_DQS_Maintaince_AOR = 9
 
         //Termination_OC_3D_Index
         Dim Constant_UL_FSB_Name_TOC  = 1
@@ -67,24 +71,8 @@ Function Prepare_Data()
         Dim Constant_DM_Count_TOC     = 13
 
         XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)
-
-        If G_P1S5 = 1
-            //处理7013表
-            CSV_obj = CSV.Open(G_CSV_File_Path)
-            DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
-            DT_obj = Datatable.SliceDataTable(DT_obj,[],[1,2,4,5,7,10,11,21])
-            DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
-            List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
-            //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
-
-            //验证二维数据
-            //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\验证数据.xls",false)
-            //Excel.WriteRange(TestExcelObj,"Sheet1","A1",List_7013,false)
-            //Excel.CloseExcel(TestExcelObj,true)
-            //Traceprint(List_7013)
-        End If
     
-        If (G_P1S1 = 1 Or G_P2S1 = 1)
+        If G_P1S1 = 1
             FSB_Count_Correction = 0
             G_FSB_Count = 0
 
@@ -153,6 +141,15 @@ Function Prepare_Data()
         End If
 
         If G_P1S5 = 1
+            //处理7013表
+            CSV_obj = CSV.Open(G_CSV_File_Path)
+            DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
+            DT_obj = Datatable.SliceDataTable(DT_obj,[],[1,2,4,5,7,10,11,21])
+            DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
+            List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
+            //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
+
+            //G_Other_Info
             For RL1 = 1 To Constant_Info_Data_Count
                 G_Other_Info[RL1] = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[RL1,Constant_Info_Data_Column])
             Next
@@ -418,9 +415,9 @@ Function Prepare_Data()
             G_P1S5_Repeat_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[6,5])
             G_P1S5_Repeat_Sum = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[6,6])
         End If
+
         Excel.CloseExcel(XLS_Obj,true)
     //Catch
-    //    Traceprint(Max_Lenth)
     //    Excel.CloseExcel(XLS_Obj,true)
     //End Try
 End Function

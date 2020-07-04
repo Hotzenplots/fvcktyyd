@@ -129,56 +129,7 @@ Function Prepare_Data()
     Next
   
 
-    // Step7_Circulation_Start 循环起点
-    Step7_Circulation_Start = Excel.ReadCell(Opened_Excel_Obj,Info_Sheet,[37,2])
-    // Step7_Circulation_Sum 循环合计
-    Step7_Circulation_Sum = 0
-    For PD_CL1 = 1 to Ubound(FSB_Fiber_Process_Data)
-        Step7_Circulation_Sum = Step7_Circulation_Sum + FSB_Fiber_Process_Data[PD_CL1][FFPD_FS_2_Count]
-    Next
-    // Step7_Circulation_Sum 合计写入
-    Excel.WriteCell(Opened_Excel_Obj,Info_Sheet,[37,3],Step7_Circulation_Sum,true) //立即保存
-
-    //构建 Add_Optical_Route_Data[][13]
-    For PD_CL1 = 1 To Step7_Circulation_Sum
-        For PD_CL2 = 1 To 13
-            PD_Temp_List_1[PD_CL2] = ""
-        Next
-        Add_Optical_Route_Data[PD_CL1] = Clone(PD_Temp_List_1)
-    Next
-
-    //Add_Optical_Route_Data 加载数据
-    PD_Temp_Data = 0 
-    For PD_CL1 = 1 to DT_Shape[0] - 1
-        If List_7013[PD_CL1][7] = ""
-            Continue
-        End If
-        PD_Temp_Data = PD_Temp_Data + 1
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_Z_Equipment] = Clone(List_7013[PD_CL1][3])
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_Z_Location] = Clone(List_7013[PD_CL1][4])
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_A_Equipment] = left(List_7013[PD_CL1][7],(len(List_7013[PD_CL1][7]) - 6))
-        For PD_CL2 = 1 to DT_Shape[0] - 1
-            If Add_Optical_Route_Data[PD_Temp_Data][AORD_A_Equipment] = List_7013[PD_CL2][3]
-                Add_Optical_Route_Data[PD_Temp_Data][AORD_A_Location] = List_7013[PD_CL2][4]
-            End If
-        Next
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_A_DownLink_Port] = Right(List_7013[PD_CL1][7],5)
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_Optical_Route_Name] = "光路名称"
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_Project_Num] = List_7013[PD_CL2][5]
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_Task_Name] = List_7013[PD_CL2][6]
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_DQS_Project] = Other_Info[AORD_DQS_Project_Constant]
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_DQS_City] = Other_Info[AORD_DQS_City_Constant]
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_DQS_District] = Other_Info[AORD_DQS_District_Constant]
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_DQS_Maintaince] = Other_Info[AORD_DQS_Maintaince_Constant]
-        Add_Optical_Route_Data[PD_Temp_Data][AORD_Vocational_Name] = List_7013[PD_CL2][2]
-    Next
-    //Add_Optical_Route_Data 数据验证
-    //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\222.xls",false)
-    //Excel.WriteRange(TestExcelObj,"Sheet1","A2",Add_Optical_Route_Data,false)
-    //Excel.CloseExcel(TestExcelObj,true)
-
-    Excel.CloseExcel(Opened_Excel_Obj,true) //立即保存
-End Function
+   
 
 Function Add_Optical_Route(AORD)
     #icon("@res:S7-增加-按钮.png")

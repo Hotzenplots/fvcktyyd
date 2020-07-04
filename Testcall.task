@@ -3,10 +3,15 @@ Import testfunc
 Const test1 = "1234123"
 
 testfunc.tttyyy(test1)
+sRet = Clipboard.GetText()
 
-try 
- catch 
- end try
 
-Throw ""
+t1 = "AAA"
+t2 = "BBB"
+t3 = t1&t2
+TracePrint(sRet)
+Clipboard.SetText("333")
+
+sRet = Clipboard.GetText()
+TracePrint(sRet)
 
