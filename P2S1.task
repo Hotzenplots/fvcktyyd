@@ -7,19 +7,17 @@ Function Add_Optical_Route(Para_Add_Optical_Route_Info)
     Dim Temp_Data2
 
     //Add_Optical_Route_Info_Index
-    Dim A_Location_AOR             =  1
-    Dim A_Equipment_AOR            =  2
-    Dim A_DownLink_Port_AOR        =  3
-    Dim Z_Location_AOR             =  4
-    Dim Z_Equipment_AOR            =  5
-    Dim Optical_Route_Name_AOR     =  6
-    Dim Project_Num_AOR            =  7
-    Dim Task_Name_AOR              =  8
-    Dim DQS_Project_AOR            =  9
-    Dim DQS_City_AOR               = 10
-    Dim DQS_District_AOR           = 11
-    Dim DQS_Maintaince_AOR         = 12
-    Dim Vocational_Name_AOR        = 13
+    Dim A_Location_AOR             =  0
+    Dim A_Equipment_AOR            =  1
+    Dim Z_Location_AOR             =  2
+    Dim Z_Equipment_AOR            =  3
+    Dim Project_Num_AOR            =  4
+    Dim Task_Name_AOR              =  5
+    Dim DQS_Project_AOR            =  6
+    Dim DQS_City_AOR               =  7
+    Dim DQS_District_AOR           =  8
+    Dim DQS_Maintaince_AOR         =  9
+    Dim Vocational_Name_AOR        = 10
 
     #icon("@res:S7-增加-按钮.png")
     Mouse.Action({"html":{"attrMap":{"id":"ext-gen66","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
@@ -37,7 +35,7 @@ Function Add_Optical_Route(Para_Add_Optical_Route_Info)
     #icon("@res:S7-查询-按钮 (2).png")
     Mouse.Action({"html":{"attrMap":{"id":"ext-gen471","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-读取中-图片.png")
-    Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-读取中-图片.png",0.9,"hide",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true})
+    Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-读取中-图片.png",0.9,"hide",20000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true})
     #icon("@res:S7-统一名称-按钮.png")
     Mouse.Action({"html":{"attrMap":{"aaname":"统一名称","parentid":"ext-gen484","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","dbclick",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":25,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-下箭头-按钮 (3).png")
@@ -146,15 +144,8 @@ Function Add_Optical_Route(Para_Add_Optical_Route_Info)
     Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-正在执行操作请稍后-图片.png",0.9,"hide",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true})
     #icon("@res:lvqe71at-ras6-59q1-avjh-8vih6u7nfhtk.png")
     G_OC_Name = UiElement.GetValue({"html":[{"id":"opticname","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200})
-    //#icon("@res:S7-光路名称-文本框.png")
-    //Mouse.Action({"html":{"attrMap":{"id":"opticname","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-    //#icon("@res:S7-光路名称-文本框 (2).png")
-    //Keyboard.PressKey({"html":{"attrMap":{"id":"opticname","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"A",10,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":["Ctrl"],"sSimulate":"simulate"})
-    //#icon("@res:S7-光路名称-文本框 (3).png")
-    //Keyboard.PressKey({"html":{"attrMap":{"id":"opticname","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"C",10,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":["Ctrl"],"sSimulate":"simulate"})
     
     //光路名称尾号处理
-    
     XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)
     For RL1 = 1 to 3
         For RL2 = 1 to G_P2S1_Repeat_Sum
@@ -172,11 +163,6 @@ Function Add_Optical_Route(Para_Add_Optical_Route_Info)
     G_P2S1_Repeat_Count = G_P2S1_Repeat_Count + 1
     #icon("@res:arcof6g6-4la4-g5o2-obgf-ldv7ht65123v.png")
     Keyboard.InputText({"html":[{"id":"opticname","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},G_OC_Name,true,20,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
-    //#icon("@res:S7-光路名称-文本框 (2).png")
-    //Keyboard.PressKey({"html":{"attrMap":{"id":"opticname","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"A",10,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":["Ctrl"],"sSimulate":"simulate"})
-    //#icon("@res:S7-光路名称-文本框 (3).png")
-    //Keyboard.PressKey({"html":{"attrMap":{"id":"opticname","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"V",10,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":["Ctrl"],"sSimulate":"simulate"})
-
     #icon("@res:S7-下箭头-按钮 (9).png")
     Mouse.Action({"html":{"attrMap":{"id":"ext-gen315","tag":"IMG"},"index":0,"tagName":"IMG"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-业务光路-按钮.png")
@@ -186,31 +172,31 @@ Function Add_Optical_Route(Para_Add_Optical_Route_Info)
     #icon("@res:S7-家客接入-按钮.png")
     Mouse.Action({"html":{"attrMap":{"aaname":"家客接入","parentid":"ext-gen1009","tag":"DIV"},"index":0,"tagName":"DIV"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人地市-文本框.png")
-    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1011","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[DQS_City_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1011","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[DQS_City_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*10,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人地市-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1011","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Down",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人地市-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1011","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Enter",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人工程-文本框.png")
-    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1010","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[DQS_Project_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1010","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[DQS_Project_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*10,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人工程-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1010","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Down",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人工程-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1010","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Enter",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-项目编码-文本框.png")
-    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1016","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[Project_Num_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1016","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[Project_Num_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*10,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-项目编码-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1016","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Down",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-项目编码-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1016","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Enter",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人区县-文本框.png")
-    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1012","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[DQS_District_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1012","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[DQS_District_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*10,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人区县-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1012","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Enter",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-数据质量责任人区县-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1012","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Enter",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-一线数据维护人-文本框.png")
-    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1013","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[DQS_Maintaince_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1013","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[DQS_Maintaince_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*10,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-一线数据维护人-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1013","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Down",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-一线数据维护人-文本框.png")
@@ -224,7 +210,7 @@ Function Add_Optical_Route(Para_Add_Optical_Route_Info)
     #icon("@res:S7-业务类型-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1009","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Enter",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-任务名称-文本框.png")
-    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1017","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[Task_Name_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Keyboard.InputText({"html":{"attrMap":{"id":"ext-comp-1017","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Para_Add_Optical_Route_Info[Task_Name_AOR],true,Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*10,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-任务名称-文本框.png")
     Keyboard.PressKey({"html":{"attrMap":{"id":"ext-comp-1017","tag":"INPUT"},"index":0,"tagName":"INPUT"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"Down",Delay_Unit,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:S7-任务名称-文本框.png")

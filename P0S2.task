@@ -97,21 +97,20 @@ Function Prepare_Data()
     //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\AOR验证.xls",false)
     //Excel.WriteRange(TestExcelObj,"Sheet1","A1",G_Add_Optical_Route_Info,false)
     //Excel.CloseExcel(TestExcelObj,true)
+    
+    //写入P2S1的Repeat_Sum
+    XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)
+    Temp_Data = 0
+    For RL1 = 1 to Ubound(G_Add_Optical_Route_Info)
+        If G_Add_Optical_Route_Info[RL1][0] <> ""
+            Temp_Data = Temp_Data + 1
+        End If
+    Next
+    Excel.WriteCell(XLS_Obj,G_Info_Sheet,[7,6],Temp_Data,true)
 
-
-    // //写入P2S1的Repeat_Sum
-    // Temp_Data = 0
-    // For RL1 = 1 to Ubound(G_Termination_OC_Info)
-    //     Temp_Data = Temp_Data + G_Termination_OC_Info[RL1][Constant_2FS_Count_TOC]
-    // Next
-    // Excel.WriteCell(XLS_Obj,G_Info_Sheet,[7,6],Temp_Data,true)
-
-    // //读取P2S1的Repeat_Start和Repeat_Sum
-    // G_P2S1_Repeat_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[7,5])
-    // G_P2S1_Repeat_Sum = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[7,6])
-
-
-
-    // Excel.CloseExcel(XLS_Obj,true)
+    //读取P2S1的Repeat_Start和Repeat_Sum
+    G_P2S1_Repeat_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[7,5])
+    G_P2S1_Repeat_Sum = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[7,6])
+    Excel.CloseExcel(XLS_Obj,true)
 End Function
 
