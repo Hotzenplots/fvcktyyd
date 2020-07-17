@@ -14,8 +14,8 @@ Dim XLS_Obj
 
 //Traceprint(TURING.version())
 
-G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\ds.xls"
-G_CSV_File_Path = "C:\\Users\\Administrator\\Desktop\\ds.csv"
+G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\LDS.xls"
+G_CSV_File_Path = "C:\\Users\\Administrator\\Desktop\\LDS.csv"
 G_FSB_Topology_Sheet = "FSB_Topology"
 G_OC_Topology_Sheet = "OC_Topology"
 G_Info_Sheet = "Info"
@@ -64,11 +64,13 @@ Function MainProgress()
                         Break
                     End If
                     G_P2S1_Repeat_Count = G_P2S1_Repeat_Start
+
+
                     For RL1 = G_P2S1_Repeat_Start to G_P2S1_Repeat_Sum
                         P2S1.Add_Optical_Route(G_Add_Optical_Route_Info[RL1])
                         XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
                         //保存生成的光路名称
-                        Excel.WriteCell(XLS_Obj,G_Info_Sheet,[G_P2S1_Repeat_Count - 1,35],G_OC_Name,true)
+                        Excel.WriteCell(XLS_Obj,G_Info_Sheet,[G_P2S1_Repeat_Count,35],G_OC_Name,true)
                         G_P2S1_Repeat_Count = G_P2S1_Repeat_Count + 1
                         //续传点写入
                         Excel.WriteCell(XLS_Obj,G_Info_Sheet,[7,5],RL1 + 1,true)

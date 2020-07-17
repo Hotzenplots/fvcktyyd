@@ -156,7 +156,8 @@ Function Add_Optical_Route(Para_Add_Optical_Route_Info)
             End If
         Next
     Next
-
+    Excel.CloseExcel(XLS_Obj,true) //立即保存
+    
     #icon("@res:arcof6g6-4la4-g5o2-obgf-ldv7ht65123v.png")
     Keyboard.InputText({"html":[{"id":"opticname","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},G_OC_Name,true,20,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
     #icon("@res:S7-下箭头-按钮 (9).png")

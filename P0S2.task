@@ -32,8 +32,7 @@ Function Prepare_Data()
     Dim Vocational_Name_AOR        = 10
     
     //数据质量责任人
-    DQS_List = [[],["迎泽区","杨伟","卢锐","董剑峰","tt_1_cuichao"]]
-
+    DQS_List = [[],["迎泽区","杨伟","卢锐","董剑峰","tt_1_cuichao"],["小店区","杨伟","卢锐","刘雅","tt_1_ningxianghao2"]]
 
     //处理7013表
     CSV_obj = CSV.Open(G_CSV_File_Path)
@@ -68,30 +67,32 @@ Function Prepare_Data()
     Next
 
     //G_Add_Optical_Route_Info 填充数据
+    Temp_Data = 1
     For RL1 = 1 to Ubound(List_7013)
         If List_7013[RL1][7] = ""
             Continue
         End If
-        G_Add_Optical_Route_Info[RL1][A_Location_AOR] = List_7013[RL1][4]
-        G_Add_Optical_Route_Info[RL1][A_Equipment_AOR] = List_7013[RL1][3]
+        G_Add_Optical_Route_Info[Temp_Data][A_Location_AOR] = List_7013[RL1][4]
+        G_Add_Optical_Route_Info[Temp_Data][A_Equipment_AOR] = List_7013[RL1][3]
         Temp_List_3 = Split(List_7013[RL1][7],"-")
-        G_Add_Optical_Route_Info[RL1][Z_Equipment_AOR] = Temp_List_3[0]
+        G_Add_Optical_Route_Info[Temp_Data][Z_Equipment_AOR] = Temp_List_3[0]
         For RL2 = 1 to Ubound(Temp_List_2)
-            If G_Add_Optical_Route_Info[RL1][Z_Equipment_AOR] = Temp_List_2[RL2][0]
-                G_Add_Optical_Route_Info[RL1][Z_Location_AOR] = Temp_List_2[RL2][1]
+            If G_Add_Optical_Route_Info[Temp_Data][Z_Equipment_AOR] = Temp_List_2[RL2][0]
+                G_Add_Optical_Route_Info[Temp_Data][Z_Location_AOR] = Temp_List_2[RL2][1]
             End If
         Next
-        G_Add_Optical_Route_Info[RL1][Project_Num_AOR] = List_7013[RL1][5]
-        G_Add_Optical_Route_Info[RL1][Task_Name_AOR] = List_7013[RL1][6]
+        G_Add_Optical_Route_Info[Temp_Data][Project_Num_AOR] = List_7013[RL1][5]
+        G_Add_Optical_Route_Info[Temp_Data][Task_Name_AOR] = List_7013[RL1][6]
         For RL2 = 1 to Ubound(DQS_List)
-            If List_7013[RL1][1] = DQs_List[RL2][0]
-                G_Add_Optical_Route_Info[RL1][DQS_Project_AOR] = DQs_List[RL2][1]
-                G_Add_Optical_Route_Info[RL1][DQS_City_AOR] = DQs_List[RL2][2]
-                G_Add_Optical_Route_Info[RL1][DQS_District_AOR] = DQs_List[RL2][3]
-                G_Add_Optical_Route_Info[RL1][DQS_Maintaince_AOR] = DQs_List[RL2][4]
+            If List_7013[Temp_Data][1] = DQs_List[RL2][0]
+                G_Add_Optical_Route_Info[Temp_Data][DQS_Project_AOR] = DQs_List[RL2][1]
+                G_Add_Optical_Route_Info[Temp_Data][DQS_City_AOR] = DQs_List[RL2][2]
+                G_Add_Optical_Route_Info[Temp_Data][DQS_District_AOR] = DQs_List[RL2][3]
+                G_Add_Optical_Route_Info[Temp_Data][DQS_Maintaince_AOR] = DQs_List[RL2][4]
             End If
         Next
-        G_Add_Optical_Route_Info[RL1][Vocational_Name_AOR] = List_7013[RL1][2]
+        G_Add_Optical_Route_Info[Temp_Data][Vocational_Name_AOR] = List_7013[RL1][2]
+        Temp_Data = Temp_Data + 1
     Next
     //G_Add_Optical_Route_Info 验证
     //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\AOR验证.xls",false)
