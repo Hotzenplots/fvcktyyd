@@ -16,7 +16,8 @@ Function Prepare_Data()
     Dim DT_obj2
     Dim DT_Shape
     Dim List_7013 = []
-    Dim DQs_List = []
+    Dim DQS_List = []
+    Dim CS_District_List = []
 
     //Add_Optical_Route_Info_Index
     Dim A_Location_AOR             =  0
@@ -30,10 +31,14 @@ Function Prepare_Data()
     Dim DQS_District_AOR           =  8
     Dim DQS_Maintaince_AOR         =  9
     Dim Vocational_Name_AOR        = 10
+    Dim CS_District                = 11
     
     //数据质量责任人
-    DQS_List = [[],["迎泽区","杨伟","卢锐","董剑峰","tt_1_cuichao"],["小店区","杨伟","卢锐","刘雅","tt_1_ningxianghao2"]]
+    DQS_List = [[],["迎泽区","杨伟","卢锐","董剑峰","tt_1_cuichao"],["小店区","杨伟","卢锐","刘雅","tt_1_ningxianghao2"],["万柏林区","杨伟","卢锐","徐艳","tt_2_hanjingyu"]]
 
+    //归属区县
+    CS_District_List = [["小店区",1],["杏花岭区",2],["晋源区",3],["娄烦县",4],["尖草坪区",5],["阳曲县",6],["迎泽区",7],["古交市",8],["万柏林区",9],["清徐县",10]]
+    
     //处理7013表
     CSV_obj = CSV.Open(G_CSV_File_Path)
     DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
@@ -84,14 +89,19 @@ Function Prepare_Data()
         G_Add_Optical_Route_Info[Temp_Data][Project_Num_AOR] = List_7013[RL1][5]
         G_Add_Optical_Route_Info[Temp_Data][Task_Name_AOR] = List_7013[RL1][6]
         For RL2 = 1 to Ubound(DQS_List)
-            If List_7013[Temp_Data][1] = DQs_List[RL2][0]
-                G_Add_Optical_Route_Info[Temp_Data][DQS_Project_AOR] = DQs_List[RL2][1]
-                G_Add_Optical_Route_Info[Temp_Data][DQS_City_AOR] = DQs_List[RL2][2]
-                G_Add_Optical_Route_Info[Temp_Data][DQS_District_AOR] = DQs_List[RL2][3]
-                G_Add_Optical_Route_Info[Temp_Data][DQS_Maintaince_AOR] = DQs_List[RL2][4]
+            If List_7013[Temp_Data][1] = DQS_List[RL2][0]
+                G_Add_Optical_Route_Info[Temp_Data][DQS_Project_AOR] = DQS_List[RL2][1]
+                G_Add_Optical_Route_Info[Temp_Data][DQS_City_AOR] = DQS_List[RL2][2]
+                G_Add_Optical_Route_Info[Temp_Data][DQS_District_AOR] = DQS_List[RL2][3]
+                G_Add_Optical_Route_Info[Temp_Data][DQS_Maintaince_AOR] = DQS_List[RL2][4]
             End If
         Next
         G_Add_Optical_Route_Info[Temp_Data][Vocational_Name_AOR] = List_7013[RL1][2]
+        For RL2 = 1 to Ubound(CS_District_List)
+            If List_7013[Temp_Data][1] = CS_District_List[RL2][0]
+                G_Add_Optical_Route_Info[Temp_Data][CS_District] = CS_District_List[RL2][1]
+            End If
+        Next
         Temp_Data = Temp_Data + 1
     Next
     //G_Add_Optical_Route_Info 验证
