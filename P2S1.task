@@ -21,7 +21,7 @@ Function Add_Optical_Route(Para_Add_Optical_Route_Info)
     Dim CS_District                = 11
 
     #icon("@res:S7-增加-按钮.png")
-    Mouse.Action({"html":{"attrMap":{"id":"ext-gen66","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Mouse.Action({"html":[{"id":"ext-gen66","tag":"BUTTON"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     //起始点
     #icon("@res:S7-选择-按钮.png")
     Mouse.Action({"html":{"attrMap":{"id":"ext-gen277","tag":"BUTTON"},"index":0,"tagName":"BUTTON"},"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})

@@ -10,6 +10,7 @@ Function Prepare_Data()
     Dim Temp_Data
     Dim Temp_Data2
     Dim Temp_Data3
+    Dim TestExcelObj
     Dim XLS_Obj
     Dim CSV_obj
     Dim DT_obj
@@ -46,10 +47,12 @@ Function Prepare_Data()
     DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
     List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
     //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
-    //验证数据
-    //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\7013验证.xls",false)
-    //Excel.WriteRange(TestExcelObj,"Sheet1","A1",List_7013,false)
-    //Excel.CloseExcel(TestExcelObj,true)
+    If G_Test_Output = 1 
+        //验证数据
+        TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\7013验证.xls",false)
+        Excel.WriteRange(TestExcelObj,"Sheet1","A1",List_7013,false)
+        Excel.CloseExcel(TestExcelObj,true)
+    End If
 
     //准备一级分光器安装位置查询List
     Temp_Data = 1
@@ -79,8 +82,9 @@ Function Prepare_Data()
         End If
         G_Add_Optical_Route_Info[Temp_Data][A_Location_AOR] = List_7013[RL1][4]
         G_Add_Optical_Route_Info[Temp_Data][A_Equipment_AOR] = List_7013[RL1][3]
-        Temp_List_3 = Split(List_7013[RL1][7],"-")
-        G_Add_Optical_Route_Info[Temp_Data][Z_Equipment_AOR] = Temp_List_3[0]
+        Temp_Data2 = Right(List_7013[RL1][7],6)
+        Temp_Data3 = RTrim(List_7013[RL1][7],Temp_Data2)
+        G_Add_Optical_Route_Info[Temp_Data][Z_Equipment_AOR] = Temp_Data3
         For RL2 = 1 to Ubound(Temp_List_2)
             If G_Add_Optical_Route_Info[Temp_Data][Z_Equipment_AOR] = Temp_List_2[RL2][0]
                 G_Add_Optical_Route_Info[Temp_Data][Z_Location_AOR] = Temp_List_2[RL2][1]
@@ -104,10 +108,12 @@ Function Prepare_Data()
         Next
         Temp_Data = Temp_Data + 1
     Next
-    //G_Add_Optical_Route_Info 验证
-    //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\AOR验证.xls",false)
-    //Excel.WriteRange(TestExcelObj,"Sheet1","A1",G_Add_Optical_Route_Info,false)
-    //Excel.CloseExcel(TestExcelObj,true)
+    If G_Test_Output = 1 
+        //G_Add_Optical_Route_Info 验证
+        TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\AOR验证.xls",false)
+        Excel.WriteRange(TestExcelObj,"Sheet1","A1",G_Add_Optical_Route_Info,false)
+        Excel.CloseExcel(TestExcelObj,true)
+    End If
     
     //写入P2S1的Repeat_Sum
     XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)

@@ -15,3 +15,12 @@ Clipboard.SetText("333")
 sRet = Clipboard.GetText()
 TracePrint(sRet)
 
+TracePrint(51 / 50)
+dim sRet = ""
+dim b=1.9
+iRet =-Math.Int(-b)
+TracePrint iRet
+iRet =-Math.fix(-b)
+TracePrint iRet
+sRet = CStr(varData)
+

@@ -43,10 +43,10 @@ Function Determine_FSB_Type(Box_Name)
     End If
 End Function
 
-Function Tail_Add(OC_Name)
+Function Tail_Add(Para_OC_Name)
     Dim Temp_Data
     Dim Temp_Data2
-    Temp_Data =  Clipboard.GetText()
+    Temp_Data =  Para_OC_Name
     Temp_Data2 = 0
     Temp_Data2 = CNumber(Right(Temp_Data,1))
     Temp_Data2 = Math.Round(Temp_Data2 + 1,0)
@@ -54,3 +54,113 @@ Function Tail_Add(OC_Name)
     Temp_Data = Temp_Data&Temp_Data2
     Return Temp_Data
 End Function
+
+Function OA_Prepare(Para_Add_Optical_Route_Info,Para_P2S1_RL1)
+    Dim Temp_Data
+    Dim Temp_Data2
+    //Add_Optical_Route_Info_Index
+    Dim A_Location_AOR             =  0
+    Dim A_Equipment_AOR            =  1
+    Dim Z_Location_AOR             =  2
+    Dim Z_Equipment_AOR            =  3
+    Dim Project_Num_AOR            =  4
+    Dim Task_Name_AOR              =  5
+    Dim DQS_Project_AOR            =  6
+    Dim DQS_City_AOR               =  7
+    Dim DQS_District_AOR           =  8
+    Dim DQS_Maintaince_AOR         =  9
+    Dim Vocational_Name_AOR        = 10
+    Dim CS_District                = 11
+    
+    App.Kill("360se.exe")
+    Temp_Data2 = App.GetStatus("360se.exe")
+    Do
+        Temp_Data = App.Run("C:\\360\\360se6\\Application\\360se.exe", 0, "1")
+        Delay 500
+        Temp_Data2 = App.GetStatus("360se.exe")
+    Loop While Not Temp_Data2
+    Delay Delay_Unit*5
+    #icon("@res:SF-OA-按钮.png")
+    Mouse.Action({"wnd":[{"app":"360se","cls":"360se6_Frame","title":"百度一下，你就知道 - 360安全浏览器 12.2"}],"ctrl":[{"role":"ROLE_SYSTEM_PANE","name":"百度一下，你就知道 - 360安全浏览器 12.2"},{"role":"ROLE_SYSTEM_PANE","name":"360安全浏览器"},{"role":"ROLE_SYSTEM_TOOLBAR","name":"收藏管理器"},{"role":"ROLE_SYSTEM_PUSHBUTTON","name":"OA"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Delay Delay_Unit*5
+    #icon("@res:SF-用户名-文本框.png")
+    Keyboard.InputText({"html":[{"id":"username","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"tyyangwei",true,20,Delay_Unit*5,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
+    #icon("@res:SF-密码-文本框.png")
+    Keyboard.InputText({"html":[{"id":"password","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"tyyw369...",true,20,Delay_Unit*5,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
+    #icon("@res:SF-登录-按钮.png")
+    Mouse.Action({"html":[{"css-selector":"body>div>div>form>div","idx":2,"parentid":"login_bg","tag":"DIV"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Delay Delay_Unit*5
+    #icon("@res:SF-进入首页-按钮.png")
+    Temp_Data = UiElement.Exists({"html":[{"tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5})
+    If Temp_Data  
+        #icon("@res:SF-进入首页-按钮.png")
+        Mouse.Action({"html":[{"tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    End If
+    #icon("@res:SF-OA界面-图片.png")
+    Window.SetActive({"wnd":[{"cls":"360se6_Frame","title":"统一信息平台门户 － 太原分公司 - 360安全浏览器 12.2","app":"360se"}]})
+    #icon("@res:SF-网络维护-按钮.png")
+    Mouse.Action({"html":[{"id":"one3","tag":"LI"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:SF-综合资管-按钮.png")
+    Mouse.Action({"html":[{"idx":2,"parentid":"all_items3","tag":"LI"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Delay Delay_Unit*20
+    #icon("@res:SF-7112右箭头-按钮.png")
+    Mouse.Action({"html":[{"css-selector":"body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>a>img","tableCol":"35","tag":"IMG"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:SF-7112右箭头-按钮.png")
+    Mouse.Action({"html":[{"css-selector":"body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td>a>img","tableCol":"35","tag":"IMG"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:SF-光路调度-按钮.png")
+    Mouse.Action({"html":[{"parentid":"sysmodel","tableCol":"7","tag":"IMG"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:SF-刷新-按钮.png")
+    UiElement.Wait({"html":[{"id":"ext-gen74","tag":"BUTTON"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"show",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*50,"iDelayBefore":Delay_Unit*5})
+    #icon("@res:SF-查询条件下箭头-按钮.png")
+    Mouse.Action({"html":[{"id":"ext-gen10","tag":"DIV"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Temp_Data = Para_Add_Optical_Route_Info[Vocational_Name_AOR]&"AAA0"&Cstr(-Math.Int(-(Para_P2S1_RL1 / 50)))
+    #icon("@res:SF-工单主题-文本框.png")
+    Keyboard.InputText({"html":[{"name":"processinstname","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Temp_Data,true,20,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
+    #icon("@res:SF-工单查询-按钮.png")
+    Mouse.Action({"html":[{"id":"ext-gen38","tag":"BUTTON"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":1,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:SF-加载数据-图片.png")
+    Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-加载数据-图片.png",0.9,"show",10000,{"bContinueOnError":false,"iDelayAfter":1,"iDelayBefore":1,"bSetForeground":true,"sMatchType":"GrayMatch"})
+    #icon("@res:SF-加载数据-图片.png")
+    Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-加载数据-图片.png",0.9,"hide",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":1,"bSetForeground":true,"sMatchType":"GrayMatch"})
+    #icon("@res:SF-没有记录-图片.png")
+    Temp_Data2 = UiElement.GetValue({"html":[{"id":"ext-comp-1015","tag":"DIV"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5})
+    If Temp_Data2 = "没有记录"
+        //新建工单
+        #icon("@res:SF-资源调度左侧十字-按钮.png")
+        Mouse.Action({"html":[{"idx":4,"parentid":"ext-gen42","tag":"IMG"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-光路调度-按钮 (2).png")
+        Mouse.Action({"html":[{"aaname":"光路调度","parentid":"ext-gen49","tag":"SPAN"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-工单主题-文本框 (2).png")
+        Keyboard.InputText({"html":[{"name":"title","tag":"INPUT","type":"text"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Temp_Data,true,20,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
+        #icon("@res:SF-完成时间-文本框.png")
+        Mouse.Action({"html":[{"id":"requestTime","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-完成时间下个月-按钮.png")
+        Mouse.Action({"html":[{"idx":3,"parentid":"dpTitle","tag":"A"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-完成时间确定-按钮.png")
+        Mouse.Action({"html":[{"id":"dpOkInput","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-调度理由-文本框.png")
+        Keyboard.InputText({"html":[{"tag":"TEXTAREA"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Temp_Data,true,20,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
+        #icon("@res:SF-提交-按钮.png")
+        Mouse.Action({"html":[{"id":"submitForm","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Delay Delay_Unit*50
+        #icon("@res:SF-查询条件下箭头-按钮.png")
+        Mouse.Action({"html":[{"id":"ext-gen10","tag":"DIV"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        Temp_Data = Para_Add_Optical_Route_Info[Vocational_Name_AOR]&"AAA0"&Cstr(-Math.Int(-(Para_P2S1_RL1 / 50)))
+        #icon("@res:SF-工单主题-文本框.png")
+        Keyboard.InputText({"html":[{"name":"processinstname","tag":"INPUT"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},Temp_Data,true,20,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sKeyModifiers":[],"sSimulate":"message","bValidate":false})
+        #icon("@res:SF-工单查询-按钮.png")
+        Mouse.Action({"html":[{"id":"ext-gen38","tag":"BUTTON"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":1,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+        #icon("@res:SF-加载数据-图片.png")
+        Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-加载数据-图片.png",0.9,"show",10000,{"bContinueOnError":false,"iDelayAfter":1,"iDelayBefore":1,"bSetForeground":true,"sMatchType":"GrayMatch"})
+        #icon("@res:SF-加载数据-图片.png")
+        Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"SF-加载数据-图片.png",0.9,"hide",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":1,"bSetForeground":true,"sMatchType":"GrayMatch"})
+    End If
+    //利旧工单
+    #icon("@res:SF-工单主题-按钮.png")
+    Mouse.Action({"html":[{"aaname":"主题","parentid":"ext-gen28","tag":"DIV"}],"wnd":[{"app":"360se","cls":"360se6_Frame","title":"*"},{"cls":"Internet Explorer_Server"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":25,"sKeyModifiers":[],"sSimulate":"simulate"})
+    Delay Delay_Unit*50
+
+
+End Function
+
+

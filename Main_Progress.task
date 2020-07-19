@@ -14,14 +14,11 @@ Dim XLS_Obj
 
 //Traceprint(TURING.version())
 
-G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\wxy.xls"
-G_CSV_File_Path = "C:\\Users\\Administrator\\Desktop\\wxy.csv"
+G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\LDS.xls"
+G_CSV_File_Path = "C:\\Users\\Administrator\\Desktop\\LDS.csv"
 G_FSB_Topology_Sheet = "FSB_Topology"
 G_OC_Topology_Sheet = "OC_Topology"
 G_Info_Sheet = "Info"
-G_P1S1 = 0
-G_P1S5 = 0
-G_P2S1 = 1
 
 Function MainProgress()
     If G_P1S1 = 1 
@@ -65,6 +62,9 @@ Function MainProgress()
                     End If
                     G_P2S1_Repeat_Count = G_P2S1_Repeat_Start
                     For RL1 = G_P2S1_Repeat_Start to G_P2S1_Repeat_Sum
+                        If (RL1 mod 50) = 1
+                            SF.OA_Prepare(G_Add_Optical_Route_Info[RL1],RL1)
+                        End If
                         P2S1.Add_Optical_Route(G_Add_Optical_Route_Info[RL1])
                         XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
                         //保存生成的光路名称
@@ -76,13 +76,16 @@ Function MainProgress()
                     Next
                 Next
                 Break
-            Catch 
-                #icon("@res:P2S1-关闭-按钮.png")
-                Mouse.Action({"wnd":[{"app":"360se","cls":"Internet Explorer_TridentDlgFrame","title":"添加申请信息 -- 网页对话框"}],"ctrl":[{"role":"ROLE_SYSTEM_PUSHBUTTON","name":"关闭"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":1,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
-                #icon("@res:S7-增加-按钮.png")
-                Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-增加-按钮.png",0.9,"show",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit,"iDelayBefore":1,"bSetForeground":true})
-                #icon("@res:S7-读取中-图片.png")
-                Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-读取中-图片.png",0.9,"hide",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit,"iDelayBefore":Delay_Unit,"bSetForeground":true})
+            Catch
+                Try
+                    #icon("@res:P2S1-关闭-按钮.png")
+                    Mouse.Action({"wnd":[{"app":"360se","cls":"Internet Explorer_TridentDlgFrame","title":"添加申请信息 -- 网页对话框"}],"ctrl":[{"role":"ROLE_SYSTEM_PUSHBUTTON","name":"关闭"}]},"left","click",10000,{"bContinueOnError":false,"iDelayAfter":1,"iDelayBefore":Delay_Unit*5,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+                    #icon("@res:S7-增加-按钮.png")
+                    Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-增加-按钮.png",0.9,"show",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit,"iDelayBefore":1,"bSetForeground":true})
+                    #icon("@res:S7-读取中-图片.png")
+                    Image.Wait({"wnd":[{"cls":"360se6_Frame","title":"中国移动综合资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"S7-读取中-图片.png",0.9,"hide",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit,"iDelayBefore":Delay_Unit,"bSetForeground":true})
+                Catch
+                End Try
             End Try
         Next
     End If
