@@ -1,423 +1,436 @@
 Import SF
 Traceprint("保留") //方便输入
 Function Prepare_Data()
-    //Try
-        //内部变量
-        Dim Temp_Data
-        Dim RL1
-        Dim RL2
-        Dim RL3
-        Dim XLS_Obj
-        Dim FSB_Info_3D = []
-        Dim FSB_Count_Correction
-        Dim Temp_List_1 = []
-        Dim Temp_List_2 = []
-        Dim Temp_List_3 = []
-        Dim Temp_List_4 = []
-        Dim OCS_Lenth_X_Y = []
-        Dim Max_Lenth
-        Dim Longitude_Start
-        Dim Horizontal_Density
-        Dim Latitude_Start
-        Dim Vertical_Density
-        Dim Horizontal_Metre
-        Dim Vertical_Metre
-        Dim Termination_OC_3D =[]
-        Dim TOC_Correction
-        Dim Single_FS_Use_Fiber_Count
 
-        //CSV相关
-        Dim CSV_obj
-        Dim DT_obj
-        Dim DT_Shape = []
-        Dim List_7013 = []
+    //内部变量
+    Dim Temp_Data
+    Dim RL1
+    Dim RL2
+    Dim RL3
+    Dim XLS_Obj
+    Dim FSB_Info_3D = []
+    Dim FSB_Count_Correction
+    Dim Temp_List_1 = []
+    Dim Temp_List_2 = []
+    Dim Temp_List_3 = []
+    Dim Temp_List_4 = []
+    Dim OCS_Lenth_X_Y = []
+    Dim Max_Lenth
+    Dim Longitude_Start
+    Dim Horizontal_Density
+    Dim Latitude_Start
+    Dim Vertical_Density
+    Dim Horizontal_Metre
+    Dim Vertical_Metre
+    Dim Termination_OC_3D =[]
+    Dim TOC_Correction
+    Dim Single_FS_Use_Fiber_Count
+    Dim TestExcelObj
 
-        //G_OC_Info_Index
-        Dim Constant_OC_Widtht = 1
-        Dim Constant_OC_Lenth = 2
-        Dim Constant_OC_Type = 3
+    //CSV相关
+    Dim CSV_obj
+    Dim DT_obj
+    Dim DT_Shape = []
+    Dim List_7013 = []
 
-        //G_FSB_Info_Index
-        Dim Constant_FSB_Name       = 1
-        Dim Constant_FSB_Longitude  = 2
-        Dim Constant_FSB_Latitude   = 3
+    //G_OC_Info_Index_D3
+    Dim Constant_OC_Widtht = 1
+    Dim Constant_OC_Lenth = 2
+    Dim Constant_OC_Type = 3
 
-        //G_Other_Info_Index
-        Dim Constant_Info_Data_Count   = 9
-        Dim Constant_Info_Data_Column   = 2
-        Dim Constant_Longitude_Start    = 1
-        Dim Constant_Latitude_Start     = 2
-        Dim Constant_Horizontal_Density = 3
-        Dim Constant_Vertical_Density   = 4
-        Dim Constant_Back_Fiber_Count   = 5
-        Dim Constant_DQS_Project_AOR    = 6
-        Dim Constant_DQS_City_AOR       = 7
-        Dim Constant_DQS_District_AOR   = 8
-        Dim Constant_DQS_Maintaince_AOR = 9
+    //G_FSB_Info_Index
+    Dim Constant_FSB_Name       = 1
+    Dim Constant_FSB_Longitude  = 2
+    Dim Constant_FSB_Latitude   = 3
 
-        //Termination_OC_3D_Index
-        Dim Constant_UL_FSB_Name_TOC  = 1
-        Dim Constant_UL_Width_TOC     = 2
-        Dim Constant_FSB_Name_TOC     = 3
-        Dim Constant_DL_Width_TOC     = 4
-        Dim Constant_DL_FSB_Name_TOC  = 5
-        Dim Constant_Ordinary_Num_TOC = 6
-        Dim Constant_1FS_Count_TOC    = 7
-        Dim Constant_2FS_Count_TOC    = 8
-        Dim Constant_DL_FS_Count_TOC  = 9
-        Dim Constant_T_Start_TOC      = 10
-        Dim Constant_T_Count_TOC      = 11
-        Dim Constant_DM_Start_TOC     = 12
-        Dim Constant_DM_Count_TOC     = 13
+    //G_Other_Info_Index
+    Dim Constant_Info_Data_Count   = 9
+    Dim Constant_Info_Data_Column   = 2
+    Dim Constant_Longitude_Start    = 1
+    Dim Constant_Latitude_Start     = 2
+    Dim Constant_Horizontal_Density = 3
+    Dim Constant_Vertical_Density   = 4
+    Dim Constant_Back_Fiber_Count   = 5
+    Dim Constant_DQS_Project_AOR    = 6
+    Dim Constant_DQS_City_AOR       = 7
+    Dim Constant_DQS_District_AOR   = 8
+    Dim Constant_DQS_Maintaince_AOR = 9
 
-        XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)
-    
-        If G_P1S1 = 1
-            FSB_Count_Correction = 0
-            G_FSB_Count = 0
+    //Termination_OC_3D_Index
+    Dim Constant_UL_FSB_Name_TOC  = 1
+    Dim Constant_UL_Width_TOC     = 2
+    Dim Constant_FSB_Name_TOC     = 3
+    Dim Constant_DL_Width_TOC     = 4
+    Dim Constant_DL_FSB_Name_TOC  = 5
+    Dim Constant_Ordinary_Num_TOC = 6
+    Dim Constant_1FS_Count_TOC    = 7
+    Dim Constant_2FS_Count_TOC    = 8
+    Dim Constant_DL_FS_Count_TOC  = 9
+    Dim Constant_T_Start_TOC      = 10
+    Dim Constant_T_Count_TOC      = 11
+    Dim Constant_DM_Start_TOC     = 12
+    Dim Constant_DM_Count_TOC     = 13
 
-            //构建G_FSB_RC,计算G_FSB_Count,G_FSB_RC未排除空箱,应用时遇到空箱直接Continue
-            For RL1 = 1 To 100
-                For RL2 = 1 To 100
-                    Temp_Data = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[RL1,RL2])
-                    If Temp_Data = ""
-                        Break
-                    End If
-                    If Temp_Data = "empty"
-                        FSB_Count_Correction = FSB_Count_Correction + 1
-                    End If
-                Next
-                Temp_Data = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[RL1,1])
+    XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false)
+
+    If G_P1S1 = 1
+        FSB_Count_Correction = 0
+        G_FSB_Count = 0
+
+        //构建G_FSB_RC,计算G_FSB_Count,G_FSB_RC未排除空箱,应用时遇到空箱直接Continue
+        For RL1 = 1 To 100
+            For RL2 = 1 To 100
+                Temp_Data = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[RL1,RL2])
                 If Temp_Data = ""
                     Break
                 End If
-                G_FSB_RC[RL1] = RL2 - 1
-                G_FSB_Count = G_FSB_Count + G_FSB_RC[RL1]
+                If Temp_Data = "empty"
+                    FSB_Count_Correction = FSB_Count_Correction + 1
+                End If
             Next
-            G_FSB_Count = G_FSB_Count - FSB_Count_Correction
+            Temp_Data = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[RL1,1])
+            If Temp_Data = ""
+                Break
+            End If
+            G_FSB_RC[RL1] = RL2 - 1
+            G_FSB_Count = G_FSB_Count + G_FSB_RC[RL1]
+        Next
+        G_FSB_Count = G_FSB_Count - FSB_Count_Correction
 
-            //构建FSB_Info_3D[][][3]
-            For RL1 = 1 To Ubound(G_FSB_RC)
-                For RL2 = 0 To G_FSB_RC[RL1]
-                    For RL3 = 0 To 3
-                        Temp_List_1[RL3] = ""
-                    Next
-                    Temp_List_2[RL2] = Clone(Temp_List_1)
+        //构建FSB_Info_3D[][][3]
+        For RL1 = 1 To Ubound(G_FSB_RC)
+            For RL2 = 0 To G_FSB_RC[RL1]
+                For RL3 = 0 To 3
+                    Temp_List_1[RL3] = ""
                 Next
-                FSB_Info_3D[RL1] = Clone(Temp_List_2)
+                Temp_List_2[RL2] = Clone(Temp_List_1)
             Next
-            FSB_Info_3D[0] = ""
+            FSB_Info_3D[RL1] = Clone(Temp_List_2)
+        Next
+        FSB_Info_3D[0] = ""
 
-            //FSB_Info_3D 加载名称/经度/维度
-            Longitude_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Longitude_Start,Constant_Info_Data_Column])
-            Latitude_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Latitude_Start,Constant_Info_Data_Column])
-            Horizontal_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Horizontal_Density,Constant_Info_Data_Column])
-            Vertical_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Vertical_Density,Constant_Info_Data_Column])
-            For RL1 = 1 To Ubound(G_FSB_RC)
-                For RL2 = 1 To G_FSB_RC[RL1]
-                    FSB_Info_3D[RL1][RL2][Constant_FSB_Name] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[RL1,RL2])
-                    FSB_Info_3D[RL1][RL2][Constant_FSB_Longitude] = Longitude_Start + (RL2 - 1) * Horizontal_Density
-                    FSB_Info_3D[RL1][RL2][Constant_FSB_Latitude] = Latitude_Start - (RL1 - 1) * Vertical_Density
-                Next
+        //FSB_Info_3D 加载名称/经度/维度
+        Longitude_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Longitude_Start,Constant_Info_Data_Column])
+        Latitude_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Latitude_Start,Constant_Info_Data_Column])
+        Horizontal_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Horizontal_Density,Constant_Info_Data_Column])
+        Vertical_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Vertical_Density,Constant_Info_Data_Column])
+        For RL1 = 1 To Ubound(G_FSB_RC)
+            For RL2 = 1 To G_FSB_RC[RL1]
+                FSB_Info_3D[RL1][RL2][Constant_FSB_Name] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[RL1,RL2])
+                FSB_Info_3D[RL1][RL2][Constant_FSB_Longitude] = Longitude_Start + (RL2 - 1) * Horizontal_Density
+                FSB_Info_3D[RL1][RL2][Constant_FSB_Latitude] = Latitude_Start - (RL1 - 1) * Vertical_Density
             Next
+        Next
 
-            //FSB_Info_3D 降维 G_FSB_Info
-            Temp_Data = 1
-            For RL1 = 1 To Ubound(G_FSB_RC)
-                For RL2 = 1 To G_FSB_RC[RL1]
-                    If FSB_Info_3D[RL1][RL2][1] = "empty"
-                        Continue
-                    End If
-                    G_FSB_Info[Temp_Data] = FSB_Info_3D[RL1][RL2]
-                    Temp_Data = Temp_Data + 1
-                Next
+        //FSB_Info_3D 降维 G_FSB_Info
+        Temp_Data = 1
+        For RL1 = 1 To Ubound(G_FSB_RC)
+            For RL2 = 1 To G_FSB_RC[RL1]
+                If FSB_Info_3D[RL1][RL2][1] = "empty"
+                    Continue
+                End If
+                G_FSB_Info[Temp_Data] = FSB_Info_3D[RL1][RL2]
+                Temp_Data = Temp_Data + 1
             Next
-            
-            //写入P1S1的Repeat_Sum
-            Excel.WriteCell(XLS_Obj,G_Info_Sheet,[2,6],G_FSB_Count,true)
-            //读取P1S1的Repeat_Start和Repeat_Sum
-            G_P1S1_Repeat_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[2,5])
-            G_P1S1_Repeat_Sum = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[2,6])
+        Next
+
+        //G_FSB_Info 验证数据
+        If G_Test_Output = 1 
+            TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\推箱子验证.xls",false)
+            Excel.WriteRange(TestExcelObj,"Sheet1","A1",G_FSB_Info,false)
+            Excel.CloseExcel(TestExcelObj,true)
         End If
+        
+        //写入P1S1的Repeat_Sum
+        Excel.WriteCell(XLS_Obj,G_Info_Sheet,[2,6],G_FSB_Count,true)
+        //读取P1S1的Repeat_Start和Repeat_Sum
+        G_P1S1_Repeat_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[2,5])
+        G_P1S1_Repeat_Sum = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[2,6])
+    End If
 
-        If G_P1S5 = 1
-            //处理7013表
-            CSV_obj = CSV.Open(G_CSV_File_Path)
-            DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
-            DT_obj = Datatable.SliceDataTable(DT_obj,[],[1,2,4,5,7,10,11,21])
-            DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
-            List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
-            //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
-
-            //G_Other_Info
-            For RL1 = 1 To Constant_Info_Data_Count
-                G_Other_Info[RL1] = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[RL1,Constant_Info_Data_Column])
-            Next
-
-            //构建G_OCS_RC[]
-            For RL1 = 1 To 100
-                For RL2 =1 To 100
-                    Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)])
-                    If Temp_Data = ""
-                        Break
-                    End If
+    If G_P1S2 = 1
+        //构建G_OC_Info[][][10]
+        For RL1 = 1 To Ubound(G_OCS_RC)
+            For RL2 = 1 To G_OCS_RC[RL1]
+                For RL3 = 1 To 10
+                    Temp_List_1[RL3] = ""
                 Next
-                Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,2])
+                Temp_List_2[RL2] = Clone(Temp_List_1)
+            Next
+            G_OC_Info[RL1] = Clone(Temp_List_2)
+        Next
+
+
+
+    End If
+
+    If G_P1S5 = 1
+        //处理7013表
+        CSV_obj = CSV.Open(G_CSV_File_Path)
+        DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
+        DT_obj = Datatable.SliceDataTable(DT_obj,[],[1,2,4,5,7,10,11,21])
+        DT_Shape = Datatable.GetDataTableShape(DT_obj) //DT长宽[0]y,[1]x
+        List_7013 = Datatable.GetDataTableByArray(DT_obj,false)
+        //处理7013表完成,DT_obj,DT_Shape,List_7013,可用
+
+        //G_Other_Info
+        For RL1 = 1 To Constant_Info_Data_Count
+            G_Other_Info[RL1] = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[RL1,Constant_Info_Data_Column])
+        Next
+
+        //构建G_OCS_RC[]
+        For RL1 = 1 To 100
+            For RL2 =1 To 100
+                Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)])
                 If Temp_Data = ""
                     Break
                 End If
-                G_OCS_RC[RL1] = RL2 - 1
             Next
+            Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,2])
+            If Temp_Data = ""
+                Break
+            End If
+            G_OCS_RC[RL1] = RL2 - 1
+        Next
 
-            // //构建G_OC_Info[][][4]
-            // For RL1 = 1 To Ubound(G_OCS_RC)
-            //     For RL2 = 1 To G_OCS_RC[RL1]
-            //         For RL3 = 1 To 4
-            //             Temp_List_1[RL3] = ""
-            //         Next
-            //         Temp_List_2[RL2] = Clone(Temp_List_1)
-            //     Next
-            //     G_OC_Info[RL1] = Clone(Temp_List_2)
-            // Next
 
-            // //G_OC_Info 加载芯数
-            // For RL1 = 1 To Ubound(G_OCS_RC)
-            //     For RL2 = 1 To G_OCS_RC[RL1]
-            //         Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)])
-            //         If Temp_Data = ""
-            //             Break
-            //         End If
-            //         Temp_List_1 = Split(Temp_Data,"&")
-            //         G_OC_Info[RL1][RL2][Constant_OC_Widtht] = CInt(Temp_List_1[2])
-            //     Next
-            //     Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,2])
-            //     If Temp_Data = ""
-            //         Break
-            //     End If
-            // Next
 
-            // //G_OC_Info 加载长度
-            // Horizontal_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Horizontal_Density,Constant_Info_Data_Column])
-            // Vertical_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Vertical_Density,Constant_Info_Data_Column])
-            // Latitude_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Latitude_Start,Constant_Info_Data_Column])
-            // Horizontal_Metre = 111.11 * 1000 * Math.Cos(Latitude_Start * 3.1415926535 / 180) * Horizontal_Density
-            // Vertical_Metre = 111.11 * 1000 * Vertical_Density
-            // For RL1 = 1 To Ubound(G_OCS_RC)
-            //     For RL2 = 1 To G_OCS_RC[RL1]
-            //         Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)])
-            //         OCS_Lenth_X_Y = Split(Temp_Data, "&")
-            //         If OCS_Lenth_X_Y[0] = 0 //竖线
-            //             G_OC_Info[RL1][RL2][Constant_OC_Lenth] = Math.Round(Math.Abs(Vertical_Metre * OCS_Lenth_X_Y[1]),0)
-            //         End If
-            //         If OCS_Lenth_X_Y[1] = 0 //横线
-            //             G_OC_Info[RL1][RL2][Constant_OC_Lenth] = Math.Round(Math.Abs(Horizontal_Metre * OCS_Lenth_X_Y[0]),0)
-            //         End If
-            //         If (OCS_Lenth_X_Y[0] <> 0 and OCS_Lenth_X_Y[1] <> 0) //斜线
-            //             G_OC_Info[RL1][RL2][Constant_OC_Lenth] = Math.Round(Math.Abs(Math.Sqr((OCS_Lenth_X_Y[0] * Horizontal_Metre) ^ 2 + (OCS_Lenth_X_Y[1] * Vertical_Metre) ^ 2)),0)
-            //         End If
-            //     Next
-            // Next
+        // //G_OC_Info 加载芯数
+        // For RL1 = 1 To Ubound(G_OCS_RC)
+        //     For RL2 = 1 To G_OCS_RC[RL1]
+        //         Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)])
+        //         If Temp_Data = ""
+        //             Break
+        //         End If
+        //         Temp_List_1 = Split(Temp_Data,"&")
+        //         G_OC_Info[RL1][RL2][Constant_OC_Widtht] = CInt(Temp_List_1[2])
+        //     Next
+        //     Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,2])
+        //     If Temp_Data = ""
+        //         Break
+        //     End If
+        // Next
 
-            // //G_OC_Info 加载型号
-            // For RL1 = 1 To Ubound(G_OCS_RC)
-            //     For RL2 = 1 To G_OCS_RC[RL1]
-            //         G_OC_Info[RL1][RL2][Constant_OC_Type] = "GYTA-" & CStr(G_OC_Info[RL1][RL2][Constant_OC_Widtht])
-            //         //Traceprint(OC_Info[RL1][RL2][Constant_OC_Type])
-            //     Next
-            // Next
+        // //G_OC_Info 加载长度
+        // Horizontal_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Horizontal_Density,Constant_Info_Data_Column])
+        // Vertical_Density = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Vertical_Density,Constant_Info_Data_Column])
+        // Latitude_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Latitude_Start,Constant_Info_Data_Column])
+        // Horizontal_Metre = 111.11 * 1000 * Math.Cos(Latitude_Start * 3.1415926535 / 180) * Horizontal_Density
+        // Vertical_Metre = 111.11 * 1000 * Vertical_Density
+        // For RL1 = 1 To Ubound(G_OCS_RC)
+        //     For RL2 = 1 To G_OCS_RC[RL1]
+        //         Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)])
+        //         OCS_Lenth_X_Y = Split(Temp_Data, "&")
+        //         If OCS_Lenth_X_Y[0] = 0 //竖线
+        //             G_OC_Info[RL1][RL2][Constant_OC_Lenth] = Math.Round(Math.Abs(Vertical_Metre * OCS_Lenth_X_Y[1]),0)
+        //         End If
+        //         If OCS_Lenth_X_Y[1] = 0 //横线
+        //             G_OC_Info[RL1][RL2][Constant_OC_Lenth] = Math.Round(Math.Abs(Horizontal_Metre * OCS_Lenth_X_Y[0]),0)
+        //         End If
+        //         If (OCS_Lenth_X_Y[0] <> 0 and OCS_Lenth_X_Y[1] <> 0) //斜线
+        //             G_OC_Info[RL1][RL2][Constant_OC_Lenth] = Math.Round(Math.Abs(Math.Sqr((OCS_Lenth_X_Y[0] * Horizontal_Metre) ^ 2 + (OCS_Lenth_X_Y[1] * Vertical_Metre) ^ 2)),0)
+        //         End If
+        //     Next
+        // Next
 
-            // //构建G_OC_Draw_Vector[][][2]
-            // For RL1 = 1 To Ubound(G_OCS_RC)
-            //     For RL2 = 1 To G_OCS_RC[RL1]
-            //         For RL3 = 1 To 2
-            //             Temp_List_1[RL3] = ""
-            //         Next
-            //         Temp_List_2[RL2] = Clone(Temp_List_1)
-            //     Next
-            //     G_OC_Draw_Vector[RL1] = Clone(Temp_List_2)
-            // Next
+        // //G_OC_Info 加载型号
+        // For RL1 = 1 To Ubound(G_OCS_RC)
+        //     For RL2 = 1 To G_OCS_RC[RL1]
+        //         G_OC_Info[RL1][RL2][Constant_OC_Type] = "GYTA-" & CStr(G_OC_Info[RL1][RL2][Constant_OC_Widtht])
+        //         //Traceprint(OC_Info[RL1][RL2][Constant_OC_Type])
+        //     Next
+        // Next
 
-            //计算最长光缆的段落数
-            Max_Lenth = 0 
-            For RL1 = 1 To Ubound(G_OCS_RC)
-                Max_Lenth = SF.Max_Number(Max_Lenth,G_OCS_RC[RL1])
+        // //构建G_OC_Draw_Vector[][][2]
+        // For RL1 = 1 To Ubound(G_OCS_RC)
+        //     For RL2 = 1 To G_OCS_RC[RL1]
+        //         For RL3 = 1 To 2
+        //             Temp_List_1[RL3] = ""
+        //         Next
+        //         Temp_List_2[RL2] = Clone(Temp_List_1)
+        //     Next
+        //     G_OC_Draw_Vector[RL1] = Clone(Temp_List_2)
+        // Next
+
+        //计算最长光缆的段落数
+        Max_Lenth = 0 
+        For RL1 = 1 To Ubound(G_OCS_RC)
+            Max_Lenth = SF.Max_Number(Max_Lenth,G_OCS_RC[RL1])
+        Next
+
+        //构建Termination_OC_3D[][][13]
+        Temp_List_1 = []
+        Temp_List_2 = []
+        For RL1 = 1 To Ubound(G_OCS_RC)
+            For RL2 = 1 To (Max_Lenth + 1) 
+                For RL3 = 1 To 13
+                    Temp_List_1[RL3] = ""
+                Next
+                Temp_List_2[RL2] = Clone(Temp_List_1)
             Next
+            Termination_OC_3D[RL1] = Clone(Temp_List_2)
+        Next
 
-            //构建Termination_OC_3D[][][13]
+        //Termination_OC_3D 填充数据
+        For RL1 = 1 To Ubound(G_OCS_RC)
             Temp_List_1 = []
-            Temp_List_2 = []
-            For RL1 = 1 To Ubound(G_OCS_RC)
-                For RL2 = 1 To (Max_Lenth + 1) 
-                    For RL3 = 1 To 13
-                        Temp_List_1[RL3] = ""
-                    Next
-                    Temp_List_2[RL2] = Clone(Temp_List_1)
-                Next
-                Termination_OC_3D[RL1] = Clone(Temp_List_2)
-            Next
-
-            //Termination_OC_3D 填充数据
-            For RL1 = 1 To Ubound(G_OCS_RC)
-                Temp_List_1 = []
-                Temp_List_2 = [0,0]
-                Temp_List_3 = []
-                Temp_List_4 = []
-                For RL2 = 1 To (Max_Lenth + 1)
-                    //FSB_Name
-                    If RL2 = 1
-                        Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,1]) //第 RL1 条的起点坐标
-                        Temp_List_1 = Split(Temp_Data,"&")
-                        Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[CNumber(Temp_List_1[1]),CNumber(Temp_List_1[0])]) //第 RL1 条的起点FSB名
-                    Else
-                        Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,RL2])
-                        If Len(Temp_Data) = 0
-                            Break
-                        End If
-                        Temp_List_1 = Split(Temp_Data,"&")
-                        Temp_List_2[0] = Temp_List_2[0] + Temp_List_1[0]
-                        Temp_List_2[1] = Temp_List_2[1] + Temp_List_1[1]
-                        Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,1]) //第 RL1 条的起点坐标
-                        Temp_List_3 = Split(Temp_Data,"&")
-                        Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[(CNumber(Temp_List_3[1]) - CNumber(Temp_List_2[1])),(CNumber(Temp_List_3[0]) + CNumber(Temp_List_2[0]))])
-                    End If
-
-                    //DL_Width
-                    Temp_List_4 = Split(Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)]),"&") //下行芯数
-                    If Len(Temp_List_4) < 3
-                        Termination_OC_3D[RL1][RL2][Constant_DL_Width_TOC] = 0
-                    Else
-                        Termination_OC_3D[RL1][RL2][Constant_DL_Width_TOC] = Math.Round(CNumber(Temp_List_4[2]),0)
-                    End If
-
-                    //Ordinary_Num
-                    Termination_OC_3D[RL1][RL2][Constant_Ordinary_Num_TOC] = RL2 //FSB位置 
-                Next
-            Next
-
-            //Termination_OC_3D 填充数据2
-            For RL1 = 1 To Ubound(G_OCS_RC)
-                For RL2 = 1 To (Max_Lenth + 1)
-                    //DL_FSB_Name
-                    If Len(Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]) = 0
-                        Break
-                    End If
-                    If Termination_OC_3D[RL1][RL2][Constant_DL_Width_TOC] <> 0
-                        Termination_OC_3D[RL1][RL2][Constant_DL_FSB_Name_TOC] = Termination_OC_3D[RL1][(RL2 + 1)][Constant_FSB_Name_TOC]
-                    Else
-                        Termination_OC_3D[RL1][RL2][Constant_DL_FSB_Name_TOC] = "End"
-                    End If
-                Next
-            Next
-
-            //Termination_OC_3D 填充数据3
-            For RL1 = 1 To Ubound(G_OCS_RC)
-                For RL2 = 1 To (Max_Lenth + 1)
-                    //UL_FSB_Name 
-                    //UL_Width
-                    If Len(Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]) = 0
-                        Break
-                    End If
-                    If RL2 = 1
-                        Termination_OC_3D[RL1][RL2][Constant_UL_FSB_Name_TOC] = "Begin"
-                        Termination_OC_3D[RL1][RL2][Constant_UL_Width_TOC] = 0
-                    Else
-                        Termination_OC_3D[RL1][RL2][Constant_UL_FSB_Name_TOC] = Termination_OC_3D[RL1][(RL2 - 1)][Constant_FSB_Name_TOC]
-                        Termination_OC_3D[RL1][RL2][Constant_UL_Width_TOC] = Termination_OC_3D[RL1][(RL2 - 1)][Constant_DL_Width_TOC]
-                    End If
-                Next
-            Next
-
-            //Termination_OC_3D 填充数据4
-            For RL1 = 1 To Ubound(G_OCS_RC)
-                For RL2 = 1 To (Max_Lenth + 1)
-                    Temp_Data = Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]
-                    Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] = 0
-                    Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] = 0
-                    For RL3 = 1 To DT_Shape[0]
-                        If Temp_Data = List_7013[RL3 - 1][4]
-                            If len(List_7013[RL3 - 1][7]) = 0
-                                Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] = Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] + 1
-                            Else
-                                Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] = Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] + 1
-                            End If
-                        End If
-                    Next
-                    If Termination_OC_3D[RL1][RL2][Constant_DL_Width_TOC] = 0 //短光缆跳出循环,避免数组越界
-                        Break
-                    End If
-                Next
-            Next
-
-            //G_Termination_OC_Info 填充数据
-            Temp_Data = 1
-            For RL1 = 1 To Ubound(G_OCS_RC)
-                TOC_Correction = 0
-                For RL2 = 1 To (Max_Lenth + 1)
-                    If Len(Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]) = 0 //跳过短光缆
-                        Break
-                    End If
-                    If (Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] = 0 And Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] = 0)
-                        TOC_Correction = TOC_Correction + 1
-                        Continue
-                    End If
-                    G_Termination_OC_Info[Temp_Data] = Clone(Termination_OC_3D[RL1][RL2]) //直接利用 Termination_OC_3D 的数据
-                    G_Termination_OC_Info[Temp_Data][Constant_Ordinary_Num_TOC] = G_Termination_OC_Info[Temp_Data][Constant_Ordinary_Num_TOC] - TOC_Correction //空箱修正
-                    Temp_Data = Temp_Data + 1
-                Next
-            Next
-
-            //G_Termination_OC_Info 加载DL_FS_Count
-            For RL1 = Ubound(G_Termination_OC_Info) To 1 Step -1
-                If G_Termination_OC_Info[RL1][Constant_DL_FSB_Name_TOC] = "End"
-                    G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] = 0
+            Temp_List_2 = [0,0]
+            Temp_List_3 = []
+            Temp_List_4 = []
+            For RL2 = 1 To (Max_Lenth + 1)
+                //FSB_Name
+                If RL2 = 1
+                    Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,1]) //第 RL1 条的起点坐标
+                    Temp_List_1 = Split(Temp_Data,"&")
+                    Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[CNumber(Temp_List_1[1]),CNumber(Temp_List_1[0])]) //第 RL1 条的起点FSB名
                 Else
-                    G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] = G_Termination_OC_Info[RL1 + 1][Constant_2FS_Count_TOC] + G_Termination_OC_Info[RL1 + 1][Constant_DL_FS_Count_TOC]
+                    Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,RL2])
+                    If Len(Temp_Data) = 0
+                        Break
+                    End If
+                    Temp_List_1 = Split(Temp_Data,"&")
+                    Temp_List_2[0] = Temp_List_2[0] + Temp_List_1[0]
+                    Temp_List_2[1] = Temp_List_2[1] + Temp_List_1[1]
+                    Temp_Data = Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,1]) //第 RL1 条的起点坐标
+                    Temp_List_3 = Split(Temp_Data,"&")
+                    Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC] = Excel.ReadCell(XLS_Obj,G_FSB_Topology_Sheet,[(CNumber(Temp_List_3[1]) - CNumber(Temp_List_2[1])),(CNumber(Temp_List_3[0]) + CNumber(Temp_List_2[0]))])
+                End If
+
+                //DL_Width
+                Temp_List_4 = Split(Excel.ReadCell(XLS_Obj,G_OC_Topology_Sheet,[RL1,(RL2 + 1)]),"&") //下行芯数
+                If Len(Temp_List_4) < 3
+                    Termination_OC_3D[RL1][RL2][Constant_DL_Width_TOC] = 0
+                Else
+                    Termination_OC_3D[RL1][RL2][Constant_DL_Width_TOC] = Math.Round(CNumber(Temp_List_4[2]),0)
+                End If
+
+                //Ordinary_Num
+                Termination_OC_3D[RL1][RL2][Constant_Ordinary_Num_TOC] = RL2 //FSB位置 
+            Next
+        Next
+
+        //Termination_OC_3D 填充数据2
+        For RL1 = 1 To Ubound(G_OCS_RC)
+            For RL2 = 1 To (Max_Lenth + 1)
+                //DL_FSB_Name
+                If Len(Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]) = 0
+                    Break
+                End If
+                If Termination_OC_3D[RL1][RL2][Constant_DL_Width_TOC] <> 0
+                    Termination_OC_3D[RL1][RL2][Constant_DL_FSB_Name_TOC] = Termination_OC_3D[RL1][(RL2 + 1)][Constant_FSB_Name_TOC]
+                Else
+                    Termination_OC_3D[RL1][RL2][Constant_DL_FSB_Name_TOC] = "End"
                 End If
             Next
+        Next
 
-            //G_Termination_OC_Info 加载
-            //T_Start_TOC
-            //T_Count_TOC
-            //DM_Start_TOC
-            //DM_Count_TOC
-            
-            Single_FS_Use_Fiber_Count = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Back_Fiber_Count,Constant_Info_Data_Column]) + 1
-            For RL1 = Ubound(G_Termination_OC_Info) To 1 Step -1
-                If G_Termination_OC_Info[RL1][Constant_DL_FSB_Name_TOC] = "End" 
+        //Termination_OC_3D 填充数据3
+        For RL1 = 1 To Ubound(G_OCS_RC)
+            For RL2 = 1 To (Max_Lenth + 1)
+                //UL_FSB_Name 
+                //UL_Width
+                If Len(Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]) = 0
+                    Break
+                End If
+                If RL2 = 1
+                    Termination_OC_3D[RL1][RL2][Constant_UL_FSB_Name_TOC] = "Begin"
+                    Termination_OC_3D[RL1][RL2][Constant_UL_Width_TOC] = 0
+                Else
+                    Termination_OC_3D[RL1][RL2][Constant_UL_FSB_Name_TOC] = Termination_OC_3D[RL1][(RL2 - 1)][Constant_FSB_Name_TOC]
+                    Termination_OC_3D[RL1][RL2][Constant_UL_Width_TOC] = Termination_OC_3D[RL1][(RL2 - 1)][Constant_DL_Width_TOC]
+                End If
+            Next
+        Next
+
+        //Termination_OC_3D 填充数据4
+        For RL1 = 1 To Ubound(G_OCS_RC)
+            For RL2 = 1 To (Max_Lenth + 1)
+                Temp_Data = Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]
+                Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] = 0
+                Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] = 0
+                For RL3 = 1 To DT_Shape[0]
+                    If Temp_Data = List_7013[RL3 - 1][4]
+                        If len(List_7013[RL3 - 1][7]) = 0
+                            Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] = Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] + 1
+                        Else
+                            Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] = Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] + 1
+                        End If
+                    End If
+                Next
+                If Termination_OC_3D[RL1][RL2][Constant_DL_Width_TOC] = 0 //短光缆跳出循环,避免数组越界
+                    Break
+                End If
+            Next
+        Next
+
+        //G_Termination_OC_Info 填充数据
+        Temp_Data = 1
+        For RL1 = 1 To Ubound(G_OCS_RC)
+            TOC_Correction = 0
+            For RL2 = 1 To (Max_Lenth + 1)
+                If Len(Termination_OC_3D[RL1][RL2][Constant_FSB_Name_TOC]) = 0 //跳过短光缆
+                    Break
+                End If
+                If (Termination_OC_3D[RL1][RL2][Constant_1FS_Count_TOC] = 0 And Termination_OC_3D[RL1][RL2][Constant_2FS_Count_TOC] = 0)
+                    TOC_Correction = TOC_Correction + 1
+                    Continue
+                End If
+                G_Termination_OC_Info[Temp_Data] = Clone(Termination_OC_3D[RL1][RL2]) //直接利用 Termination_OC_3D 的数据
+                G_Termination_OC_Info[Temp_Data][Constant_Ordinary_Num_TOC] = G_Termination_OC_Info[Temp_Data][Constant_Ordinary_Num_TOC] - TOC_Correction //空箱修正
+                Temp_Data = Temp_Data + 1
+            Next
+        Next
+
+        //G_Termination_OC_Info 加载DL_FS_Count
+        For RL1 = Ubound(G_Termination_OC_Info) To 1 Step -1
+            If G_Termination_OC_Info[RL1][Constant_DL_FSB_Name_TOC] = "End"
+                G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] = 0
+            Else
+                G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] = G_Termination_OC_Info[RL1 + 1][Constant_2FS_Count_TOC] + G_Termination_OC_Info[RL1 + 1][Constant_DL_FS_Count_TOC]
+            End If
+        Next
+
+        //G_Termination_OC_Info 加载
+        //T_Start_TOC
+        //T_Count_TOC
+        //DM_Start_TOC
+        //DM_Count_TOC
+        
+        Single_FS_Use_Fiber_Count = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[Constant_Back_Fiber_Count,Constant_Info_Data_Column]) + 1
+        For RL1 = Ubound(G_Termination_OC_Info) To 1 Step -1
+            If G_Termination_OC_Info[RL1][Constant_DL_FSB_Name_TOC] = "End" 
+                G_Termination_OC_Info[RL1][Constant_T_Start_TOC] = 1
+                G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_2FS_Count_TOC] * Single_FS_Use_Fiber_Count)
+                G_Termination_OC_Info[RL1][Constant_DM_Start_TOC] = 0
+                G_Termination_OC_Info[RL1][Constant_DM_Count_TOC] = 0
+            Else
+                If G_Termination_OC_Info[RL1][Constant_UL_FSB_Name_TOC] = "Begin"
                     G_Termination_OC_Info[RL1][Constant_T_Start_TOC] = 1
-                    G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_2FS_Count_TOC] * Single_FS_Use_Fiber_Count)
+                    G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC])
                     G_Termination_OC_Info[RL1][Constant_DM_Start_TOC] = 0
                     G_Termination_OC_Info[RL1][Constant_DM_Count_TOC] = 0
                 Else
-                    If G_Termination_OC_Info[RL1][Constant_UL_FSB_Name_TOC] = "Begin"
-                        G_Termination_OC_Info[RL1][Constant_T_Start_TOC] = 1
-                        G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC])
-                        G_Termination_OC_Info[RL1][Constant_DM_Start_TOC] = 0
-                        G_Termination_OC_Info[RL1][Constant_DM_Count_TOC] = 0
-                    Else
-                        G_Termination_OC_Info[RL1][Constant_T_Start_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] * Single_FS_Use_Fiber_Count + 1)
-                        G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_2FS_Count_TOC] * Single_FS_Use_Fiber_Count)
-                        G_Termination_OC_Info[RL1][Constant_DM_Start_TOC] = 1
-                        G_Termination_OC_Info[RL1][Constant_DM_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] * Single_FS_Use_Fiber_Count)
-                    End If
+                    G_Termination_OC_Info[RL1][Constant_T_Start_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] * Single_FS_Use_Fiber_Count + 1)
+                    G_Termination_OC_Info[RL1][Constant_T_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_2FS_Count_TOC] * Single_FS_Use_Fiber_Count)
+                    G_Termination_OC_Info[RL1][Constant_DM_Start_TOC] = 1
+                    G_Termination_OC_Info[RL1][Constant_DM_Count_TOC] = Math.Int(G_Termination_OC_Info[RL1][Constant_DL_FS_Count_TOC] * Single_FS_Use_Fiber_Count)
                 End If
-            Next
+            End If
+        Next
 
-            //验证二维数据
-            //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\验证数据.xls",false)
-            //Excel.WriteRange(TestExcelObj,"Sheet1","A1",G_Termination_OC_Info,false)
-            //Excel.CloseExcel(TestExcelObj,true)
-        
-            //写入P1S5的Repeat_Sum
-            Temp_Data = Ubound(G_Termination_OC_Info)
-            G_P1S5_Repeat_Sum = Excel.WriteCell(XLS_Obj,G_Info_Sheet,[6,6],Temp_Data,true)
-            //读取P1S5的Repeat_Start和Repeat_Sum
-            G_P1S5_Repeat_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[6,5])
-            G_P1S5_Repeat_Sum = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[6,6])
-        End If
+        //验证二维数据
+        //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\验证数据.xls",false)
+        //Excel.WriteRange(TestExcelObj,"Sheet1","A1",G_Termination_OC_Info,false)
+        //Excel.CloseExcel(TestExcelObj,true)
+    
+        //写入P1S5的Repeat_Sum
+        Temp_Data = Ubound(G_Termination_OC_Info)
+        G_P1S5_Repeat_Sum = Excel.WriteCell(XLS_Obj,G_Info_Sheet,[6,6],Temp_Data,true)
+        //读取P1S5的Repeat_Start和Repeat_Sum
+        G_P1S5_Repeat_Start = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[6,5])
+        G_P1S5_Repeat_Sum = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[6,6])
+    End If
 
-        Excel.CloseExcel(XLS_Obj,true)
-    //Catch
-    //    Excel.CloseExcel(XLS_Obj,true)
-    //End Try
+    Excel.CloseExcel(XLS_Obj,true)
+
 End Function

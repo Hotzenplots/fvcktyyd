@@ -80,14 +80,14 @@ Function Prepare_Data()
         If List_7013[RL1][7] = ""
             Continue
         End If
-        G_Add_Optical_Route_Info[Temp_Data][A_Location_AOR] = List_7013[RL1][4]
-        G_Add_Optical_Route_Info[Temp_Data][A_Equipment_AOR] = List_7013[RL1][3]
+        G_Add_Optical_Route_Info[Temp_Data][Z_Location_AOR] = List_7013[RL1][4]
+        G_Add_Optical_Route_Info[Temp_Data][Z_Equipment_AOR] = List_7013[RL1][3]
         Temp_Data2 = Right(List_7013[RL1][7],6)
         Temp_Data3 = RTrim(List_7013[RL1][7],Temp_Data2)
-        G_Add_Optical_Route_Info[Temp_Data][Z_Equipment_AOR] = Temp_Data3
+        G_Add_Optical_Route_Info[Temp_Data][A_Equipment_AOR] = Temp_Data3
         For RL2 = 1 to Ubound(Temp_List_2)
-            If G_Add_Optical_Route_Info[Temp_Data][Z_Equipment_AOR] = Temp_List_2[RL2][0]
-                G_Add_Optical_Route_Info[Temp_Data][Z_Location_AOR] = Temp_List_2[RL2][1]
+            If G_Add_Optical_Route_Info[Temp_Data][A_Equipment_AOR] = Temp_List_2[RL2][0]
+                G_Add_Optical_Route_Info[Temp_Data][A_Location_AOR] = Temp_List_2[RL2][1]
             End If
         Next
         G_Add_Optical_Route_Info[Temp_Data][Project_Num_AOR] = List_7013[RL1][5]

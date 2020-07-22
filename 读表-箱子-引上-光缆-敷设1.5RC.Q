@@ -126,104 +126,6 @@ Function MainProgress()
         End If
     End If
 End Function
-Function Push_Box() //推箱子
-    For CL1_in_PB = 1 To (Ubound(FSB_CC) - 1)
-        For CL2_in_PB = 1 To FSB_CC(CL1_in_PB)
-            Call Determine_Box(FSB_Info(CL1_in_PB, CL2_in_PB, FSB_Name_Constant))
-            MoveTo 250, 232
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Delay Delay_Unit * 5
-            KeyDown 17, 1
-            KeyPress 65, 1
-            KeyUp 17, 1
-            Delay Delay_Unit * 5
-            KeyPress "Delete", 1
-            Delay Delay_Unit * 5
-            SayString FSB_Info(CL1_in_PB, CL2_in_PB, FSB_Name_Constant)
-            Delay Delay_Unit * 5
-            MoveR 0, 35
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Delay Delay_Unit * 5
-            Mouse_searching = GetCursorShape(0)
-            While Mouse_searching=0
-                Delay Delay_Unit * 5
-                Mouse_searching = GetCursorShape(0)
-            Wend
-            MoveR 0, 60
-            Delay Delay_Unit * 5
-            LeftDoubleClick 1
-            Delay Delay_Unit * 5
-            MoveR 875, 225
-            Delay Delay_Unit * 5
-            MoveTo 1210, 495
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Mouse_searching = GetCursorShape(0)
-            While Mouse_searching=0
-                Delay Delay_Unit * 5
-                Mouse_searching = GetCursorShape(0)
-            Wend
-            MoveTo 1210, 575
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Delay Delay_Unit * 5
-            MoveTo 1125, 552
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Delay Delay_Unit * 5
-            MoveTo 1220, 550
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Delay Delay_Unit * 5
-            KeyDown 17, 1
-            KeyPress 65, 1
-            KeyUp 17, 1
-            Delay Delay_Unit * 5
-            SayString FSB_Info(CL1_in_PB, CL2_in_PB, FSB_Longitude_Constant)
-            Delay Delay_Unit * 5
-            MoveTo 1230, 580
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Delay Delay_Unit * 5
-            KeyDown 17, 1
-            KeyPress 65, 1
-            KeyUp 17, 1
-            SayString FSB_Info(CL1_in_PB, CL2_in_PB, FSB_Latitude_Constant)
-            Delay Delay_Unit * 5
-            MoveTo 1375, 575
-            LeftClick 1
-            Delay Delay_Unit * 5
-            Mouse_searching = GetCursorShape(0)
-            While Mouse_searching=0
-                Delay Delay_Unit * 5
-                Mouse_searching = GetCursorShape(0)
-            Wend
-            Delay Delay_Unit * 5
-            MoveTo 1130, 580
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Delay Delay_Unit * 5
-        Next 
-    Next
-End Function
-Function After_SWI() //单字输入后选择选项上屏
-    Delay Delay_Unit * 5
-    KeyPress "Down", 1
-    Delay Delay_Unit * 5
-    KeyPress "Enter", 1
-    Delay Delay_Unit * 5
-    KeyPress "Tab", 1
-    Delay Delay_Unit * 5
-End Function
-Function SingleWordInput(SW_String) //单字输入
-    For i = 1 To len(SW_String)
-        Inputing = mid(SW_String, i, 1)		
-        SayString Inputing
-        Delay Delay_Unit * 0.5
-    Next
-End Function
 Function Draw_SS(SPY_in_Func) //画引上段
     Call Determine_Box(OC_Info(SPY_in_Func, 1, Start_Point_Constant))
     MoveTo 250, 232
@@ -1297,21 +1199,7 @@ Function OC_Laying() //敷设
 End Function
 Function Prepare_Data() //数据准备函数
     Call Plugin.Office.OpenXls(Source_File)
-    Redim FSB_CC(100) //分光器循环计数
-    For CL1_in_PD = 1 To C_End //CL=Circulation_Layer
-        For CL2_in_PD =1 To C_End
-            Temp_Data_in_PD = Plugin.Office.ReadXls(FSB_Topology_Sheet, CL1_in_PD, CL2_in_PD)
-            If Temp_Data_in_PD = ""
-                Exit For
-            End If
-        Next
-        Temp_Data_in_PD = Plugin.Office.ReadXls(FSB_Topology_Sheet, CL1_in_PD,1)
-        If Temp_Data_in_PD = ""
-            Exit For
-        End If
-        FSB_CC(CL1_in_PD) = CL2_in_PD - 1
-    Next
-    Redim Preserve FSB_CC(CL1_in_PD) //Redim上限,此后可用
+
     Redim OCS_CC(100) //光缆段循环计数
     For CL1_in_PD = 1 To C_End
         For CL2_in_PD =1 To C_End
@@ -1392,32 +1280,4 @@ Function Prepare_Data() //数据准备函数
         Next
     Next
     Call Plugin.Office.CloseXls()
-End Function
-Function Determine_Box(Box_Name) //光交or分线箱判断函数
-    If InStr(Box_Name,"GJ") <> 0
-        If InStr(Box_Name,"光交") <> 0
-            MoveTo 90, 145
-            Delay Delay_Unit * 5
-            LeftClick 1
-            Delay Delay_Unit * 5
-            MoveTo 90, 205
-            Delay Delay_Unit * 5
-            LeftClick 1
-            MoveTo 80, 270
-            Delay Delay_Unit * 5
-            LeftClick 1
-        End If
-    Else
-        MoveTo 90, 145
-        Delay Delay_Unit * 5
-        LeftClick 1
-        Delay Delay_Unit * 5
-        MoveTo 90, 205
-        Delay Delay_Unit * 5
-        LeftClick 1
-        MoveTo 80, 285
-        Delay Delay_Unit * 5
-        LeftClick 1
-    End If
-
 End Function
