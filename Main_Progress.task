@@ -16,18 +16,15 @@ Dim XLS_Obj
 
 G_XLS_File_Path = "C:\\Users\\Administrator\\Desktop\\wxy.xls"
 G_CSV_File_Path = "C:\\Users\\Administrator\\Desktop\\wxy.csv"
-G_FSB_Topology_Sheet = "FSB_Topology"
-G_OC_Topology_Sheet = "OC_Topology"
-G_Info_Sheet = "Info"
 
 Function MainProgress()
     If G_P1S1 = 1 
         P0S1.Prepare_Data()
-        For RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P1S1_Repeat_Start 和 G_P1S1_Repeat_Sum
+        For RL0 = 1 To 1 //嵌套一层一次循环,判断 G_P1S1_Repeat_Start 和 G_P1S1_Repeat_Sum
             If G_P1S1_Repeat_Start = G_P1S1_Repeat_Sum
                 Break
             End If
-            For RL1 = G_P1S1_Repeat_Start to G_P1S1_Repeat_Sum
+            For RL1 = G_P1S1_Repeat_Start To G_P1S1_Repeat_Sum
                 P1S1.Push_FSB(G_FSB_Info[RL1])
                 XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
                 Excel.WriteCell(XLS_Obj,G_Info_Sheet,[2,5],RL1 + 1,true)
@@ -35,14 +32,28 @@ Function MainProgress()
             Next
         Next
     End If
+    If G_P1S2 = 1
+        For RL00 = 1 To 1000
+            Try
+                P0S1.Prepare_Data()
+                SF.Get_Resolution()
+                For RL1 = 1 To Ubound(G_OC_RC)
+                    P1S2.Draw_Support_Segment(G_OC_Info[RL1],RL1)
+                Next
+                Break
+            Catch
+
+            End Try
+        Next
+    End If
     If G_P1S5 = 1 
         P0S1.Prepare_Data()
         SF.Get_Resolution()
-        For RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P1S5_Repeat_Start 和 G_P1S5_Repeat_Sum
+        For RL0 = 1 To 1 //嵌套一层一次循环,判断 G_P1S5_Repeat_Start 和 G_P1S5_Repeat_Sum
             If G_P1S5_Repeat_Start = G_P1S5_Repeat_Sum
                 Break
             End If
-            For RL1 = G_P1S5_Repeat_Start to G_P1S5_Repeat_Sum
+            For RL1 = G_P1S5_Repeat_Start To G_P1S5_Repeat_Sum
                 P1S5.Termination_OC(G_Termination_OC_Info[RL1])
                 XLS_Obj = Excel.OpenExcel(G_XLS_File_Path,false) //后台打开
                 Excel.WriteCell(XLS_Obj,G_Info_Sheet,[6,5],RL1 + 1,true)
@@ -50,18 +61,17 @@ Function MainProgress()
             Next
         Next
     End If
-
     If G_P2S1 = 1
-        For RL00 = 1 to 1000
+        For RL00 = 1 To 1000
             Try
                 P0S2.Prepare_Data()
                 SF.Get_Resolution()
-                For RL0 = 1 to 1 //嵌套一层一次循环,判断 G_P2S1_Repeat_Start 和 G_P2S1_Repeat_Sum
+                For RL0 = 1 To 1 //嵌套一层一次循环,判断 G_P2S1_Repeat_Start 和 G_P2S1_Repeat_Sum
                     If G_P2S1_Repeat_Start > G_P2S1_Repeat_Sum
                         Break
                     End If
                     G_P2S1_Repeat_Count = G_P2S1_Repeat_Start
-                    For RL1 = G_P2S1_Repeat_Start to G_P2S1_Repeat_Sum
+                    For RL1 = G_P2S1_Repeat_Start To G_P2S1_Repeat_Sum
                         If (RL1 mod 50) = 1
                             SF.OA_Prepare(G_Add_Optical_Route_Info[RL1],RL1)
                         End If

@@ -32,18 +32,18 @@ Function Termination_OC(Para_Termination_OC_Info)
 
 
     SF.Determine_FSB_Type(Para_Termination_OC_Info[Constant_FSB_Name_TOC])
-    #icon("@res:fc7kn8d4-jlak-ja9s-l2ll-mf8evr17t8d9.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"fc7kn8d4-jlak-ja9s-l2ll-mf8evr17t8d9.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":120,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:P1S5-黑色下箭头-图片.png")
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S5-黑色下箭头-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":120,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     Delay Delay_Unit*10
     Keyboard.Input(Para_Termination_OC_Info[Constant_FSB_Name_TOC],{"iDelayAfter":Delay_Unit*5,"iDelayBefore":Delay_Unit*5,"sSimulate":"message"})
     Delay Delay_Unit*10
     Keyboard.Press("Enter", "press", [],{"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"sSimulate":"message"})
     SF.Wait_Searching() //判断鼠标指针
-    #icon("@res:2o286112-3t7q-32l7-tebg-3rmq4e2td7va.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"2o286112-3t7q-32l7-tebg-3rmq4e2td7va.png",0.9,"left","dbclick",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":30,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:P1S5-左侧第二个中文名称-图片.png")
+    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S5-左侧第二个中文名称-图片.png",0.9,"left","dbclick",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":30,"sKeyModifiers":[],"sSimulate":"simulate"})
     SF.Wait_Searching()
-    #icon("@res:1k7d4nc9-6g5i-6vhl-d372-ms0sgjkcdifo.png")
-    Image.Hover({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"1k7d4nc9-6g5i-6vhl-d372-ms0sgjkcdifo.png",0.7,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
+    #icon("@res:P1S1-红色分纤箱-图片.png")
+    Image.Hover({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S1-红色分纤箱-图片.png",0.7,10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:r7nbpf4a-rclh-vg5b-u7fr-3vj6t4uvtnbn.png")
     Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.1","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"r7nbpf4a-rclh-vg5b-u7fr-3vj6t4uvtnbn.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":Delay_Unit*2,"iDelayBefore":Delay_Unit*2,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":30,"sKeyModifiers":[],"sSimulate":"simulate"})
     #icon("@res:2b4id6jb-vvv7-s8d1-v120-8p7toocurktk.png")
