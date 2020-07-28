@@ -68,15 +68,19 @@ Function Draw_Support_Segment(Para_OC_Info,Para_RL1)
     SF.Wait_Searching()
     Delay Delay_Unit * 10
     #icon("@res:P1S2-管线编辑蓝字-图片.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S2-管线编辑蓝字-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate","sMatchType":"GrayMatch","iSerialNo":1})
-    Delay Delay_Unit * 10
+    Image.Hover({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S2-管线编辑蓝字-图片.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":100,"iDelayBefore":100,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate","sMatchType":"GrayMatch","iSerialNo":1})
+    Delay 1000
+    Mouse.Click("left", "down", [],{"iDelayAfter":100,"iDelayBefore":100})
     Temp_Data1=Mouse.GetPos()
-    Mouse.Drag(Temp_Data1["x"], Temp_Data1["y"], G_Monitor_X * 0.95, G_Monitor_Y * 0.95, "left", [],{"iDelayAfter":300,"iDelayBefore":200})
-    #icon("@res:P1S2-管线编辑蓝字-图片.png")
-    Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S2-管线编辑蓝字-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate","sMatchType":"GrayMatch","iSerialNo":1})
-    Delay Delay_Unit * 10
-    Temp_Data1=Mouse.GetPos()
-    Mouse.Drag(Temp_Data1["x"], Temp_Data1["y"], G_Monitor_X * 0.95, G_Monitor_Y * 0.95, "left", [],{"iDelayAfter":300,"iDelayBefore":200})
+    Do While Temp_Data1["x"] < (1920 * 0.95)
+        Mouse.Move(5, 0, true,{"iDelayAfter":5,"iDelayBefore":5})
+        Temp_Data1=Mouse.GetPos()
+    Loop
+    Do While Temp_Data1["y"] < (1080 * 0.9)
+        Mouse.Move(0, 5, true,{"iDelayAfter":5,"iDelayBefore":5})
+        Temp_Data1=Mouse.GetPos()
+    Loop
+    Mouse.Click("left", "up", [],{"iDelayAfter":100,"iDelayBefore":100})
     Else
     //第n条,利旧印上
     Rem 123
@@ -91,14 +95,23 @@ Function Draw_Support_Segment(Para_OC_Info,Para_RL1)
     Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S2-确认-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate","sMatchType":"GrayMatch","iSerialNo":1})
     SF.Wait_Searching()
         If Para_RL1 = Ubound(G_OC_RC)
-            Rem 最后一条,移回窗口
             #icon("@res:P1S2-管线编辑蓝字-图片.png")
-            Image.Click({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S2-管线编辑蓝字-图片.png",0.9,"left","click",10000,{"bContinueOnError":false,"iDelayAfter":300,"iDelayBefore":200,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate","sMatchType":"GrayMatch","iSerialNo":1})
-            Delay Delay_Unit * 10
+            Image.Hover({"wnd":[{"cls":"360se6_Frame","title":"中国移动外线资源管理系统 - 360安全浏览器 12.2","app":"360se"}]},{"height":0,"width":0,"x":0,"y":0},@res"P1S2-管线编辑蓝字-图片.png",0.9,10000,{"bContinueOnError":false,"iDelayAfter":100,"iDelayBefore":100,"bSetForeground":true,"sCursorPosition":"Center","iCursorOffsetX":0,"iCursorOffsetY":0,"sKeyModifiers":[],"sSimulate":"simulate","sMatchType":"GrayMatch","iSerialNo":1})
+            Delay 1000
+            Mouse.Click("left", "down", [],{"iDelayAfter":100,"iDelayBefore":100})
             Temp_Data1=Mouse.GetPos()
-            Mouse.Drag(Temp_Data1["x"], Temp_Data1["y"], G_Monitor_X * 0.2, G_Monitor_Y * 0.2, "left", [],{"iDelayAfter":300,"iDelayBefore":200})
+            Do While Temp_Data1["x"] > (1920 * 0.2)
+                Mouse.Move(-5, 0, true,{"iDelayAfter":5,"iDelayBefore":5})
+                Temp_Data1=Mouse.GetPos()
+            Loop
+            Do While Temp_Data1["y"] > (1080 * 0.2)
+                Mouse.Move(0, -5, true,{"iDelayAfter":5,"iDelayBefore":5})
+                Temp_Data1=Mouse.GetPos()
+            Loop
+            Mouse.Click("left", "up", [],{"iDelayAfter":100,"iDelayBefore":100})
         End If
     End If
+    Rem 统一输入信息
+    
 End Function
-
 
