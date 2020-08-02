@@ -28,6 +28,7 @@ Function Prepare_Data()
     Dim TOC_Correction
     Dim Single_FS_Use_Fiber_Count
     Dim TestExcelObj
+    Dim DQS_List =[]
 
     //CSV相关
     Dim CSV_obj
@@ -46,14 +47,21 @@ Function Prepare_Data()
     Dim Constant_FSB_Latitude   = 3
 
     //G_Other_Info_Index
-    Dim Constant_Info_Data_Count   = 6
+    Dim Constant_Info_Data_Count   = 5
     Dim Constant_Info_Data_Column   = 2
     Dim Constant_Longitude_Start    = 1
     Dim Constant_Latitude_Start     = 2
     Dim Constant_Horizontal_Density = 3
     Dim Constant_Vertical_Density   = 4
     Dim Constant_Back_Fiber_Count   = 5
-    Dim Constant_RD_Name            = 6
+    Dim Constant_RD_Name_OI             =  6
+    Dim Constant_District_OI            =  7
+    Dim Constant_Project_Num_OI         =  8
+    Dim Constant_Task_Name_OI           =  9
+    Dim Constant_DQS_Project_OI         = 10
+    Dim Constant_DQS_City_OI            = 11
+    Dim Constant_DQS_District_OI        = 12
+    Dim Constant_DQS_DQS_Maintaince_OI  = 13
 
     //Termination_OC_3D_Index
     Dim Constant_UL_FSB_Name_TOC  = 1
@@ -212,11 +220,6 @@ Function Prepare_Data()
             Next
         Next
 
-        //G_Other_Info
-        For RL1 = 1 To Constant_Info_Data_Count
-            G_Other_Info[RL1] = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[RL1,Constant_Info_Data_Column])
-        Next
-
         If G_Test_Output = 1
             //验证数据
             TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\OC_Info验证.xlsx",false)
@@ -227,6 +230,30 @@ Function Prepare_Data()
             Next
             Excel.CloseExcel(TestExcelObj,true)
         End If
+
+        //处理7013表
+        CSV_obj = CSV.Open(G_CSV_File_Path)
+        DT_obj = Datatable.BuildDataTable(CSV_obj,["网元内部编码","所属地市","所属区县","所属营销区域","所属小区","中文名称","业务类型","安装位置","所属对象名称","所属对象类型","项目编号","任务名称","分光比","主用OLT","主用OLT的PON端口","网元状态","产权归属","管理单位","设备型号","上级POS名称","上级设备是否为POS","上级POS端口","级别","别名","厂商","覆盖区域","备用OLT","备用OLT的PON口","资产编号","位置描述","二维码","采集名称","验收状态","未通过原因","时间戳","修改时间","网元内部编码","创建人","创建时间","修改人","是否合格","错误类型","纬度","经度","数据质量责任人(工程)","数据质量责任人(地市)","数据质量责任人(区县)","change_task_id","一线数据维护人（代维/一线）","上联PON口是否为10GE","维护地市","维护区县"])
+        DT_obj = Datatable.SliceDataTable(DT_obj,[],[2,4,10,11])
+        Temp_List_1 = []
+        Temp_List_1 = Datatable.GetDataTableByArray(DT_obj,false)
+        DQS_List = [[],["万柏林区","tyyangwei","lurui2","tyxuyan","tt_2_hanjingyu"]]
+        //G_Other_Info
+        For RL1 = 1 To Constant_Info_Data_Count
+            G_Other_Info[RL1] = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[RL1,Constant_Info_Data_Column])
+        Next
+        G_Other_Info[Constant_RD_Name_OI] = Temp_List_1[2][1]
+        G_Other_Info[Constant_District_OI] = Temp_List_1[2][0]
+        G_Other_Info[Constant_Project_Num_OI] = Temp_List_1[2][2]
+        G_Other_Info[Constant_Task_Name_OI] = Temp_List_1[2][3]
+        For RL2 = 1 to Ubound(DQS_List)
+            If Temp_List_1[2][0] = DQS_List[RL2][0]
+                G_Other_Info[Constant_DQS_Project_OI] = DQS_List[RL2][1]
+                G_Other_Info[Constant_DQS_City_OI] = DQS_List[RL2][2]
+                G_Other_Info[Constant_DQS_District_OI] = DQS_List[RL2][3]
+                G_Other_Info[Constant_DQS_DQS_Maintaince_OI] = DQS_List[RL2][4]
+            End If
+        Next
     End If
 
     If G_P1S5 = 1

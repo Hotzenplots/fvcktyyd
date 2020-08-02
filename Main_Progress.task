@@ -42,7 +42,7 @@ Function MainProgress()
                 Next
                 Break
             Catch
-
+                //删除引上系统,清理窗口
             End Try
         Next
     End If
@@ -101,3 +101,4 @@ Function MainProgress()
     End If
 End Function
 MainProgress()
+

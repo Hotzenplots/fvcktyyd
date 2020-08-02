@@ -126,66 +126,7 @@ Function MainProgress()
         End If
     End If
 End Function
-Function Draw_SS(SPY_in_Func) //画引上段
-    Call Determine_Box(OC_Info(SPY_in_Func, 1, Start_Point_Constant))
-    MoveTo 250, 232
-    Delay Delay_Unit * 5
-    LeftClick 1
-    Delay Delay_Unit * 5
-    KeyDown 17, 1
-    KeyPress 65, 1
-    KeyUp 17, 1
-    Delay Delay_Unit * 5
-    KeyPress "Delete", 1
-    Delay Delay_Unit * 5
-    SayString OC_Info(SPY_in_Func, 1, Start_Point_Constant)
-    Delay Delay_Unit * 5
-    MoveR 0, 35
-    Delay Delay_Unit * 5
-    LeftClick 1
-    Delay Delay_Unit * 5
-    Mouse_searching = GetCursorShape(0)
-    While Mouse_searching=0
-        Delay Delay_Unit * 5
-        Mouse_searching = GetCursorShape(0)
-    Wend
-    MoveR 0, 60
-    Delay Delay_Unit * 5
-    LeftDoubleClick 1
-    Delay Delay_Unit * 10
-    MoveTo 345, 175
-    Delay Delay_Unit * 5
-    LeftClick 1
-    Delay Delay_Unit * 5
-    MoveTo 345, 355
-    Delay Delay_Unit * 5
-    LeftClick 1
-    Delay Delay_Unit * 5
-    MoveTo 390, 430
-    Delay Delay_Unit * 5
-    LeftClick 1
-    Delay Delay_Unit * 5
-    MoveTo 1116, 548 //起始点
-    Delay Delay_Unit * 5
-    LeftClick 1
-    Delay Delay_Unit * 5
-    For i = 1 To OCS_CC(SPY_in_Func)
-        R_Move_X = Draw_Vector(SPY_in_Func, i, 0)
-        R_Move_Y = Draw_Vector(SPY_in_Func, i, 1)
-        MoveR R_Move_X * 75, R_Move_Y * -75
-        Delay Delay_Unit * 5
-        LeftClick 1
-        Delay Delay_Unit * 5
-    Next
-    MoveTo 1050, 135
-    Delay Delay_Unit * 5
-    LeftClick 1
-    While Mouse_searching=0
-        Delay Delay_Unit * 5
-        Mouse_searching = GetCursorShape(0)
-    Wend
-    Delay Delay_Unit * 5
-End Function
+
 Function SS_Set_New_Branch() //新建引上段输入信息
     Delay Delay_Unit * 5
     MoveTo 1070, 570 //新增选项
