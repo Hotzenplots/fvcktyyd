@@ -222,13 +222,13 @@ Function Prepare_Data()
 
         If G_Test_Output = 1
             //验证数据
-            TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\OC_Info验证.xlsx",false)
+            //TestExcelObj = Excel.OpenExcel("C:\\Users\\Administrator\\Desktop\\OC_Info验证.xlsx",false)
             For RL1 = 1 to Ubound(G_OC_Info)
                 Traceprint(G_OC_Info[RL1])
                 //不是纯二维List,不能简单写入XLSX文件
                 //Excel.WriteRange(TestExcelObj,"Sheet1",[RL1,1],G_OC_Info[RL1][0],false)
             Next
-            Excel.CloseExcel(TestExcelObj,true)
+            //Excel.CloseExcel(TestExcelObj,true)
         End If
 
         //处理7013表
@@ -238,22 +238,23 @@ Function Prepare_Data()
         Temp_List_1 = []
         Temp_List_1 = Datatable.GetDataTableByArray(DT_obj,false)
         DQS_List = [[],["万柏林区","tyyangwei","lurui2","tyxuyan","tt_2_hanjingyu"]]
+
         //G_Other_Info
-        For RL1 = 1 To Constant_Info_Data_Count
-            G_Other_Info[RL1] = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[RL1,Constant_Info_Data_Column])
-        Next
-        G_Other_Info[Constant_RD_Name_OI] = Temp_List_1[2][1]
-        G_Other_Info[Constant_District_OI] = Temp_List_1[2][0]
-        G_Other_Info[Constant_Project_Num_OI] = Temp_List_1[2][2]
-        G_Other_Info[Constant_Task_Name_OI] = Temp_List_1[2][3]
-        For RL2 = 1 to Ubound(DQS_List)
-            If Temp_List_1[2][0] = DQS_List[RL2][0]
-                G_Other_Info[Constant_DQS_Project_OI] = DQS_List[RL2][1]
-                G_Other_Info[Constant_DQS_City_OI] = DQS_List[RL2][2]
-                G_Other_Info[Constant_DQS_District_OI] = DQS_List[RL2][3]
-                G_Other_Info[Constant_DQS_DQS_Maintaince_OI] = DQS_List[RL2][4]
-            End If
-        Next
+            For RL1 = 1 To Constant_Info_Data_Count
+                G_Other_Info[RL1] = Excel.ReadCell(XLS_Obj,G_Info_Sheet,[RL1,Constant_Info_Data_Column])
+            Next
+            G_Other_Info[Constant_RD_Name_OI] = Temp_List_1[2][1]
+            G_Other_Info[Constant_District_OI] = Temp_List_1[2][0]
+            G_Other_Info[Constant_Project_Num_OI] = Temp_List_1[2][2]
+            G_Other_Info[Constant_Task_Name_OI] = Temp_List_1[2][3]
+            For RL2 = 1 to Ubound(DQS_List)
+                If Temp_List_1[2][0] = DQS_List[RL2][0]
+                    G_Other_Info[Constant_DQS_Project_OI] = DQS_List[RL2][1]
+                    G_Other_Info[Constant_DQS_City_OI] = DQS_List[RL2][2]
+                    G_Other_Info[Constant_DQS_District_OI] = DQS_List[RL2][3]
+                    G_Other_Info[Constant_DQS_DQS_Maintaince_OI] = DQS_List[RL2][4]
+                End If
+            Next
     End If
 
     If G_P1S5 = 1

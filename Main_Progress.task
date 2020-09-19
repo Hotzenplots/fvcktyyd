@@ -42,7 +42,8 @@ Function MainProgress()
                 Next
                 Break
             Catch
-                //删除引上系统,清理窗口
+                //删除引上系统,清理窗口,重新缩放,移动镜头
+                P1S2.Reprepare_DSS(G_OC_Info)
             End Try
         Next
     End If
